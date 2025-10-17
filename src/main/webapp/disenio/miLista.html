@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Lista - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="Index.html">Inicio</a>
+                <a href="miLista.html">Mi Lista</a>
+                <a href="paraVer.html">Para Ver</a>
+                <a href="#" class="user-profile">👤 Mi Perfil</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1 class="page-title">📚 Mi Biblioteca Personal</h1>
+
+        <!-- Estadísticas del Usuario -->
+        <div class="user-stats">
+            <div class="stat-item">
+                <span class="stat-number">47</span>
+                <span class="stat-label">Vistas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">23</span>
+                <span class="stat-label">Favoritas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">15</span>
+                <span class="stat-label">Reseñadas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">4.3</span>
+                <span class="stat-label">Rating Promedio</span>
+            </div>
+        </div>
+
+        <!-- Películas y Series Vistas -->
+        <section class="category">
+            <div class="section-header">
+                <h2>✅ Vistas Recientemente</h2>
+                <select class="filter-select">
+                    <option value="todas">Todas</option>
+                    <option value="peliculas">Solo Películas</option>
+                    <option value="series">Solo Series</option>
+                </select>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 1">
+                    <div class="movie-info">
+                        <div class="movie-title">Interstellar</div>
+                        <div class="movie-rating">Mi rating: ★★★★★</div>
+                        <div class="watched-date">Visto: 10 Oct 2024</div>
+                        <button class="btn-secondary" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Película 2">
+                    <div class="movie-info">
+                        <div class="movie-title">Breaking Bad T1</div>
+                        <div class="movie-rating">Mi rating: ★★★★★</div>
+                        <div class="watched-date">Visto: 08 Oct 2024</div>
+                        <button class="btn-secondary" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 3">
+                    <div class="movie-info">
+                        <div class="movie-title">Oppenheimer</div>
+                        <div class="movie-rating">Mi rating: ★★★★★</div>
+                        <div class="watched-date">Visto: 05 Oct 2024</div>
+                        <button class="btn-secondary" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 4">
+                    <div class="movie-info">
+                        <div class="movie-title">The Dark Knight</div>
+                        <div class="movie-rating">Mi rating: ★★★★★</div>
+                        <div class="watched-date">Visto: 02 Oct 2024</div>
+                        <button class="btn-secondary" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 5">
+                    <div class="movie-info">
+                        <div class="movie-title">Inception</div>
+                        <div class="movie-rating">Mi rating: ★★★★☆</div>
+                        <div class="watched-date">Visto: 28 Sep 2024</div>
+                        <button class="btn-secondary" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mis Favoritas -->
+        <section class="category">
+            <div class="section-header">
+                <h2>❤️ Mis Favoritas</h2>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card favorite">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                    <div class="movie-info">
+                        <div class="movie-title">Interstellar</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <button class="btn-remove">❌ Quitar de favoritas</button>
+                    </div>
+                </div>
+                <div class="movie-card favorite">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie">
+                    <div class="movie-info">
+                        <div class="movie-title">Breaking Bad</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <button class="btn-remove">❌ Quitar de favoritas</button>
+                    </div>
+                </div>
+                <div class="movie-card favorite">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                    <div class="movie-info">
+                        <div class="movie-title">The Dark Knight</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <button class="btn-remove">❌ Quitar de favoritas</button>
+                    </div>
+                </div>
+                <div class="movie-card favorite">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                    <div class="movie-info">
+                        <div class="movie-title">Pulp Fiction</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <button class="btn-remove">❌ Quitar de favoritas</button>
+                    </div>
+                </div>
+                <div class="movie-card favorite">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie">
+                    <div class="movie-info">
+                        <div class="movie-title">The Last of Us</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <button class="btn-remove">❌ Quitar de favoritas</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mis Reseñas -->
+        <section class="category">
+            <div class="section-header">
+                <h2>✍️ Mis Reseñas</h2>
+            </div>
+            <div class="reviews-grid">
+                <div class="my-review-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                    <div class="review-content">
+                        <h3>Interstellar</h3>
+                        <div class="movie-rating">★★★★★</div>
+                        <p class="review-text">"Una obra maestra absoluta. Christopher Nolan demuestra su genio una vez más con esta épica historia sobre el amor, el tiempo y la supervivencia."</p>
+                        <span class="review-date">Publicado: 10 Oct 2024</span>
+                        <div class="review-actions">
+                            <button class="btn-icon">✏️ Editar</button>
+                            <button class="btn-icon">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-review-card">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie">
+                    <div class="review-content">
+                        <h3>Breaking Bad T1</h3>
+                        <div class="movie-rating">★★★★★</div>
+                        <p class="review-text">"La mejor serie de la historia. Cada episodio es perfecto. El desarrollo de personajes es excepcional."</p>
+                        <span class="review-date">Publicado: 08 Oct 2024</span>
+                        <div class="review-actions">
+                            <button class="btn-icon">✏️ Editar</button>
+                            <button class="btn-icon">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-review-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                    <div class="review-content">
+                        <h3>Oppenheimer</h3>
+                        <div class="movie-rating">★★★★★</div>
+                        <p class="review-text">"Biopic brillante. Cillian Murphy ofrece una actuación memorable. La cinematografía es impresionante."</p>
+                        <span class="review-date">Publicado: 05 Oct 2024</span>
+                        <div class="review-actions">
+                            <button class="btn-icon">✏️ Editar</button>
+                            <button class="btn-icon">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historial de Alquileres -->
+        <section class="category">
+            <div class="section-header">
+                <h2>📜 Historial de Alquileres</h2>
+            </div>
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Fecha Alquiler</th>
+                            <th>Período</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Interstellar</td>
+                            <td>08 Oct 2024</td>
+                            <td>3 días</td>
+                            <td>$3.99</td>
+                            <td><span class="status-badge active">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>Breaking Bad T1</td>
+                            <td>05 Oct 2024</td>
+                            <td>7 días</td>
+                            <td>$5.99</td>
+                            <td><span class="status-badge active">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>Oppenheimer</td>
+                            <td>01 Oct 2024</td>
+                            <td>3 días</td>
+                            <td>$3.99</td>
+                            <td><span class="status-badge completed">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>The Dark Knight</td>
+                            <td>28 Sep 2024</td>
+                            <td>3 días</td>
+                            <td>$2.99</td>
+                            <td><span class="status-badge completed">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dune: Part Two</td>
+                            <td>25 Sep 2024</td>
+                            <td>3 días</td>
+                            <td>$4.99</td>
+                            <td><span class="status-badge completed">Completado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+            <a href="#">Centro de ayuda</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

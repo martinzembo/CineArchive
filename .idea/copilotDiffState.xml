@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/fix_paths.ps1">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/fix_paths.ps1" />
+              <option name="updatedContent" value="$file = &quot;C:\Users\Francisco\Desktop\CineArchive\src\main\webapp\disenio\detalle.html&quot;&#10;$content = Get-Content $file -Raw -Encoding UTF8&#10;$content = $content -replace 'href=&quot;styles\.css&quot;', 'href=&quot;../css/styles.css&quot;'&#10;$content = $content -replace 'src=&quot;script\.js&quot;', 'src=&quot;../js/script.js&quot;'&#10;$content = $content -replace 'src=&quot;img/', 'src=&quot;../img/'&#10;[System.IO.File]::WriteAllText($file, $content, [System.Text.UTF8Encoding]::new($false))&#10;Write-Host &quot;Rutas corregidas exitosamente&quot;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

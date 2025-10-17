@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="admin-panel.html">Panel Admin</a>
+                <a href="Index.html">Catálogo</a>
+                <a href="#" class="user-profile">👤 Administrador</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="admin-panel">
+            <h1>Panel de Administración</h1>
+
+            <!-- Estadísticas Generales -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3>Total Usuarios</h3>
+                        <p class="stat-number">1,247</p>
+                        <span class="stat-change positive">+12% este mes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎬</div>
+                    <div class="stat-content">
+                        <h3>Alquileres Activos</h3>
+                        <p class="stat-number">358</p>
+                        <span class="stat-change positive">+8% esta semana</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <h3>Ingresos del Mes</h3>
+                        <p class="stat-number">$12,450</p>
+                        <span class="stat-change positive">+15% vs mes anterior</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3>Contenido Total</h3>
+                        <p class="stat-number">4,892</p>
+                        <span class="stat-change">Películas y Series</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión de Usuarios -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>👥 Gestión de Usuarios</h2>
+                    <button class="btn-primary">➕ Crear Usuario</button>
+                </div>
+
+                <div class="search-filter-bar">
+                    <input type="text" class="search-input" placeholder="Buscar usuario...">
+                    <select class="filter-select">
+                        <option value="">Todos los roles</option>
+                        <option value="regular">Usuario Regular</option>
+                        <option value="admin">Administrador</option>
+                        <option value="gestor">Gestor de Inventario</option>
+                        <option value="analista">Analista de Datos</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Estado</option>
+                        <option value="activo">Activo</option>
+                        <option value="suspendido">Suspendido</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Fecha Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1001</td>
+                                <td>Juan Pérez</td>
+                                <td>juan.perez@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>15/08/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1002</td>
+                                <td>María González</td>
+                                <td>maria.gonzalez@email.com</td>
+                                <td><span class="badge badge-admin">Administrador</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>10/07/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Ver detalles">👁️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1003</td>
+                                <td>Carlos Rodríguez</td>
+                                <td>carlos.r@email.com</td>
+                                <td><span class="badge badge-gestor">Gestor Inventario</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>22/06/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1004</td>
+                                <td>Ana Martínez</td>
+                                <td>ana.martinez@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge suspended">Suspendido</span></td>
+                                <td>05/09/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Activar">✅</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1005</td>
+                                <td>Luis Fernández</td>
+                                <td>luis.fernandez@email.com</td>
+                                <td><span class="badge badge-analista">Analista Datos</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>18/08/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1006</td>
+                                <td>Patricia Sánchez</td>
+                                <td>patricia.s@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>20/09/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1007</td>
+                                <td>Roberto Díaz</td>
+                                <td>roberto.diaz@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>25/09/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="btn-secondary">← Anterior</button>
+                    <span>Página 1 de 25</span>
+                    <button class="btn-secondary">Siguiente →</button>
+                </div>
+            </section>
+
+            <!-- Configuración de Precios -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>💰 Configuración de Precios</h2>
+                    <button class="btn-primary">💾 Guardar Cambios</button>
+                </div>
+
+                <div class="price-config-grid">
+                    <div class="config-card">
+                        <h3>🎬 Películas</h3>
+                        <div class="price-input-group">
+                            <label>3 días:</label>
+                            <input type="number" value="3.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>7 días:</label>
+                            <input type="number" value="5.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>30 días:</label>
+                            <input type="number" value="9.99" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <h3>📺 Series (por temporada)</h3>
+                        <div class="price-input-group">
+                            <label>7 días:</label>
+                            <input type="number" value="5.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>14 días:</label>
+                            <input type="number" value="8.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>30 días:</label>
+                            <input type="number" value="12.99" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <h3>⚙️ Configuración General</h3>
+                        <div class="price-input-group">
+                            <label>Máx. alquileres simultáneos:</label>
+                            <input type="number" value="5">
+                        </div>
+                        <div class="price-input-group">
+                            <label>Extensión de alquiler (días):</label>
+                            <input type="number" value="3">
+                        </div>
+                        <div class="price-input-group">
+                            <label>Descuento por volumen (%):</label>
+                            <input type="number" value="10">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Políticas del Sistema -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>📋 Políticas del Sistema</h2>
+                    <button class="btn-primary">💾 Guardar Políticas</button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tiempo de gracia para devolución (horas):</label>
+                        <input type="number" value="24">
+                    </div>
+                    <div class="form-group">
+                        <label>Penalización por retraso (% por día):</label>
+                        <input type="number" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Edad mínima para registro:</label>
+                        <input type="number" value="13">
+                    </div>
+                    <div class="form-group">
+                        <label>Intentos de login antes de bloqueo:</label>
+                        <input type="number" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Duración de bloqueo (minutos):</label>
+                        <input type="number" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>Días de retención de historial:</label>
+                        <input type="number" value="365">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Términos y Condiciones (URL):</label>
+                        <input type="text" value="https://cinearchive.com/terminos">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Política de Privacidad (URL):</label>
+                        <input type="text" value="https://cinearchive.com/privacidad">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actividad Reciente del Sistema -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>⚡ Actividad Reciente del Sistema</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h3>Nuevos Usuarios Hoy</h3>
+                            <p class="stat-number">24</p>
+                            <span class="stat-change positive">+15% vs ayer</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎬</div>
+                        <div class="stat-content">
+                            <h3>Alquileres Hoy</h3>
+                            <p class="stat-number">87</p>
+                            <span class="stat-change positive">+22% vs ayer</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-content">
+                            <h3>Cuentas Suspendidas</h3>
+                            <p class="stat-number">3</p>
+                            <span class="stat-change">Esta semana</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💬</div>
+                        <div class="stat-content">
+                            <h3>Reseñas Nuevas</h3>
+                            <p class="stat-number">45</p>
+                            <span class="stat-change positive">+8% vs ayer</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logs y Auditoría -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>📋 Registro de Actividades (Auditoría)</h2>
+                    <button class="btn-secondary">📥 Exportar Logs</button>
+                </div>
+
+                <div class="logs-container">
+                    <div class="log-item">
+                        <span class="log-time">2024-10-14 10:30:15</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Suspendió al usuario #1004 (Ana Martínez)</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-14 09:15:42</span>
+                        <span class="log-user">Gestor: Carlos Rodríguez</span>
+                        <span class="log-action">Agregó película "Dune: Part Two" al catálogo</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 18:45:30</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Modificó precio de alquiler de 3 días a $3.99</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 16:20:11</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Creó nuevo rol "Analista de Datos" para usuario #1005</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 14:05:55</span>
+                        <span class="log-user">Gestor: Carlos Rodríguez</span>
+                        <span class="log-action">Actualizó disponibilidad de "Interstellar" - 15 copias</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 12:30:22</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Activó cuenta de usuario #1006 (Patricia Sánchez)</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 11:15:08</span>
+                        <span class="log-user">Analista: Luis Fernández</span>
+                        <span class="log-action">Generó reporte mensual de rendimiento por género</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-12 19:45:33</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Modificó política de penalización por retraso a 5%</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-12 16:20:44</span>
+                        <span class="log-user">Gestor: Carlos Rodríguez</span>
+                        <span class="log-action">Eliminó contenido obsoleto "Película Antigua" del catálogo</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-12 14:10:19</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Configuró nuevo límite de alquileres simultáneos a 5</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accesos Rápidos -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>🔗 Accesos Rápidos</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='gestor-inventario.html'">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-content">
+                            <h3>Gestión de Inventario</h3>
+                            <p style="font-size: 14px; color: #888;">Administrar catálogo de contenido</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='analista-datos.html'">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <h3>Reportes y Analítica</h3>
+                            <p style="font-size: 14px; color: #888;">Ver estadísticas y tendencias</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon">🔒</div>
+                        <div class="stat-content">
+                            <h3>Seguridad</h3>
+                            <p style="font-size: 14px; color: #888;">Configuración de seguridad</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon">📧</div>
+                        <div class="stat-content">
+                            <h3>Notificaciones</h3>
+                            <p style="font-size: 14px; color: #888;">Gestionar comunicaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

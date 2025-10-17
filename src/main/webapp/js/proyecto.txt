@@ -1,0 +1,77 @@
+# **CineArchive (V2)**
+
+Aplicación web para alquilar, almacenar y gestionar series y películas vistas
+
+La plataforma permitirá a los usuarios llevar un registro de su contenido visto, alquilar series ó películas temporalmente y gestionar su biblioteca personal de entretenimiento
+
+## Objetivos Específicos
+
+1. Implementar un sistema robusto de **autenticación y autorización con múltiples roles** que contemple **Usuarios Regulares, Administradores, Gestores de Inventario y Analistas de Datos**, garantizando permisos diferenciados según responsabilidades
+2. Diseñar y desarrollar un **módulo de alquiler digital** con gestión de períodos temporales y pagos para **Usuarios Regulares**, incluyendo biblioteca personal, listas y reseñas
+3. Crear un **panel de administración completo** para que los Administradores gestionen usuarios, precios y políticas del sistema
+4. Implementar un **sistema de gestión de inventario y disponibilidad** que permita a los Gestores de Inventario controlar el catálogo, stock de licencias y disponibilidad de contenido
+5. Desarrollar un **sistema de reportes y analítica avanzada** que permita a los Analistas de Datos estudiar comportamiento de usuarios, rendimiento de géneros y contenido más popular
+6. Integrar APIs externas para enriquecer el catálogo con información actualizada, facilitando la importación masiva de contenido por parte de Gestores de Inventario
+7. Proporcionar herramientas avanzadas de **búsqueda, filtrado y personalización** adaptadas a cada tipo de actor según sus necesidades operativas
+
+## ACTORES DEL SISTEMA
+
+El sistema contempla cuatro tipos de actores con responsabilidades y permisos claramente diferenciados:
+
+### Usuario Regular (Cliente)
+
+**Descripción:** Usuario final de la plataforma que consume y gestiona contenido audiovisual mediante alquiler temporal.
+
+**Responsabilidades:**
+
+- Navegación y búsqueda en el catálogo de películas y series disponibles
+- Alquiler temporal de contenido audiovisual según disponibilidad
+- Gestión de biblioteca personal (películas/series vistas, alquiladas actualmente)
+- Creación y administración de listas personalizadas de favoritos
+- Calificación y escritura de reseñas de contenido consumido
+- Consulta de historial de alquileres y transacciones
+- Visualización de contenido durante el período de alquiler activo
+
+### Administrador del Sistema
+
+**Descripción:** Usuario con privilegios para la gestión estratégica de la plataforma, enfocado en usuarios, políticas y supervisión general del sistema.
+
+**Responsabilidades:**
+
+- Administración completa de usuarios (creación, activación, suspensión, modificación de roles)
+- Configuración de precios y políticas de alquiler del sistema
+- Definición de períodos de alquiler y restricciones de uso
+- Supervisión general del sistema y resolución de conflictos entre usuarios
+- Auditoría de actividades y logs del sistema
+- Gestión de reportes generados por Analistas de Datos
+- Toma de decisiones estratégicas basadas en analytics
+
+### Gestor de Inventario (Content Manager)
+
+**Descripción:** Usuario especializado en la gestión del catálogo de contenido, control de disponibilidad y mantenimiento del inventario digital de la plataforma.
+
+**Responsabilidades:**
+
+- Gestión completa del catálogo (CRUD de películas y series)
+- Control de disponibilidad y stock de licencias digitales
+- Importación masiva de contenido desde APIs externas (TMDb, OMDb, etc.)
+- Gestión de categorías, géneros, tags y metadatos del contenido
+- Actualización de información de películas/series (sinopsis, posters, trailers)
+- Marcado de contenido como disponible/no disponible para alquiler
+- Renovación y control de vencimiento de licencias de contenido
+- Gestión de copias digitales simultáneas disponibles para alquiler
+
+### Analista de Datos (Generador de Reportes)
+
+**Descripción:** Usuario especializado en el análisis de información y generación de reportes estratégicos, con acceso de solo lectura a datos del sistema para análisis sin capacidad de modificación.
+
+**Responsabilidades:**
+
+- Generación de reportes de películas/series más alquiladas por período
+- Análisis de comportamiento y patrones de consumo de usuarios
+- Análisis demográfico de usuarios por rango de edad y preferencias
+- Comparativa de rendimiento entre géneros (acción vs. comedia vs. drama, etc.)
+- Identificación de contenido con mejor y peor performance
+- Análisis de tendencias temporales de alquileres
+- Generación de dashboards y visualizaciones de datos
+- Recomendaciones basadas en datos para estrategia de contenido

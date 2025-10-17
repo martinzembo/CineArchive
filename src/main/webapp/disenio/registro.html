@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="login.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="login-container">
+            <h2>Crear Cuenta</h2>
+            <p class="subtitle">Únete a CineArchive y disfruta del mejor contenido</p>
+            <form class="login-form">
+                <input type="text" placeholder="Nombre completo" required>
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <input type="password" placeholder="Confirmar contraseña" required>
+                <input type="date" placeholder="Fecha de nacimiento" required>
+
+                <select required>
+                    <option value="">Selecciona tu país</option>
+                    <option value="mx">México</option>
+                    <option value="es">España</option>
+                    <option value="ar">Argentina</option>
+                    <option value="co">Colombia</option>
+                    <option value="cl">Chile</option>
+                    <option value="pe">Perú</option>
+                    <option value="us">Estados Unidos</option>
+                    <option value="other">Otro</option>
+                </select>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de Privacidad</a></label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter">
+                    <label for="newsletter">Deseo recibir novedades y ofertas por correo electrónico</label>
+                </div>
+
+                <button type="submit">Crear Cuenta</button>
+            </form>
+            <div class="login-links">
+                <span>¿Ya tienes una cuenta? </span><a href="login.html">Iniciar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle - CineArchive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="Index.html">Inicio</a>
+                <a href="miLista.html">Mi Lista</a>
+                <a href="paraVer.html">Para Ver</a>
+                <a href="#" class="user-profile">👤 Mi Perfil</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="detail-container">
+            <div class="detail-hero">
+                <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película" class="detail-poster">
+                <div class="detail-info">
+                    <h1>Interstellar</h1>
+                    <div class="detail-meta">
+                        <span class="badge">Ciencia Ficción</span>
+                        <span class="badge">Drama</span>
+                        <span class="badge">Aventura</span>
+                        <span>•</span>
+                        <span>2h 49min</span>
+                        <span>•</span>
+                        <span>2014</span>
+                        <span>•</span>
+                        <span class="rating-large">★★★★★ 4.8/5</span>
+                    </div>
+
+                    <div class="rental-section">
+                        <div class="rental-options">
+                            <div class="rental-option selected">
+                                <input type="radio" name="rental" id="rental3" checked>
+                                <label for="rental3">
+                                    <span class="rental-duration">3 días</span>
+                                    <span class="rental-price-large">$3.99</span>
+                                </label>
+                            </div>
+                            <div class="rental-option">
+                                <input type="radio" name="rental" id="rental7">
+                                <label for="rental7">
+                                    <span class="rental-duration">7 días</span>
+                                    <span class="rental-price-large">$5.99</span>
+                                </label>
+                            </div>
+                            <div class="rental-option">
+                                <input type="radio" name="rental" id="rental30">
+                                <label for="rental30">
+                                    <span class="rental-duration">30 días</span>
+                                    <span class="rental-price-large">$9.99</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button class="rent-btn-large">🎬 Alquilar ahora</button>
+                        <div class="action-buttons">
+                            <button class="btn-secondary">➕ Agregar a Mi Lista</button>
+                            <button class="btn-secondary">📋 Agregar a Para Ver</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-synopsis">
+                        <h3>Sinopsis</h3>
+                        <p>Un grupo de exploradores viaja a través de un agujero de gusano en el espacio en un intento de garantizar la supervivencia de la humanidad. En un futuro cercano, la Tierra se ha vuelto inhabitable debido a una plaga que ha devastado los cultivos del planeta.</p>
+                    </div>
+
+                    <div class="detail-cast">
+                        <h3>Reparto Principal</h3>
+                        <p><strong>Director:</strong> Christopher Nolan</p>
+                        <p><strong>Actores:</strong> Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine</p>
+                    </div>
+
+                    <div class="availability">
+                        <p>✅ <strong>Disponible:</strong> 15 copias disponibles para alquiler</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de reseñas -->
+            <div class="reviews-section">
+                <h2>Reseñas de Usuarios</h2>
+                <div class="review-form">
+                    <h3>Escribe tu reseña</h3>
+                    <div class="rating-input">
+                        <span>Tu calificación: </span>
+                        <span class="stars-input">☆☆☆☆☆</span>
+                    </div>
+                    <textarea placeholder="Comparte tu opinión sobre esta película..."></textarea>
+                    <button class="btn-primary">Publicar Reseña</button>
+                </div>
+
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>Usuario123</strong>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Hace 2 días</span>
+                        </div>
+                        <p class="review-text">Obra maestra del cine moderno. Christopher Nolan demuestra una vez más su genialidad con una historia profunda sobre el amor, el tiempo y la supervivencia humana.</p>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>CineFan2024</strong>
+                            <span class="review-rating">★★★★☆</span>
+                            <span class="review-date">Hace 1 semana</span>
+                        </div>
+                        <p class="review-text">Excelente película con efectos visuales impresionantes. La trama puede ser un poco confusa en algunos momentos, pero vale totalmente la pena.</p>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>MovieLover</strong>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Hace 2 semanas</span>
+                        </div>
+                        <p class="review-text">Una experiencia cinematográfica única. La banda sonora de Hans Zimmer complementa perfectamente las escenas emotivas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido relacionado -->
+            <section class="category">
+                <h2>Películas Similares</h2>
+                <div class="movie-row">
+                    <div class="movie-card">
+                        <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Inception</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn">Alquilar</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">The Martian</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn">Alquilar</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Gravity</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn">Alquilar</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Arrival</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn">Alquilar</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">2001: A Space Odyssey</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn">Alquilar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+            <a href="#">Centro de ayuda</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

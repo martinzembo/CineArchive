@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="Index.html">Inicio</a>
+                <a href="miLista.html">Mi Lista</a>
+                <a href="paraVer.html">Para Ver</a>
+                <a href="#" class="user-profile">👤 Mi Perfil</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="detail-container">
+            <div class="detail-hero">
+                <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película" class="detail-poster">
+                <div class="detail-info">
+                    <h1>Interstellar</h1>
+                    <div class="detail-meta">
+                        <span class="badge">Ciencia Ficción</span>
+                        <span class="badge">Drama</span>
+                        <span class="badge">Aventura</span>
+                        <span>•</span>
+                        <span>2h 49min</span>
+                        <span>•</span>
+                        <span>2014</span>
+                        <span>•</span>
+                        <span class="rating-large">★★★★★ 4.8/5</span>
+                    </div>
+
+                    <div class="rental-section">
+                        <div class="rental-options">
+                            <div class="rental-option selected">
+                                <input type="radio" name="rental" id="rental3" checked>
+                                <label for="rental3">
+                                    <span class="rental-duration">3 días</span>
+                                    <span class="rental-price-large">$3.99</span>
+                                </label>
+                            </div>
+                            <div class="rental-option">
+                                <input type="radio" name="rental" id="rental7">
+                                <label for="rental7">
+                                    <span class="rental-duration">7 días</span>
+                                    <span class="rental-price-large">$5.99</span>
+                                </label>
+                            </div>
+                            <div class="rental-option">
+                                <input type="radio" name="rental" id="rental30">
+                                <label for="rental30">
+                                    <span class="rental-duration">30 días</span>
+                                    <span class="rental-price-large">$9.99</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button class="rent-btn-large">🎬 Alquilar ahora</button>
+                        <div class="action-buttons">
+                            <button class="btn-secondary">➕ Agregar a Mi Lista</button>
+                            <button class="btn-secondary">📋 Agregar a Para Ver</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-synopsis">
+                        <h3>Sinopsis</h3>
+                        <p>Un grupo de exploradores viaja a través de un agujero de gusano en el espacio en un intento de garantizar la supervivencia de la humanidad. En un futuro cercano, la Tierra se ha vuelto inhabitable debido a una plaga que ha devastado los cultivos del planeta.</p>
+                        <p>Cooper, un ex piloto de la NASA convertido en granjero, es reclutado para liderar una misión espacial junto a un equipo de científicos. Su viaje los llevará a través de dimensiones desconocidas donde el tiempo se comporta de manera extraña y cada decisión puede significar la diferencia entre la extinción y la salvación de la humanidad.</p>
+                    </div>
+
+                    <div class="detail-cast">
+                        <h3>Información Adicional</h3>
+                        <p><strong>Director:</strong> Christopher Nolan</p>
+                        <p><strong>Guionista:</strong> Jonathan Nolan, Christopher Nolan</p>
+                        <p><strong>Reparto Principal:</strong> Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine, Matt Damon</p>
+                        <p><strong>Productora:</strong> Paramount Pictures, Warner Bros., Legendary Pictures</p>
+                        <p><strong>Música:</strong> Hans Zimmer</p>
+                        <p><strong>Clasificación:</strong> PG-13</p>
+                        <p><strong>Idiomas:</strong> Inglés, Español (subtítulos)</p>
+                    </div>
+
+                    <div class="availability">
+                        <p>✅ <strong>Disponible para alquiler</strong></p>
+                        <p>15 copias disponibles • Alta calidad HD/4K</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trailer -->
+            <section class="admin-section">
+                <h2>🎥 Tráiler Oficial</h2>
+                <div style="background: #000; padding: 20px; border-radius: 10px; text-align: center;">
+                    <p style="color: #888;">El reproductor de video se cargará aquí</p>
+                    <p style="color: #888; font-size: 14px;">[Integración con reproductor de video]</p>
+                </div>
+            </section>
+
+            <!-- Sección de reseñas -->
+            <div class="reviews-section">
+                <h2>✍️ Reseñas de Usuarios</h2>
+
+                <div class="review-form">
+                    <h3>Escribe tu reseña</h3>
+                    <div class="rating-input">
+                        <span>Tu calificación: </span>
+                        <span class="stars-input">☆☆☆☆☆</span>
+                    </div>
+                    <textarea placeholder="Comparte tu opinión sobre esta película... ¿Qué te pareció? ¿La recomiendas?"></textarea>
+                    <button class="btn-primary">Publicar Reseña</button>
+                </div>
+
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>Usuario123</strong>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Hace 2 días</span>
+                        </div>
+                        <p class="review-text">Obra maestra del cine moderno. Christopher Nolan demuestra una vez más su genialidad con una historia profunda sobre el amor, el tiempo y la supervivencia humana. La banda sonora de Hans Zimmer es simplemente épica. Las actuaciones están a la altura, especialmente Matthew McConaughey. Una experiencia cinematográfica que te deja pensando días después.</p>
+                        <div class="review-actions">
+                            <button class="btn-icon">👍 Útil (45)</button>
+                            <button class="btn-icon">💬 Responder</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>CineFan2024</strong>
+                            <span class="review-rating">★★★★☆</span>
+                            <span class="review-date">Hace 1 semana</span>
+                        </div>
+                        <p class="review-text">Excelente película con efectos visuales impresionantes. La trama puede ser un poco confusa en algunos momentos, especialmente con el tema del tiempo y las dimensiones, pero vale totalmente la pena. Recomiendo verla con atención y quizás más de una vez para captar todos los detalles.</p>
+                        <div class="review-actions">
+                            <button class="btn-icon">👍 Útil (32)</button>
+                            <button class="btn-icon">💬 Responder</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>MovieLover</strong>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Hace 2 semanas</span>
+                        </div>
+                        <p class="review-text">Una experiencia cinematográfica única. La banda sonora de Hans Zimmer complementa perfectamente las escenas emotivas. Me encantó la forma en que explora conceptos científicos complejos de manera accesible. La escena del agujero negro es visualmente impresionante.</p>
+                        <div class="review-actions">
+                            <button class="btn-icon">👍 Útil (28)</button>
+                            <button class="btn-icon">💬 Responder</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>SciFiAddict</strong>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Hace 3 semanas</span>
+                        </div>
+                        <p class="review-text">Para los amantes de la ciencia ficción inteligente, esta es una joya. Nolan logra combinar drama familiar con exploración espacial de una manera brillante. El concepto del tiempo como dimensión relativa está muy bien ejecutado. Imprescindible para cualquier fan del género.</p>
+                        <div class="review-actions">
+                            <button class="btn-icon">👍 Útil (41)</button>
+                            <button class="btn-icon">💬 Responder</button>
+                        </div>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>JuanCarlos92</strong>
+                            <span class="review-rating">★★★★☆</span>
+                            <span class="review-date">Hace 1 mes</span>
+                        </div>
+                        <p class="review-text">Gran película, aunque admito que me costó seguir algunas partes. Los efectos especiales son de primer nivel y la fotografía es hermosa. La relación padre-hija le da un toque muy emotivo a toda la historia. Definitivamente la volvería a ver.</p>
+                        <div class="review-actions">
+                            <button class="btn-icon">👍 Útil (19)</button>
+                            <button class="btn-icon">💬 Responder</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-secondary">Ver más reseñas</button>
+                </div>
+            </div>
+
+            <!-- Contenido relacionado -->
+            <section class="category">
+                <h2>🎬 Películas Similares</h2>
+                <div class="movie-row">
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Inception</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">The Martian</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Gravity</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Arrival</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">2001: A Space Odyssey</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Blade Runner 2049</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Más del director -->
+            <section class="category">
+                <h2>🎬 Más de Christopher Nolan</h2>
+                <div class="movie-row">
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Oppenheimer</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">The Dark Knight</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Dunkirk</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$3.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">Tenet</div>
+                            <div class="movie-rating">★★★★☆</div>
+                            <div class="rental-price">$4.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                    <div class="movie-card">
+                        <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película">
+                        <div class="movie-info">
+                            <div class="movie-title">The Prestige</div>
+                            <div class="movie-rating">★★★★★</div>
+                            <div class="rental-price">$2.99 / 3 días</div>
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">Ver detalles</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+            <a href="#">Centro de ayuda</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
+

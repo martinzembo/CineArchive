@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="gestor-inventario.html">Gestión Inventario</a>
+                <a href="Index.html">Catálogo</a>
+                <a href="#" class="user-profile">👤 Gestor</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="admin-panel">
+            <h1>Gestión de Inventario</h1>
+
+            <!-- Estadísticas de Inventario -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎬</div>
+                    <div class="stat-content">
+                        <h3>Total Películas</h3>
+                        <p class="stat-number">3,245</p>
+                        <span class="stat-change">En catálogo</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📺</div>
+                    <div class="stat-content">
+                        <h3>Total Series</h3>
+                        <p class="stat-number">1,647</p>
+                        <span class="stat-change">En catálogo</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3>Disponibles</h3>
+                        <p class="stat-number">4,523</p>
+                        <span class="stat-change positive">92% del total</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-content">
+                        <h3>Stock Bajo</h3>
+                        <p class="stat-number">89</p>
+                        <span class="stat-change warning">Requiere atención</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agregar Contenido -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>➕ Agregar Nuevo Contenido</h2>
+                </div>
+
+                <div class="add-content-tabs">
+                    <button class="tab-btn active">Manual</button>
+                    <button class="tab-btn">Importar desde API</button>
+                    <button class="tab-btn">Importación Masiva</button>
+                </div>
+
+                <div class="add-content-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Título:</label>
+                            <input type="text" placeholder="Nombre de la película o serie">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo:</label>
+                            <select>
+                                <option value="pelicula">Película</option>
+                                <option value="serie">Serie</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Año:</label>
+                            <input type="number" placeholder="2024">
+                        </div>
+                        <div class="form-group">
+                            <label>Duración:</label>
+                            <input type="text" placeholder="2h 30min">
+                        </div>
+                        <div class="form-group">
+                            <label>Director:</label>
+                            <input type="text" placeholder="Nombre del director">
+                        </div>
+                        <div class="form-group">
+                            <label>Géneros:</label>
+                            <input type="text" placeholder="Acción, Drama, Ciencia Ficción">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Sinopsis:</label>
+                            <textarea rows="4" placeholder="Descripción de la película o serie..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>URL del Poster:</label>
+                            <input type="text" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Copias Disponibles:</label>
+                            <input type="number" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado:</label>
+                            <select>
+                                <option value="disponible">Disponible</option>
+                                <option value="no-disponible">No Disponible</option>
+                                <option value="proximamente">Próximamente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Clasificación:</label>
+                            <select>
+                                <option value="g">G - Todos</option>
+                                <option value="pg">PG - Guía Parental</option>
+                                <option value="pg13">PG-13 - Mayores de 13</option>
+                                <option value="r">R - Restringido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary">💾 Guardar Contenido</button>
+                </div>
+            </section>
+
+            <!-- Gestión de Catálogo -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>📋 Gestión de Catálogo</h2>
+                    <div class="header-actions">
+                        <button class="btn-secondary">🔄 Sincronizar con API</button>
+                        <button class="btn-secondary">📥 Exportar Catálogo</button>
+                    </div>
+                </div>
+
+                <div class="search-filter-bar">
+                    <input type="text" class="search-input" placeholder="Buscar contenido...">
+                    <select class="filter-select">
+                        <option value="">Todos los tipos</option>
+                        <option value="pelicula">Películas</option>
+                        <option value="serie">Series</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Todos los géneros</option>
+                        <option value="accion">Acción</option>
+                        <option value="comedia">Comedia</option>
+                        <option value="drama">Drama</option>
+                        <option value="terror">Terror</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Estado</option>
+                        <option value="disponible">Disponible</option>
+                        <option value="no-disponible">No Disponible</option>
+                        <option value="stock-bajo">Stock Bajo</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Poster</th>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Año</th>
+                                <th>Género</th>
+                                <th>Copias Disp.</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#M001</td>
+                                <td><img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Poster" class="table-img"></td>
+                                <td>Interstellar</td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>2014</td>
+                                <td>Ciencia Ficción</td>
+                                <td>15 / 20</td>
+                                <td><span class="status-badge active">Disponible</span></td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Copias">📦</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#S002</td>
+                                <td><img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Poster" class="table-img"></td>
+                                <td>Breaking Bad T1</td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>2008</td>
+                                <td>Drama</td>
+                                <td>25 / 30</td>
+                                <td><span class="status-badge active">Disponible</span></td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Copias">📦</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#M003</td>
+                                <td><img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Poster" class="table-img"></td>
+                                <td>Oppenheimer</td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>2023</td>
+                                <td>Drama</td>
+                                <td>2 / 15</td>
+                                <td><span class="status-badge warning">Stock Bajo</span></td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Copias">📦</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#M004</td>
+                                <td><img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Poster" class="table-img"></td>
+                                <td>Dune: Part Two</td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>2024</td>
+                                <td>Ciencia Ficción</td>
+                                <td>0 / 20</td>
+                                <td><span class="status-badge inactive">No Disponible</span></td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Copias">📦</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#S005</td>
+                                <td><img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Poster" class="table-img"></td>
+                                <td>Stranger Things T4</td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>2022</td>
+                                <td>Ciencia Ficción</td>
+                                <td>18 / 25</td>
+                                <td><span class="status-badge active">Disponible</span></td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Copias">📦</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="btn-secondary">← Anterior</button>
+                    <span>Página 1 de 98</span>
+                    <button class="btn-secondary">Siguiente →</button>
+                </div>
+            </section>
+
+            <!-- Alertas de Stock -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>⚠️ Alertas de Stock Bajo</h2>
+                </div>
+
+                <div class="alerts-container">
+                    <div class="alert-item warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div class="alert-content">
+                            <strong>Oppenheimer</strong>
+                            <p>Solo 2 copias disponibles de 15 totales. Considere aumentar el inventario.</p>
+                        </div>
+                        <button class="btn-secondary">Aumentar Stock</button>
+                    </div>
+                    <div class="alert-item critical">
+                        <span class="alert-icon">🚨</span>
+                        <div class="alert-content">
+                            <strong>The Last of Us T1</strong>
+                            <p>0 copias disponibles. Contenido agotado - alta demanda.</p>
+                        </div>
+                        <button class="btn-primary">Renovar Licencias</button>
+                    </div>
+                    <div class="alert-item warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div class="alert-content">
+                            <strong>Barbie</strong>
+                            <p>Solo 3 copias disponibles de 20 totales.</p>
+                        </div>
+                        <button class="btn-secondary">Aumentar Stock</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="admin-panel.html">Panel Admin</a>
+                <a href="Index.html">Catálogo</a>
+                <a href="#" class="user-profile">👤 Administrador</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="admin-panel">
+            <h1>Panel de Administración</h1>
+
+            <!-- Estadísticas Generales -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3>Total Usuarios</h3>
+                        <p class="stat-number">1,247</p>
+                        <span class="stat-change positive">+12% este mes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎬</div>
+                    <div class="stat-content">
+                        <h3>Alquileres Activos</h3>
+                        <p class="stat-number">358</p>
+                        <span class="stat-change positive">+8% esta semana</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <h3>Ingresos del Mes</h3>
+                        <p class="stat-number">$12,450</p>
+                        <span class="stat-change positive">+15% vs mes anterior</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3>Contenido Total</h3>
+                        <p class="stat-number">4,892</p>
+                        <span class="stat-change">Películas y Series</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión de Usuarios -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>👥 Gestión de Usuarios</h2>
+                    <button class="btn-primary">➕ Crear Usuario</button>
+                </div>
+
+                <div class="search-filter-bar">
+                    <input type="text" class="search-input" placeholder="Buscar usuario...">
+                    <select class="filter-select">
+                        <option value="">Todos los roles</option>
+                        <option value="regular">Usuario Regular</option>
+                        <option value="admin">Administrador</option>
+                        <option value="gestor">Gestor de Inventario</option>
+                        <option value="analista">Analista de Datos</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Estado</option>
+                        <option value="activo">Activo</option>
+                        <option value="suspendido">Suspendido</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Fecha Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1001</td>
+                                <td>Juan Pérez</td>
+                                <td>juan.perez@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>15/08/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1002</td>
+                                <td>María González</td>
+                                <td>maria.gonzalez@email.com</td>
+                                <td><span class="badge badge-admin">Administrador</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>10/07/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Ver detalles">👁️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1003</td>
+                                <td>Carlos Rodríguez</td>
+                                <td>carlos.r@email.com</td>
+                                <td><span class="badge badge-gestor">Gestor Inventario</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>22/06/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1004</td>
+                                <td>Ana Martínez</td>
+                                <td>ana.martinez@email.com</td>
+                                <td><span class="badge badge-user">Usuario Regular</span></td>
+                                <td><span class="status-badge suspended">Suspendido</span></td>
+                                <td>05/09/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Activar">✅</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1005</td>
+                                <td>Luis Fernández</td>
+                                <td>luis.fernandez@email.com</td>
+                                <td><span class="badge badge-analista">Analista Datos</span></td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>18/08/2024</td>
+                                <td>
+                                    <button class="btn-icon" title="Editar">✏️</button>
+                                    <button class="btn-icon" title="Suspender">🚫</button>
+                                    <button class="btn-icon" title="Eliminar">🗑️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="btn-secondary">← Anterior</button>
+                    <span>Página 1 de 25</span>
+                    <button class="btn-secondary">Siguiente →</button>
+                </div>
+            </section>
+
+            <!-- Configuración de Precios -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>💰 Configuración de Precios</h2>
+                    <button class="btn-primary">💾 Guardar Cambios</button>
+                </div>
+
+                <div class="price-config-grid">
+                    <div class="config-card">
+                        <h3>🎬 Películas</h3>
+                        <div class="price-input-group">
+                            <label>3 días:</label>
+                            <input type="number" value="3.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>7 días:</label>
+                            <input type="number" value="5.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>30 días:</label>
+                            <input type="number" value="9.99" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <h3>📺 Series (por temporada)</h3>
+                        <div class="price-input-group">
+                            <label>7 días:</label>
+                            <input type="number" value="5.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>14 días:</label>
+                            <input type="number" value="8.99" step="0.01">
+                        </div>
+                        <div class="price-input-group">
+                            <label>30 días:</label>
+                            <input type="number" value="12.99" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <h3>⚙️ Configuración General</h3>
+                        <div class="price-input-group">
+                            <label>Máx. alquileres simultáneos:</label>
+                            <input type="number" value="5">
+                        </div>
+                        <div class="price-input-group">
+                            <label>Extensión de alquiler (días):</label>
+                            <input type="number" value="3">
+                        </div>
+                        <div class="price-input-group">
+                            <label>Descuento por volumen (%):</label>
+                            <input type="number" value="10">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logs y Auditoría -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>📋 Registro de Actividades</h2>
+                    <button class="btn-secondary">📥 Exportar Logs</button>
+                </div>
+
+                <div class="logs-container">
+                    <div class="log-item">
+                        <span class="log-time">2024-10-14 10:30:15</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Suspendió al usuario #1004 (Ana Martínez)</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-14 09:15:42</span>
+                        <span class="log-user">Gestor: Carlos Rodríguez</span>
+                        <span class="log-action">Agregó película "Dune: Part Two" al catálogo</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 18:45:30</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Modificó precio de alquiler de 3 días a $3.99</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 16:20:11</span>
+                        <span class="log-user">Admin: María González</span>
+                        <span class="log-action">Creó nuevo rol "Analista de Datos" para usuario #1005</span>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-time">2024-10-13 14:05:55</span>
+                        <span class="log-user">Gestor: Carlos Rodríguez</span>
+                        <span class="log-action">Actualizó disponibilidad de "Interstellar" - 15 copias</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

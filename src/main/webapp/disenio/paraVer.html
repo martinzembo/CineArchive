@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ver - CineArchive</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Index.html" class="logo">CineArchive</a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="Index.html">Inicio</a>
+                <a href="miLista.html">Mi Lista</a>
+                <a href="paraVer.html">Para Ver</a>
+                <a href="#" class="user-profile">👤 Mi Perfil</a>
+                <button class="login-btn" onclick="window.location.href='login.html'">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1 class="page-title">📋 Mi Lista Para Ver</h1>
+        <p class="page-subtitle">Organiza y planifica tu próximo contenido a ver</p>
+
+        <!-- Contador -->
+        <div class="watchlist-stats">
+            <div class="stat-item">
+                <span class="stat-number">12</span>
+                <span class="stat-label">Total en lista</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">8</span>
+                <span class="stat-label">Películas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">4</span>
+                <span class="stat-label">Series</span>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-bar">
+            <select class="filter-select">
+                <option value="todas">Todas</option>
+                <option value="peliculas">Solo Películas</option>
+                <option value="series">Solo Series</option>
+            </select>
+            <select class="filter-select">
+                <option value="agregado">Fecha Agregada</option>
+                <option value="prioridad">Prioridad</option>
+                <option value="titulo">Título A-Z</option>
+                <option value="rating">Mejor Valoradas</option>
+            </select>
+        </div>
+
+        <!-- Prioridad Alta -->
+        <section class="category">
+            <div class="section-header">
+                <h2>🔥 Prioridad Alta</h2>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card priority-high">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 1">
+                    <div class="movie-info">
+                        <div class="movie-title">Dune: Part Two</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$4.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-high">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie 1">
+                    <div class="movie-info">
+                        <div class="movie-title">The Last of Us</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$6.99 / 7 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-high">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 2">
+                    <div class="movie-info">
+                        <div class="movie-title">Killers of the Flower Moon</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prioridad Media -->
+        <section class="category">
+            <div class="section-header">
+                <h2>⭐ Prioridad Media</h2>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card priority-medium">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 3">
+                    <div class="movie-info">
+                        <div class="movie-title">Top Gun: Maverick</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-medium">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie 2">
+                    <div class="movie-info">
+                        <div class="movie-title">Wednesday</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$5.99 / 7 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-medium">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 4">
+                    <div class="movie-info">
+                        <div class="movie-title">John Wick 4</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$4.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-medium">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 5">
+                    <div class="movie-info">
+                        <div class="movie-title">The Creator</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$4.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prioridad Baja -->
+        <section class="category">
+            <div class="section-header">
+                <h2>📌 Prioridad Baja</h2>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card priority-low">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 6">
+                    <div class="movie-info">
+                        <div class="movie-title">Avatar: The Way of Water</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-low">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie 3">
+                    <div class="movie-info">
+                        <div class="movie-title">The Crown T6</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$5.99 / 7 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-low">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 7">
+                    <div class="movie-info">
+                        <div class="movie-title">Mission: Impossible</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$4.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-low">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Película 8">
+                    <div class="movie-info">
+                        <div class="movie-title">The Marvels</div>
+                        <div class="movie-rating">★★★☆☆</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card priority-low">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Serie 4">
+                    <div class="movie-info">
+                        <div class="movie-title">1899</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$5.99 / 7 días</div>
+                        <div class="action-buttons-vertical">
+                            <button class="rent-btn" onclick="window.location.href='detalle.html'">🎬 Alquilar</button>
+                            <button class="btn-secondary">❌ Quitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recomendaciones Basadas en tu Lista -->
+        <section class="category">
+            <div class="section-header">
+                <h2>💡 Recomendaciones para Ti</h2>
+                <p class="section-subtitle">Basado en tu lista para ver</p>
+            </div>
+            <div class="movie-row">
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Recomendación 1">
+                    <div class="movie-info">
+                        <div class="movie-title">Blade Runner 2049</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <button class="btn-add">➕ Agregar a lista</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Recomendación 2">
+                    <div class="movie-info">
+                        <div class="movie-title">Arrival</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$3.99 / 3 días</div>
+                        <button class="btn-add">➕ Agregar a lista</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BOGVkODYxMDEtODczZC00MjRiLTg3ZWYtZjgzN2QyMDBjZTUzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Recomendación 3">
+                    <div class="movie-info">
+                        <div class="movie-title">Dark T1</div>
+                        <div class="movie-rating">★★★★★</div>
+                        <div class="rental-price">$5.99 / 7 días</div>
+                        <button class="btn-add">➕ Agregar a lista</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Recomendación 4">
+                    <div class="movie-info">
+                        <div class="movie-title">Ex Machina</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$2.99 / 3 días</div>
+                        <button class="btn-add">➕ Agregar a lista</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img src="../img/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX1000_.jpg" alt="Recomendación 5">
+                    <div class="movie-info">
+                        <div class="movie-title">A.I. Artificial Intelligence</div>
+                        <div class="movie-rating">★★★★☆</div>
+                        <div class="rental-price">$2.99 / 3 días</div>
+                        <button class="btn-add">➕ Agregar a lista</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Acerca de</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Contacto</a>
+            <a href="#">Centro de ayuda</a>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
