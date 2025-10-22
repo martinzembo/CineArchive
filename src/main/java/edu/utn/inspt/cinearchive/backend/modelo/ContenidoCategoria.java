@@ -1,4 +1,4 @@
-package edu.utn.inspt.cinearchive.modelo;
+package edu.utn.inspt.cinearchive.backend.modelo;
 
 import java.io.Serializable;
 
