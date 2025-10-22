@@ -1,6 +1,75 @@
 # 📋 Plan de Delegación de Desarrollo - CineArchive V2
 ## ⚡ RÉGIMEN INTENSIVO - 4 SEMANAS
 
+## 🏗️ Arquitectura Frontend/Backend (Corrección del Profesor)
+
+Tu profesor pidió **separar claramente el FRONT del BACK**, eliminando la mezcla de responsabilidades. Esta es la arquitectura que seguiremos:
+
+### Estructura de Capas:
+```
+┌─────────────────────────────────────────────────────────┐
+│  FRONTEND (Presentación HTTP)                           │
+│  └─ Servlets (ej: LoginServlet.java)                   │
+│     • Reciben requests HTTP                             │
+│     • Validan entrada básica                            │
+│     • Llaman a Services del BACKEND                     │
+│     • Manejan sesiones y redirecciones                  │
+│     • Renderizan JSP o retornan JSON                    │
+└─────────────────────────────────────────────────────────┘
+                            ↓ Llama a
+┌─────────────────────────────────────────────────────────┐
+│  BACKEND (Lógica de Negocio Pura)                       │
+│  ├─ Services (ej: UsuarioService.java)                │
+│  │  • Validaciones complejas de negocio                 │
+│  │  • Orquestación de operaciones                       │
+│  │  • **NO manejan HTTP**                               │
+│  │  • Llaman a Repositorios                             │
+│  │                                                       │
+│  └─ Repositorios (ej: UsuarioRepositorio.java)         │
+│     • CRUD con la Base de Datos                         │
+│     • Queries SQL                                       │
+│     • Gestión de conexiones                             │
+└─────────────────────────────────────────────────────────┘
+                            ↓ Accede a
+┌─────────────────────────────────────────────────────────┐
+│  BASE DE DATOS (MySQL)                                  │
+│  └─ Tablas, Views, Stored Procedures                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Flujo de una Petición HTTP:
+```
+1. Usuario entra en login.jsp
+2. Llena formulario y hace POST a /LoginServlet
+3. LoginServlet recibe la petición
+   └─ Valida que no esté vacío
+   └─ Llama: usuarioService.autenticar(email, password)
+4. UsuarioService (BACKEND)
+   └─ Valida formato de email
+   └─ Llama: usuarioRepositorio.buscarPorEmail(email)
+5. UsuarioRepositorio (BACKEND)
+   └─ Ejecuta: SELECT * FROM usuarios WHERE email = ?
+   └─ Retorna: Usuario object (o null)
+6. UsuarioService valida password
+   └─ Retorna: Usuario autenticado
+7. LoginServlet recibe Usuario
+   └─ Crea sesión
+   └─ Redirige a index.jsp
+```
+
+### ✅ Lo Correcto:
+- ✅ LoginServlet → Llama a UsuarioService → Llama a UsuarioRepositorio → BD
+- ✅ Services NO manejan HTTP
+- ✅ Repositorios SOLO acceden a BD
+- ✅ Servlets SOLO hacen HTTP handling
+
+### ❌ Lo Incorrecto:
+- ❌ Servlet accediendo directamente a BD
+- ❌ Lógica de negocio esparcida en Servlets
+- ❌ Repositorio siendo llamado desde múltiples Servlets sin orquestar por Service
+
+---
+
 ## 🎯 Resumen del Proyecto
 **CineArchive** es una aplicación web Java (Maven + JSP) para alquilar y gestionar películas/series con 4 tipos de usuarios:
 - Usuario Regular (alquila contenido)
@@ -15,28 +84,36 @@
 ### 🔵 **DEVELOPER 1 (CHAMA) - Backend: Gestión de Usuarios y Autenticación**
 
 #### Responsabilidades Core:
-1. **Capa de Modelo - Usuarios y Seguridad**
+1. **Capa de Modelo - Usuarios y Seguridad** ✅ BACKEND
    - Completar clase `Usuario.java` con validaciones
    - Implementar sistema de encriptación de contraseñas
    - Crear DTOs para diferentes roles
 
-2. **Capa de Acceso a Datos - Usuarios**
-   - Crear DAO para Usuario (`UsuarioDAO.java`)
+2. **Capa de Repositorio - Acceso a Datos** ✅ BACKEND
+   - Crear Repositorio para Usuario (`UsuarioRepositorio.java`)
    - Implementar CRUD completo de usuarios
-   - Gestión de roles y permisos
+   - Gestión de roles y permisos en BD
+   - Conexión con `ConexionBD.java` (clase compartida)
 
-3. **Controladores - Autenticación y Usuarios**
+3. **Capa de Servicio - Lógica de Negocio** ✅ BACKEND
+   - Crear Servicio para Usuario (`UsuarioService.java`)
+   - Validaciones de negocio (email único, password fuerte, etc.)
+   - Orquestación de operaciones (encriptación, registro, búsqueda)
+   - **NO maneja HTTP ni sesiones**
+
+4. **Controladores - Frontend** 🌐 FRONTEND
    - Servlet de Login (`LoginServlet.java`)
    - Servlet de Registro (`RegistroServlet.java`)
    - Servlet de gestión de usuarios para Admin (`AdminUsuariosServlet.java`)
    - Sistema de sesiones y filtros de seguridad (`SecurityFilter.java`)
+   - **Solo reciben HTTP, llaman a Services, manejan sesiones**
 
-4. **Base de Datos - Tabla Usuarios**
+5. **Base de Datos - Tabla Usuarios**
    - Script SQL para crear tabla `usuarios`
    - Datos de prueba (seeders) - mínimo 10 usuarios de cada rol
    - Stored procedures si es necesario
 
-5. **Frontend - Vistas de Autenticación**
+6. **Frontend - Vistas de Autenticación**
    - Conectar `login.html` con backend
    - Conectar `registro.html` con backend
    - Validaciones JavaScript del lado del cliente
@@ -44,13 +121,15 @@
 
 #### Archivos a crear/modificar:
 ```
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Usuario.java (completar)
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/UsuarioDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/LoginServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/RegistroServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/AdminUsuariosServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/util/SecurityFilter.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/util/PasswordUtil.java
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Usuario.java (completar)
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/UsuarioRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/UsuarioService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/ConexionBD.java (clase compartida)
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/LoginServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/RegistroServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/AdminUsuariosServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/filtro/SecurityFilter.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/util/PasswordUtil.java
 🆕 src/main/resources/db/01_usuarios.sql
 📝 src/main/webapp/disenio/login.html (integrar con JSP)
 📝 src/main/webapp/disenio/registro.html (integrar con JSP)
@@ -66,33 +145,39 @@
 ### 🟢 **DEVELOPER 2 (Franco) - Backend: Gestión de Contenido, Alquileres y Listas**
 
 #### Responsabilidades Core:
-1. **Capa de Modelo - Contenido y Alquileres**
+1. **Capa de Modelo - Contenido y Alquileres** ✅ BACKEND
    - Completar clases `Contenido.java`, `Alquiler.java`
    - Completar `Lista.java`, `ListaContenido.java`
    - Implementar `Transaccion.java`
    - Validaciones de negocio (disponibilidad, fechas, precios)
 
-2. **Capa de Acceso a Datos - Contenido y Alquileres**
-   - Crear `ContenidoDAO.java`
-   - Crear `AlquilerDAO.java`
-   - Crear `ListaDAO.java`
-   - Crear `TransaccionDAO.java`
+2. **Capa de Repositorio - Acceso a Datos** ✅ BACKEND
+   - Crear `ContenidoRepositorio.java`
+   - Crear `AlquilerRepositorio.java`
+   - Crear `ListaRepositorio.java`
+   - Crear `TransaccionRepositorio.java`
    - Queries complejas para búsquedas y filtros
 
-3. **Controladores - Catálogo y Alquileres**
+3. **Capa de Servicio - Lógica de Negocio** ✅ BACKEND
+   - Crear `ContenidoService.java` (búsquedas, filtros)
+   - Crear `AlquilerService.java` (validar disponibilidad, crear alquiler)
+   - Crear `ListaService.java` (CRUD de listas)
+   - **NO manejan HTTP**
+
+4. **Controladores - Frontend** 🌐 FRONTEND
    - Servlet de catálogo (`CatalogoServlet.java`)
    - Servlet de alquileres (`AlquilerServlet.java`)
    - Servlet de listas personalizadas (`ListaServlet.java`)
    - Servlet de detalle de contenido (`DetalleContenidoServlet.java`)
-   - API REST para búsquedas AJAX
+   - **Solo reciben HTTP y llaman a Services**
 
-4. **Base de Datos - Tablas de Contenido**
+5. **Base de Datos - Tablas de Contenido**
    - Scripts SQL para tablas: `contenido`, `alquileres`, `listas`, `lista_contenido`, `transacciones`
    - Relaciones y constraints
    - Índices para optimización
    - Datos de prueba (mínimo 50 películas/series)
 
-5. **Frontend - Vistas de Contenido**
+6. **Frontend - Vistas de Contenido**
    - Conectar `Index.html` (catálogo principal)
    - Conectar `detalle.html` con backend
    - Conectar `miLista.html` con backend
@@ -102,19 +187,22 @@
 
 #### Archivos a crear/modificar:
 ```
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Contenido.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Alquiler.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Lista.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/ListaContenido.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Transaccion.java (completar)
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/ContenidoDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/AlquilerDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/ListaDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/TransaccionDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/CatalogoServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/AlquilerServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/ListaServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/DetalleContenidoServlet.java
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Contenido.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Alquiler.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Lista.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/ListaContenido.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Transaccion.java (completar)
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/ContenidoRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/AlquilerRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/ListaRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/TransaccionRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/ContenidoService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/AlquilerService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/ListaService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/CatalogoServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/AlquilerServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/ListaServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/DetalleContenidoServlet.java
 🆕 src/main/resources/db/02_contenido.sql
 🆕 src/main/resources/db/03_alquileres.sql
 🆕 src/main/resources/db/04_listas.sql
@@ -135,60 +223,63 @@
 ### 🟠 **DEVELOPER 3 (Martin) - Backend: Gestión de Inventario, Reseñas y Reportes**
 
 #### Responsabilidades Core:
-1. **Capa de Modelo - Inventario y Analytics**
+1. **Capa de Modelo - Inventario y Analytics** ✅ BACKEND
    - Completar `Categoria.java`, `ContenidoCategoria.java`
    - Completar `Resena.java`
    - Completar `Reporte.java`
    - Lógica de negocio para reportes y analytics
 
-2. **Capa de Acceso a Datos - Inventario y Reportes**
-   - Crear `CategoriaDAO.java`
-   - Crear `ResenaDAO.java`
-   - Crear `ReporteDAO.java`
+2. **Capa de Repositorio - Acceso a Datos** ✅ BACKEND
+   - Crear `CategoriaRepositorio.java`
+   - Crear `ResenaRepositorio.java`
+   - Crear `ReporteRepositorio.java`
    - Queries complejas para analytics (TOP contenidos, demografía, tendencias)
-   - Integración con APIs externas (TMDb, OMDb)
 
-3. **Controladores - Gestión de Inventario y Analytics**
+3. **Capa de Servicio - Lógica de Negocio** ✅ BACKEND
+   - Crear `CategoriaService.java` (gestión de categorías)
+   - Crear `ResenaService.java` (validar reseñas)
+   - Crear `ReporteService.java` (generar reportes)
+   - Crear `ApiExternaService.java` (integración TMDb, OMDb)
+   - **NO manejan HTTP**
+
+4. **Controladores - Frontend** 🌐 FRONTEND
    - Servlet de gestión de inventario (`GestorInventarioServlet.java`)
    - Servlet de reseñas (`ResenaServlet.java`)
    - Servlet de reportes (`ReporteServlet.java`)
    - Servlet de integración con APIs (`ApiIntegracionServlet.java`)
-   - API REST para datos de reportes
+   - **Solo reciben HTTP y llaman a Services**
 
-4. **Base de Datos - Tablas de Soporte**
+5. **Base de Datos - Tablas de Soporte**
    - Scripts SQL para: `categorias`, `contenido_categorias`, `resenas`
    - Views para reportes complejos
    - Stored procedures para analytics
    - Datos de prueba (10 categorías, 100+ reseñas)
 
-5. **Frontend - Vistas de Gestión**
+6. **Frontend - Vistas de Gestión**
    - Conectar `gestor-inventario.html` con backend
    - Conectar `analista-datos.html` con backend
    - Sistema de reseñas en `detalle.html`
    - Dashboards y gráficos para reportes
    - Formularios de importación de contenido
 
-6. **Servicios Externos**
-   - Cliente HTTP para TMDb API
-   - Cliente HTTP para OMDb API
-   - Mapeo de datos externos al modelo interno
-
 #### Archivos a crear/modificar:
 ```
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Categoria.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/ContenidoCategoria.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Resena.java (completar)
-✅ src/main/java/edu/utn/inspt/cinearchive/modelo/Reporte.java (completar)
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/CategoriaDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/ResenaDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/modelo/bd/ReporteDAO.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/GestorInventarioServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/ResenaServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/ReporteServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/controlador/ApiIntegracionServlet.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/servicio/TmdbService.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/servicio/OmdbService.java
-🆕 src/main/java/edu/utn/inspt/cinearchive/util/HttpClientUtil.java
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Categoria.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/ContenidoCategoria.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Resena.java (completar)
+✅ src/main/java/edu/utn/inspt/cinearchive/backend/modelo/Reporte.java (completar)
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/CategoriaRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/ResenaRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/repositorio/ReporteRepositorio.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/CategoriaService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/ResenaService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/ReporteService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/servicio/ApiExternaService.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/GestorInventarioServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/ResenaServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/ReporteServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/frontend/controlador/ApiIntegracionServlet.java
+🆕 src/main/java/edu/utn/inspt/cinearchive/backend/util/HttpClientUtil.java
 🆕 src/main/resources/db/05_categorias_resenas.sql
 🆕 src/main/resources/db/06_views_reportes.sql
 📝 src/main/webapp/disenio/gestor-inventario.html (integrar con JSP)
@@ -225,26 +316,30 @@
 
 #### Miércoles-Viernes (Días 3-5):
 - **Dev 1**:
-  - ✅ `UsuarioDAO.java` completo con todos los métodos CRUD
-  - ✅ Tests unitarios de DAO
+  - ✅ `UsuarioRepositorio.java` completo con todos los métodos CRUD
+  - ✅ `UsuarioService.java` con validaciones de negocio
+  - ✅ Tests unitarios de Repositorio y Servicio
   - ✅ Datos de prueba (seeders)
   
 - **Dev 2**:
-  - ✅ `ContenidoDAO.java` completo
-  - ✅ `AlquilerDAO.java` completo
-  - ✅ `ListaDAO.java` y `TransaccionDAO.java`
+  - ✅ `ContenidoRepositorio.java` completo
+  - ✅ `AlquilerRepositorio.java` completo
+  - ✅ `ListaRepositorio.java` y `TransaccionRepositorio.java`
+  - ✅ `ContenidoService.java`, `AlquilerService.java`, `ListaService.java`
   - ✅ Datos de prueba (50+ películas/series)
   
 - **Dev 3**:
-  - ✅ `CategoriaDAO.java` y `ResenaDAO.java`
-  - ✅ `ReporteDAO.java` con queries básicas
+  - ✅ `CategoriaRepositorio.java` y `ResenaRepositorio.java`
+  - ✅ `ReporteRepositorio.java` con queries básicas
+  - ✅ `CategoriaService.java`, `ResenaService.java`, `ReporteService.java`
   - ✅ Views SQL para reportes
   - ✅ Datos de prueba
 
 **🎯 Entregable Semana 1:**
 - Base de datos completa con todas las tablas y relaciones
 - Todos los modelos Java completados
-- Todos los DAOs implementados y probados
+- Todos los Repositorios implementados y probados
+- Todos los Servicios implementados con lógica de negocio
 - Datos de prueba cargados
 - `pom.xml` actualizado con todas las dependencias
 
@@ -255,45 +350,45 @@
 
 #### Lunes-Martes (Días 6-7):
 - **Dev 1** 🔴 **PRIORIDAD CRÍTICA**:
-  - ✅ `LoginServlet.java` completo y funcional
-  - ✅ `RegistroServlet.java` completo
+  - ✅ `LoginServlet.java` completo (llama a `UsuarioService.autenticar()`)
+  - ✅ `RegistroServlet.java` completo (llama a `UsuarioService.registrar()`)
   - ✅ `SecurityFilter.java` (filtro de autenticación)
   - ✅ Sistema de sesiones funcionando
   - ✅ **CHECKPOINT**: Login debe funcionar antes del miércoles
   
 - **Dev 2**:
-  - ⏸️ Espera a que Dev 1 termine login (trabajar en docs/tests mientras)
-  - 🔧 Preparar: `CatalogoServlet.java` estructura base
+  - ⏸️ Espera a que Dev 1 termine login (trabajar en optimización de queries/tests mientras)
+  - 🔧 Preparar: `CatalogoServlet.java` estructura base (llamará a `ContenidoService`)
   
 - **Dev 3**:
-  - ✅ `TmdbService.java` (cliente API TMDb)
-  - ✅ `OmdbService.java` (cliente API OMDb)
+  - ✅ `ApiExternaService.java` (cliente API TMDb y OMDb)
   - ✅ `HttpClientUtil.java` (utilidades HTTP)
+  - ✅ Tests de integración con APIs
 
 #### Miércoles-Viernes (Días 8-10):
 - **Dev 1**:
-  - ✅ `AdminUsuariosServlet.java` completo
+  - ✅ `AdminUsuariosServlet.java` completo (llama a `UsuarioService`)
   - ✅ Validaciones y manejo de errores
   - ✅ **AYUDAR A DEV 2 y 3** con integración de seguridad
   
 - **Dev 2** 🟢 **DESBLOQUEAR DESPUÉS DE LOGIN**:
-  - ✅ `CatalogoServlet.java` completo
-  - ✅ `AlquilerServlet.java` completo con validaciones
-  - ✅ `ListaServlet.java` completo
-  - ✅ `DetalleContenidoServlet.java` completo
+  - ✅ `CatalogoServlet.java` completo (llama a `ContenidoService.buscar()`)
+  - ✅ `AlquilerServlet.java` completo (llama a `AlquilerService.crearAlquiler()`)
+  - ✅ `ListaServlet.java` completo (llama a `ListaService`)
+  - ✅ `DetalleContenidoServlet.java` completo (llama a `ContenidoService.obtenerPorId()`)
   
 - **Dev 3**:
-  - ✅ `GestorInventarioServlet.java` completo
-  - ✅ `ResenaServlet.java` completo
-  - ✅ `ReporteServlet.java` con reportes básicos
+  - ✅ `GestorInventarioServlet.java` completo (llama a `CategoriaService`)
+  - ✅ `ResenaServlet.java` completo (llama a `ResenaService`)
+  - ✅ `ReporteServlet.java` con reportes básicos (llama a `ReporteService`)
   - ✅ `ApiIntegracionServlet.java` para importar contenido
 
 **🎯 Entregable Semana 2:**
 - Sistema de autenticación 100% funcional
-- Todos los servlets implementados
-- APIs REST documentadas
+- Todos los Servlets implementados (llaman a Services, NO acceden a BD directamente)
+- Todos los Services funcionando con lógica de negocio completa
 - Integración con APIs externas funcionando
-- Lógica de negocio completa y validada
+- Arquitectura de capas completa: Servlet → Service → Repositorio → BD
 
 ---
 
@@ -322,27 +417,29 @@
 #### Miércoles-Viernes (Días 13-15):
 - **Dev 1**:
   - ✅ Testing exhaustivo de autenticación
-  - ✅ Permisos por rol en todas las páginas
-  - ✅ Redirecciones según rol
+  - ✅ Permisos por rol en todas las páginas (mediante `SecurityFilter`)
+  - ✅ Redirecciones según rol desde los Servlets
   - ✅ Manejo de errores y mensajes de usuario
   
 - **Dev 2**:
   - ✅ Convertir `miLista.html` a JSP funcional
   - ✅ Convertir `paraVer.html` a JSP funcional
-  - ✅ `listas.js` con gestión de listas
-  - ✅ Sistema de búsqueda y filtros avanzados
+  - ✅ `listas.js` con gestión de listas (AJAX a `ListaServlet`)
+  - ✅ Sistema de búsqueda y filtros avanzados (AJAX a `CatalogoServlet`)
   - ✅ Paginación de resultados
+  - ✅ Validación del flujo: Servlet → Service → Repositorio → BD
   
 - **Dev 3**:
   - ✅ Convertir `analista-datos.html` a JSP funcional
-  - ✅ `reportes.js` con dashboards dinámicos
+  - ✅ `reportes.js` con dashboards dinámicos (AJAX a `ReporteServlet`)
   - ✅ `charts.js` con gráficos (Chart.js o similar)
   - ✅ Exportación de reportes a PDF/Excel
 
 **🎯 Entregable Semana 3:**
 - Todas las vistas HTML convertidas a JSP
 - Frontend completamente integrado con backend
-- JavaScript funcional en todas las páginas
+- Flujo de capas verificado: JSP → Servlet → Service → Repositorio → BD
+- JavaScript funcional con AJAX comunicándose con Servlets
 - Sistema de búsqueda y filtros operativo
 - Dashboards de reportes visuales
 
@@ -405,12 +502,12 @@
 
 ## 📊 Métricas de Distribución
 
-| Developer | Clases Modelo | DAOs | Servlets | Servicios | Scripts SQL | Vistas JSP | JS Files |
-|-----------|---------------|------|----------|-----------|-------------|------------|----------|
-| Dev 1     | 1             | 1    | 4        | 0         | 1           | 3          | 1        |
-| Dev 2     | 5             | 4    | 4        | 0         | 3           | 4          | 3        |
-| Dev 3     | 4             | 3    | 4        | 3         | 2           | 2          | 3        |
-| **TOTAL** | **10**        | **8**| **12**   | **3**     | **6**       | **9**      | **7**    |
+| Developer | Clases Modelo | Repositorios | Servicios | Servlets | Scripts SQL | Vistas JSP | JS Files |
+|-----------|---------------|--------------|-----------|----------|-------------|------------|----------|
+| Dev 1     | 1             | 1            | 1         | 3        | 1           | 3          | 1        |
+| Dev 2     | 5             | 4            | 3         | 4        | 3           | 4          | 3        |
+| Dev 3     | 4             | 3            | 4         | 4        | 2           | 2          | 3        |
+| **TOTAL** | **10**        | **8**        | **8**     | **11**   | **6**       | **9**      | **7**    |
 
 ---
 
@@ -543,16 +640,17 @@ Cada developer reporta:
 ### Git Workflow (SIMPLE Y RÁPIDO)
 ```
 main (protegida)
-  ├── dev1/auth (Dev 1)
-  ├── dev2/catalogo (Dev 2)
-  └── dev3/reportes (Dev 3)
+  ├── dev1/autenticacion (Dev 1 - Backend: UsuarioService + Repositorio | Frontend: LoginServlet)
+  ├── dev2/catalogo (Dev 2 - Backend: ContenidoService + Repositorio | Frontend: CatalogoServlet)
+  └── dev3/reportes (Dev 3 - Backend: ReporteService + Repositorio | Frontend: ReporteServlet)
 ```
 
 **Reglas:**
-1. Commits pequeños y frecuentes (cada feature completa)
+1. Commits pequeños y frecuentes (cada feature/clase completa)
 2. Pull de `main` cada mañana antes de empezar
-3. Merge a `main` solo cuando la feature está 100% probada
+3. Merge a `main` solo cuando la feature está 100% probada (Backend + Frontend integrados)
 4. Resolver conflictos INMEDIATAMENTE
+5. **IMPORTANTE**: Cada commit debe incluir cambios coherentes (ej: UsuarioService + UsuarioRepositorio juntos, NO separados)
 
 ---
 
@@ -684,7 +782,70 @@ mvn jetty:run
 
 ---
 
-**¡Éxito en las 4 semanas más intensas! 🎬🚀💪**
+## 📝 Resumen de Cambios en el Plan (Nueva Estructura Frontend/Backend)
 
-*"El mejor código es el código que funciona. Perfección es enemiga de terminado."*
+### ❌ Antes (DAOs mezclados):
+```
+src/main/java/edu/utn/inspt/cinearchive/
+├── modelo/
+│   ├── Usuario.java
+│   └── bd/
+│       ├── UsuarioDAO.java       ← Mezcla acceso a BD
+│       ├── ContenidoDAO.java
+│       └── ...
+└── controlador/
+    ├── LoginServlet.java         ← Mezcla HTTP + Lógica
+    ├── CatalogoServlet.java
+    └── ...
+```
+
+**Problemas:**
+- Servlets accedían directamente a DAOs
+- Lógica de negocio esparcida
+- Difícil de mantener y testear
+- No separaba front del back
+
+### ✅ Ahora (Frontend/Backend claro):
+```
+src/main/java/edu/utn/inspt/cinearchive/
+├── frontend/
+│   └── controlador/
+│       ├── LoginServlet.java      ← SOLO HTTP handling
+│       ├── CatalogoServlet.java
+│       └── ...
+└── backend/
+    ├── modelo/
+    │   ├── Usuario.java
+    │   ├── Contenido.java
+    │   └── ...
+    ├── repositorio/
+    │   ├── UsuarioRepositorio.java    ← SOLO BD
+    │   ├── ContenidoRepositorio.java
+    │   └── ConexionBD.java
+    ├── servicio/
+    │   ├── UsuarioService.java        ← SOLO lógica
+    │   ├── ContenidoService.java
+    │   └── ...
+    └── util/
+        ├── PasswordUtil.java
+        └── HttpClientUtil.java
+```
+
+**Beneficios:**
+- ✅ Separación clara de responsabilidades
+- ✅ Frontend = HTTP handling (Servlets)
+- ✅ Backend = Lógica pura (Services) + Acceso a BD (Repositorios)
+- ✅ Fácil de testear (cada capa por separado)
+- ✅ Cumple con la corrección del profesor
+- ✅ Preparado para API REST futuro
+
+### Cambios Clave:
+1. **DAOs → Repositorios** (ubicados en `backend/repositorio/`)
+2. **Lógica de negocio → Services** (nueva capa en `backend/servicio/`)
+3. **Servlets → Frontend** (ahora en `frontend/controlador/`)
+4. **Arquitectura de 3 capas**: Servlet → Service → Repositorio → BD
+
+---
+
+**¡El plan ahora refleja exactamente lo que tu profesor pidió!** 🎬✨
 
