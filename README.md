@@ -183,7 +183,7 @@ mvn jetty:run
 > **Nota:** Especificar la licencia del proyecto
 >
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 **Francisco Chiminelli** - [francisco.chiminelli@alu.inspt.utn.edu.ar](mailto:francisco.chiminelli@alu.inspt.utn.edu.ar)  
 **Franco Vilaseco** - [franco.vilaseco@alu.inspt.utn.edu.ar](mailto:franco.vilaseco@alu.inspt.utn.edu.ar)  
