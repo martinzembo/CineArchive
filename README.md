@@ -89,14 +89,39 @@ CineArchive es una plataforma integral que permite a los usuarios llevar un regi
 
 ## 🛠️ Tecnologías Utilizadas
 
-> **Nota:** Completar con las tecnologías específicas del proyecto
->
-- **Frontend:**
-- **Backend:**
-- **Base de Datos:**
-- **APIs Externas:** TMDb, OMDb
-- **Autenticación:**
-- **Otras herramientas:**
+### **Backend:**
+- **Spring Web MVC 5.3.30** - Framework principal con patrón MVC
+- **Spring JDBC** - Gestión de acceso a datos
+- **Java 11** - Lenguaje de programación
+- **Maven** - Gestión de dependencias y construcción del proyecto
+- **JDBC** - Conectividad con base de datos
+
+### **Frontend:**
+- **JSP (JavaServer Pages)** - Vistas dinámicas server-side
+- **JSTL 1.2** - Biblioteca de etiquetas estándar para JSP
+- **JavaScript** - Validaciones del lado del cliente y AJAX
+- **HTML5 + CSS3** - Estructura y estilos
+
+### **Base de Datos:**
+- **MySQL 8.0** - Sistema de gestión de base de datos relacional
+- **MySQL Workbench** - Diseño y administración de BD
+
+### **APIs Externas:**
+- **TMDb API** - The Movie Database para información de películas/series
+- **OMDb API** - Open Movie Database (alternativa/complemento)
+
+### **Seguridad:**
+- **BCrypt** - Encriptación de contraseñas
+- **Spring Security Filters** - Filtros de autenticación y autorización
+
+### **Servidor de Aplicaciones:**
+- **Eclipse Jetty 9.4** - Contenedor de servlets embebible
+
+### **Librerías Adicionales:**
+- **Gson 2.10.1** - Serialización/deserialización JSON
+- **Apache HttpClient 4.5.14** - Cliente HTTP para APIs externas
+- **Hibernate Validator 6.2.5** - Validaciones de beans
+- **JUnit 4.13.2** - Framework de testing
 
 ## 📦 Instalación
 
@@ -105,16 +130,30 @@ CineArchive es una plataforma integral que permite a los usuarios llevar un regi
 git clone [URL_DEL_REPOSITORIO]
 
 # Navegar al directorio del proyecto
-cd cinearchive-v2
+cd CineArchive
 
-# Instalar dependencias
-# [Comando de instalación según tecnología]
+# Compilar el proyecto e instalar dependencias
+mvn clean install
 
-# Configurar variables de entorno
-# Crear archivo .env basado en .env.example
+# Configurar la base de datos MySQL
+# 1. Abrir MySQL Workbench
+# 2. Importar el archivo: archivos de BD y extras/modelo_de_BD_CineArchiveV2.mwb
+# 3. Ejecutar los scripts SQL en orden:
+#    - 01_usuarios.sql
+#    - 02_contenido.sql
+#    - 03_alquileres.sql
+#    - 04_listas.sql
+#    - 05_categorias_resenas.sql
+#    - 06_views_reportes.sql
 
-# Ejecutar la aplicación
-# [Comando de ejecución]
+# Configurar credenciales de BD (actualizar si es necesario)
+# En: src/main/java/edu/utn/inspt/cinearchive/backend/config/DatabaseConfig.java
+
+# Ejecutar la aplicación con Jetty
+mvn jetty:run
+
+# Abrir en el navegador
+# http://localhost:8080/cinearchive
 ```
 
 ## ⚙️ Configuración
