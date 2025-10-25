@@ -186,6 +186,8 @@ mvn jetty:run
 ## 👨‍💻 Autor
 
 **Francisco Chiminelli** - [francisco.chiminelli@alu.inspt.utn.edu.ar](mailto:francisco.chiminelli@alu.inspt.utn.edu.ar)
+**Franco Vilaseco** - [franco.vilaseco@alu.inspt.utn.edu.ar](mailto:franco.vilaseco@alu.inspt.utn.edu.ar)
+**Martín Zembo** - [martin.zembo@alu.inspt.utn.edu.ar](mailto:martin.zembo@alu.inspt.utn.edu.ar)
 
 ## 📌 Notas de Entrega
 
