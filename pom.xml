@@ -86,7 +86,7 @@
           <stopPort>8081</stopPort>
         </configuration>
       </plugin>
-      <!-- Configurar compilador para usar --release 8 (compatible con código antiguo) -->
+      <!-- Configurar compilador para usar release 8 (compatible con código antiguo) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
