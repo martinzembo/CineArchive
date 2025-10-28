@@ -24,9 +24,16 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
         public Alquiler mapRow(ResultSet rs, int rowNum) throws SQLException {
             Alquiler a = new Alquiler();
             a.setId(rs.getLong("id"));
-            a.setUsuarioId(rs.getLong("usuarioId"));
-            a.setContenidoId(rs.getLong("contenidoId"));
+            a.setUsuarioId(rs.getLong("usuario_id"));
+            a.setContenidoId(rs.getLong("contenido_id"));
             // mapear fechas y demás
+            a.setFechaInicio(rs.getObject("fecha_inicio", java.time.LocalDateTime.class));
+            a.setFechaFin(rs.getObject("fecha_fin", java.time.LocalDateTime.class));
+            a.setPeriodoAlquiler(rs.getInt("periodo_alquiler"));
+            a.setPrecio(rs.getBigDecimal("precio"));
+            a.setEstado(Alquiler.Estado.valueOf(rs.getString("estado")));
+            a.setVisto(rs.getBoolean("visto"));
+            a.setFechaVista(rs.getObject("fecha_vista", java.time.LocalDateTime.class));
             return a;
         }
     };
@@ -39,20 +46,29 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
 
     @Override
     public List<Alquiler> findByUsuarioId(Long usuarioId) {
-        String sql = "SELECT * FROM alquileres WHERE usuarioId = ?";
+        String sql = "SELECT * FROM alquileres WHERE usuario_id = ?";
         return jdbcTemplate.query(sql, new Object[]{usuarioId}, mapper);
     }
 
     @Override
     public int save(Alquiler alquiler) {
-        String sql = "INSERT INTO alquileres (usuarioId, contenidoId, fechaInicio, fechaFin, periodoAlquiler, precio, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, alquiler.getUsuarioId(), alquiler.getContenidoId(), alquiler.getFechaInicio(), alquiler.getFechaFin(), alquiler.getPeriodoAlquiler(), alquiler.getPrecio(), alquiler.getEstado().name());
+        String sql = "INSERT INTO alquileres (usuario_id, contenido_id, fecha_inicio, fecha_fin, periodo_alquiler, precio, estado, visto, fecha_vista) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql,
+                alquiler.getUsuarioId(),
+                alquiler.getContenidoId(),
+                alquiler.getFechaInicio(),
+                alquiler.getFechaFin(),
+                alquiler.getPeriodoAlquiler(),
+                alquiler.getPrecio(),
+                alquiler.getEstado() != null ? alquiler.getEstado().name() : null,
+                alquiler.getVisto(),
+                alquiler.getFechaVista());
     }
 
     @Override
     public int update(Alquiler alquiler) {
-        String sql = "UPDATE alquileres SET fechaFin = ?, estado = ?, visto = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, alquiler.getFechaFin(), alquiler.getEstado().name(), alquiler.getVisto(), alquiler.getId());
+        String sql = "UPDATE alquileres SET fecha_fin = ?, estado = ?, visto = ?, fecha_vista = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, alquiler.getFechaFin(), alquiler.getEstado().name(), alquiler.getVisto(), alquiler.getFechaVista(), alquiler.getId());
     }
 
     @Override
