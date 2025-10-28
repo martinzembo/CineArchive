@@ -1,16 +1,20 @@
 package edu.utn.inspt.cinearchive.backend.repositorio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Transaccion;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
 public class TransaccionRepositoryImpl implements TransaccionRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public TransaccionRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -58,4 +62,3 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
         return jdbcTemplate.update(sql, id);
     }
 }
-

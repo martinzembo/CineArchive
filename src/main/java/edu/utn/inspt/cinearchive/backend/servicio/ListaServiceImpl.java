@@ -3,12 +3,16 @@ package edu.utn.inspt.cinearchive.backend.servicio;
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
 import edu.utn.inspt.cinearchive.backend.repositorio.ListaRepository;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class ListaServiceImpl implements ListaService {
 
     private final ListaRepository listaRepository;
 
+    @Autowired
     public ListaServiceImpl(ListaRepository listaRepository) {
         this.listaRepository = listaRepository;
     }
@@ -41,4 +45,3 @@ public class ListaServiceImpl implements ListaService {
         listaRepository.delete(id);
     }
 }
-

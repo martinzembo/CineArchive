@@ -3,12 +3,16 @@ package edu.utn.inspt.cinearchive.backend.servicio;
 import edu.utn.inspt.cinearchive.backend.modelo.Transaccion;
 import edu.utn.inspt.cinearchive.backend.repositorio.TransaccionRepository;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class TransaccionServiceImpl implements TransaccionService {
 
     private final TransaccionRepository transaccionRepository;
 
+    @Autowired
     public TransaccionServiceImpl(TransaccionRepository transaccionRepository) {
         this.transaccionRepository = transaccionRepository;
     }
@@ -41,4 +45,3 @@ public class TransaccionServiceImpl implements TransaccionService {
         transaccionRepository.delete(id);
     }
 }
-

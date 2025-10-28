@@ -1,16 +1,20 @@
 package edu.utn.inspt.cinearchive.backend.repositorio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
 public class ContenidoRepositoryImpl implements ContenidoRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public ContenidoRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -59,4 +63,3 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         return jdbcTemplate.update(sql, id);
     }
 }
-

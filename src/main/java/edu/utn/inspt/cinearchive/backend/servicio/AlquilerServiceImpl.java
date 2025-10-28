@@ -3,12 +3,16 @@ package edu.utn.inspt.cinearchive.backend.servicio;
 import edu.utn.inspt.cinearchive.backend.modelo.Alquiler;
 import edu.utn.inspt.cinearchive.backend.repositorio.AlquilerRepository;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class AlquilerServiceImpl implements AlquilerService {
 
     private final AlquilerRepository alquilerRepository;
 
+    @Autowired
     public AlquilerServiceImpl(AlquilerRepository alquilerRepository) {
         this.alquilerRepository = alquilerRepository;
     }
@@ -41,4 +45,3 @@ public class AlquilerServiceImpl implements AlquilerService {
         alquilerRepository.delete(id);
     }
 }
-
