@@ -1,7 +1,9 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Transaccion implements Serializable {
 
@@ -12,47 +14,54 @@ public class Transaccion implements Serializable {
         REEMBOLSADA
     }
 
-    private int id;
-    private int usuarioId;
-    private int alquilerId;
-    private float monto;
+    private Long id;
+
+    private Long usuarioId;
+
+    private Long alquilerId;
+
+    private BigDecimal monto;
+
     private String metodoPago;
-    private LocalDate fechaTransaccion;
+
+    private LocalDateTime fechaTransaccion;
+
     private Estado estado;
+
     private String referenciaExterna;
 
     public Transaccion() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getUsuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public int getAlquilerId() {
+    public Long getAlquilerId() {
         return alquilerId;
     }
 
-    public void setAlquilerId(int alquilerId) {
+    public void setAlquilerId(Long alquilerId) {
         this.alquilerId = alquilerId;
     }
 
-    public float getMonto() {
+    public BigDecimal getMonto() {
         return monto;
     }
 
-    public void setMonto(float monto) {
+    public void setMonto(BigDecimal monto) {
         this.monto = monto;
     }
 
@@ -64,11 +73,11 @@ public class Transaccion implements Serializable {
         this.metodoPago = metodoPago;
     }
 
-    public LocalDate getFechaTransaccion() {
+    public LocalDateTime getFechaTransaccion() {
         return fechaTransaccion;
     }
 
-    public void setFechaTransaccion(LocalDate fechaTransaccion) {
+    public void setFechaTransaccion(LocalDateTime fechaTransaccion) {
         this.fechaTransaccion = fechaTransaccion;
     }
 
@@ -87,5 +96,26 @@ public class Transaccion implements Serializable {
     public void setReferenciaExterna(String referenciaExterna) {
         this.referenciaExterna = referenciaExterna;
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaccion)) return false;
+        Transaccion that = (Transaccion) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Transaccion{" +
+                "id=" + id +
+                ", usuarioId=" + usuarioId +
+                ", monto=" + monto +
+                '}';
+    }
+}
