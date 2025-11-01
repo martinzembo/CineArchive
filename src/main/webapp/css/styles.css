@@ -1159,6 +1159,80 @@ footer {
     color: var(--primary-color);
 }
 
+/* ============================================
+   ESTILOS DE REGISTRO
+   ============================================ */
+
+/* Mensajes de Alerta */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* Requisitos de Contraseña */
+.password-requirements {
+    font-size: 12px;
+    color: #888;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+.password-requirements ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.password-requirements li {
+    margin: 3px 0;
+    transition: color 0.3s ease;
+}
+
+.password-requirements li.valid {
+    color: var(--success-color);
+}
+
+.password-requirements li.invalid {
+    color: var(--danger-color);
+}
+
+/* Coincidencia de Contraseñas */
+.password-match {
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.password-match.match {
+    color: var(--success-color);
+}
+
+.password-match.no-match {
+    color: var(--danger-color);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .menu-toggle {
