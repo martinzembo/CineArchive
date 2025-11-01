@@ -59,7 +59,7 @@ public class UsuarioRepository {
      * @throws RuntimeException si hay error en la inserción
      */
     public Usuario crear(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, email, contrasena, rol, fecha_registro, activo, fecha_nacimiento) " +
+        String sql = "INSERT INTO usuario (nombre, email, contrasena, rol, fecha_registro, activo, fecha_nacimiento) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -94,7 +94,7 @@ public class UsuarioRepository {
      * @return Usuario encontrado o null si no existe
      */
     public Usuario buscarPorId(int id) {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        String sql = "SELECT * FROM usuario WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, USUARIO_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException e) {
@@ -108,7 +108,7 @@ public class UsuarioRepository {
      * @return Usuario encontrado o null si no existe
      */
     public Usuario buscarPorEmail(String email) {
-        String sql = "SELECT * FROM usuarios WHERE email = ?";
+        String sql = "SELECT * FROM usuario WHERE email = ?";
         try {
             return jdbcTemplate.queryForObject(sql, USUARIO_ROW_MAPPER, email);
         } catch (EmptyResultDataAccessException e) {
@@ -122,7 +122,7 @@ public class UsuarioRepository {
      * @return true si se actualizó, false si no existe
      */
     public boolean actualizar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre = ?, email = ?, contrasena = ?, " +
+        String sql = "UPDATE usuario SET nombre = ?, email = ?, contrasena = ?, " +
                      "rol = ?, activo = ?, fecha_nacimiento = ? WHERE id = ?";
 
         int filasActualizadas = jdbcTemplate.update(sql,
@@ -144,7 +144,7 @@ public class UsuarioRepository {
      * @return true si se desactivó, false si no existe
      */
     public boolean eliminar(int id) {
-        String sql = "UPDATE usuarios SET activo = false WHERE id = ?";
+        String sql = "UPDATE usuario SET activo = false WHERE id = ?";
         int filasActualizadas = jdbcTemplate.update(sql, id);
         return filasActualizadas > 0;
     }
@@ -156,7 +156,7 @@ public class UsuarioRepository {
      * @return true si se eliminó, false si no existe
      */
     public boolean eliminarFisicamente(int id) {
-        String sql = "DELETE FROM usuarios WHERE id = ?";
+        String sql = "DELETE FROM usuario WHERE id = ?";
         int filasEliminadas = jdbcTemplate.update(sql, id);
         return filasEliminadas > 0;
     }
@@ -166,7 +166,7 @@ public class UsuarioRepository {
      * @return Lista de todos los usuarios (activos e inactivos)
      */
     public List<Usuario> listarTodos() {
-        String sql = "SELECT * FROM usuarios ORDER BY fecha_registro DESC";
+        String sql = "SELECT * FROM usuario ORDER BY fecha_registro DESC";
         return jdbcTemplate.query(sql, USUARIO_ROW_MAPPER);
     }
 
@@ -175,7 +175,7 @@ public class UsuarioRepository {
      * @return Lista de usuarios con activo = true
      */
     public List<Usuario> listarActivos() {
-        String sql = "SELECT * FROM usuarios WHERE activo = true ORDER BY nombre ASC";
+        String sql = "SELECT * FROM usuario WHERE activo = true ORDER BY nombre ASC";
         return jdbcTemplate.query(sql, USUARIO_ROW_MAPPER);
     }
 
@@ -185,7 +185,7 @@ public class UsuarioRepository {
      * @return Lista de usuarios con ese rol
      */
     public List<Usuario> buscarPorRol(Usuario.Rol rol) {
-        String sql = "SELECT * FROM usuarios WHERE rol = ? ORDER BY nombre ASC";
+        String sql = "SELECT * FROM usuario WHERE rol = ? ORDER BY nombre ASC";
         return jdbcTemplate.query(sql, USUARIO_ROW_MAPPER, rol.name());
     }
 
@@ -218,7 +218,7 @@ public class UsuarioRepository {
      * @return Número de usuarios activos
      */
     public int contarActivos() {
-        String sql = "SELECT COUNT(*) FROM usuarios WHERE activo = true";
+        String sql = "SELECT COUNT(*) FROM usuario WHERE activo = true";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
         return count != null ? count : 0;
     }
@@ -229,7 +229,7 @@ public class UsuarioRepository {
      * @return Lista de usuarios que coinciden
      */
     public List<Usuario> buscarPorNombre(String nombre) {
-        String sql = "SELECT * FROM usuarios WHERE nombre LIKE ? ORDER BY nombre ASC";
+        String sql = "SELECT * FROM usuario WHERE nombre LIKE ? ORDER BY nombre ASC";
         return jdbcTemplate.query(sql, USUARIO_ROW_MAPPER, "%" + nombre + "%");
     }
 
@@ -240,7 +240,7 @@ public class UsuarioRepository {
      * @return true si se actualizó, false si no existe
      */
     public boolean cambiarEstado(int id, boolean activo) {
-        String sql = "UPDATE usuarios SET activo = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET activo = ? WHERE id = ?";
         int filasActualizadas = jdbcTemplate.update(sql, activo, id);
         return filasActualizadas > 0;
     }
@@ -253,7 +253,7 @@ public class UsuarioRepository {
      * @return true si se actualizó, false si no existe
      */
     public boolean actualizarContrasena(int id, String nuevaContrasena) {
-        String sql = "UPDATE usuarios SET contrasena = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET contrasena = ? WHERE id = ?";
         int filasActualizadas = jdbcTemplate.update(sql, nuevaContrasena, id);
         return filasActualizadas > 0;
     }
@@ -263,7 +263,7 @@ public class UsuarioRepository {
      * @return Número total de usuarios (activos + inactivos)
      */
     public int contarTotal() {
-        String sql = "SELECT COUNT(*) FROM usuarios";
+        String sql = "SELECT COUNT(*) FROM usuario";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
         return count != null ? count : 0;
     }

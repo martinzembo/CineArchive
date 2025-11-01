@@ -136,6 +136,19 @@
             <contextPath>/cinearchive</contextPath>
           </webApp>
         </configuration>
+        <dependencies>
+          <!-- Habilita el escaneo de anotaciones (WebApplicationInitializer) -->
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
+            <version>9.4.48.v20220622</version>
+          </dependency>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-plus</artifactId>
+            <version>9.4.48.v20220622</version>
+          </dependency>
+        </dependencies>
       </plugin>
 
       <plugin>
