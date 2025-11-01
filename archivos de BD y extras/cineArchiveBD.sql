@@ -348,7 +348,13 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$10$HashedPassword1','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$10$HashedPassword2','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$10$HashedPassword3','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$10$HashedPassword4','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$10$HashedPassword5','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20');
+-- CONTRASEÑAS DE PRUEBA:
+-- admin@cinearchive.com     → Admin123
+-- gestor@cinearchive.com    → Gestor123
+-- analista@cinearchive.com  → Analista123
+-- maria@example.com         → User123
+-- juan@example.com          → User123
+INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$12$EXRgnTTeKp4J2YpnJjKZ1.jJ5k7RUxVYvCJvwJz8rLXPLw3Xqm5oO','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$12$K5v7kp0FGKuKvJ7j4Xz4WOz8JL9mRVZL1XYkJ5j4K5v7kp0FGKOK6','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$12$RXuYvC0k8YpnJjKZ1EXRgnT5j4K5v7kp0FGKOKvJz8rLXPLw3Xqm5','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$12$RXuYvC0k8YpnJjKZ1EXRgnT5j4K5v7kp0FGKOKvJz8rLXPLw3Xqm5','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -468,4 +474,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-31 19:36:09
+-- Dump completed on 2025-11-01 17:46:09
