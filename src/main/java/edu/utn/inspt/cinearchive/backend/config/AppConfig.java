@@ -18,7 +18,8 @@ import javax.validation.Validator;
 @ComponentScan(basePackages = {
     "edu.utn.inspt.cinearchive.frontend.controlador",
     "edu.utn.inspt.cinearchive.backend.servicio",
-    "edu.utn.inspt.cinearchive.backend.repositorio"
+    "edu.utn.inspt.cinearchive.backend.repositorio",
+    "edu.utn.inspt.cinearchive.backend.config"
 })
 @PropertySource("classpath:application.properties")
 public class AppConfig {
