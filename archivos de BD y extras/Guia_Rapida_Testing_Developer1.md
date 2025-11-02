@@ -17,8 +17,6 @@
 | `maria@example.com` | `User123` | USUARIO_REGULAR |
 | `juan@example.com` | `User123` | USUARIO_REGULAR |
 
-> 📄 **Más información:** Ver archivo `CREDENCIALES_DE_PRUEBA.md` para detalles completos sobre las contraseñas y herramientas de testing.
-
 ---
 
 ## 🚨 SOLUCIÓN DE PROBLEMAS
