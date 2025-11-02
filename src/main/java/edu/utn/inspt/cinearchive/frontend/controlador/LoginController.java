@@ -207,7 +207,7 @@ public class LoginController {
                 return "redirect:/reportes/panel";
 
             default: // USUARIO_REGULAR
-                return "index"; // Vista principal para usuarios regulares
+                return "redirect:/catalogo"; // Redirigir al catálogo para usuarios regulares
         }
     }
 
