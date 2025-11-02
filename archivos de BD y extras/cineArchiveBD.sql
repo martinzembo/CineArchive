@@ -348,7 +348,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$12$CQ.gB6fkdok4ThAKQXqOZeg8mpD9.nkjmemXFhNZaclomFsW0Uiy.','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$12$qMgPs/St/FL/vqVPQEvJ/eYZ4iP8VWBj7gXsPZkYClFvYMi30VnNS','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$12$vDa1JJlVgbJCLMVJElIHpuUT10ig8KA41TSz2KGBd/pyLOoPoJBeC','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20'),(6,'francisco','franciscofchiminelli@hotmail.com','$2a$12$HAQCBunfwsrtshUkJyhdB.ui1fuHb.j.1c/mDfJR2sqgScRsJ1XTC','USUARIO_REGULAR','2025-11-02 03:00:00',1,NULL);
+INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$12$CQ.gB6fkdok4ThAKQXqOZeg8mpD9.nkjmemXFhNZaclomFsW0Uiy.','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$12$qMgPs/St/FL/vqVPQEvJ/eYZ4iP8VWBj7gXsPZkYClFvYMi30VnNS','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$12$vDa1JJlVgbJCLMVJElIHpuUT10ig8KA41TSz2KGBd/pyLOoPoJBeC','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -468,4 +468,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-02 20:12:52
+-- Dump completed on 2025-11-02 20:29:15
