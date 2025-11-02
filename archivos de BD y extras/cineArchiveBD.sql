@@ -30,7 +30,7 @@ CREATE TABLE `alquiler` (
   `fecha_fin` timestamp NOT NULL,
   `periodo_alquiler` int NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `estado` enum('ACTIVO','FINALIZADO','CANCELADO') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ACTIVO',
+  `estado` enum('ACTIVO','FINALIZADO','CANCELADO') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ACTIVO',
   `visto` tinyint(1) DEFAULT '0',
   `fecha_vista` date DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -61,9 +61,9 @@ DROP TABLE IF EXISTS `categoria`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categoria` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tipo` enum('GENERO','TAG','CLASIFICACION') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
+  `nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tipo` enum('GENERO','TAG','CLASIFICACION') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`),
   KEY `idx_categoria_tipo` (`tipo`)
@@ -89,22 +89,22 @@ DROP TABLE IF EXISTS `contenido`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contenido` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `genero` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `genero` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `anio` int DEFAULT NULL,
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
-  `imagen_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `trailer_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tipo` enum('PELICULA','SERIE') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `imagen_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `trailer_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tipo` enum('PELICULA','SERIE') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `disponible_para_alquiler` tinyint(1) DEFAULT '1',
   `precio_alquiler` decimal(10,2) NOT NULL,
   `copias_disponibles` int DEFAULT '0',
   `copias_totales` int DEFAULT '0',
   `fecha_vencimiento_licencia` date DEFAULT NULL,
-  `id_api_externa` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_api_externa` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gestor_inventario_id` bigint DEFAULT NULL,
   `duracion` int DEFAULT NULL,
-  `director` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `director` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `temporadas` int DEFAULT NULL,
   `capitulos_totales` int DEFAULT NULL,
   `en_emision` tinyint(1) DEFAULT NULL,
@@ -163,8 +163,8 @@ DROP TABLE IF EXISTS `lista`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lista` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
+  `nombre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `usuario_id` bigint NOT NULL,
   `publica` tinyint(1) DEFAULT '0',
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -223,11 +223,11 @@ DROP TABLE IF EXISTS `reporte`;
 CREATE TABLE `reporte` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `analista_id` bigint NOT NULL,
-  `titulo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
-  `tipo_reporte` enum('MAS_ALQUILADOS','ANALISIS_DEMOGRAFICO','RENDIMIENTO_GENEROS','TENDENCIAS_TEMPORALES','COMPORTAMIENTO_USUARIOS') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parametros` text COLLATE utf8mb4_unicode_ci,
-  `resultados` text COLLATE utf8mb4_unicode_ci,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `tipo_reporte` enum('MAS_ALQUILADOS','ANALISIS_DEMOGRAFICO','RENDIMIENTO_GENEROS','TENDENCIAS_TEMPORALES','COMPORTAMIENTO_USUARIOS') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parametros` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `resultados` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `fecha_generacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `periodo_inicio` date DEFAULT NULL,
   `periodo_fin` date DEFAULT NULL,
@@ -260,8 +260,8 @@ CREATE TABLE `resena` (
   `usuario_id` bigint NOT NULL,
   `contenido_id` bigint NOT NULL,
   `calificacion` double NOT NULL,
-  `titulo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `texto` text COLLATE utf8mb4_unicode_ci,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `texto` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -296,10 +296,10 @@ CREATE TABLE `transaccion` (
   `usuario_id` bigint NOT NULL,
   `alquiler_id` bigint NOT NULL,
   `monto` decimal(10,2) NOT NULL,
-  `metodo_pago` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metodo_pago` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_transaccion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` enum('COMPLETADA','PENDIENTE','FALLIDA','REEMBOLSADA') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDIENTE',
-  `referencia_externa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `estado` enum('COMPLETADA','PENDIENTE','FALLIDA','REEMBOLSADA') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDIENTE',
+  `referencia_externa` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_transaccion_alquiler` (`alquiler_id`),
   KEY `idx_transaccion_usuario` (`usuario_id`),
@@ -328,10 +328,10 @@ DROP TABLE IF EXISTS `usuario`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contrasena` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rol` enum('USUARIO_REGULAR','ADMINISTRADOR','GESTOR_INVENTARIO','ANALISTA_DATOS') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USUARIO_REGULAR',
+  `nombre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contrasena` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rol` enum('USUARIO_REGULAR','ADMINISTRADOR','GESTOR_INVENTARIO','ANALISTA_DATOS') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USUARIO_REGULAR',
   `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `activo` tinyint(1) DEFAULT '1',
   `fecha_nacimiento` date DEFAULT NULL,
@@ -339,7 +339,7 @@ CREATE TABLE `usuario` (
   UNIQUE KEY `email` (`email`),
   KEY `idx_usuario_email` (`email`),
   KEY `idx_usuario_rol` (`rol`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,13 +348,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
--- CONTRASEÑAS DE PRUEBA:
--- admin@cinearchive.com     → Admin123
--- gestor@cinearchive.com    → Gestor123
--- analista@cinearchive.com  → Analista123
--- maria@example.com         → User123
--- juan@example.com          → User123
-INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$12$EXRgnTTeKp4J2YpnJjKZ1.jJ5k7RUxVYvCJvwJz8rLXPLw3Xqm5oO','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$12$K5v7kp0FGKuKvJ7j4Xz4WOz8JL9mRVZL1XYkJ5j4K5v7kp0FGKOK6','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$12$RXuYvC0k8YpnJjKZ1EXRgnT5j4K5v7kp0FGKOKvJz8rLXPLw3Xqm5','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$12$RXuYvC0k8YpnJjKZ1EXRgnT5j4K5v7kp0FGKOKvJz8rLXPLw3Xqm5','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20');
+INSERT INTO `usuario` VALUES (1,'Admin Sistema','admin@cinearchive.com','$2a$12$CQ.gB6fkdok4ThAKQXqOZeg8mpD9.nkjmemXFhNZaclomFsW0Uiy.','ADMINISTRADOR','2025-10-21 19:54:15',1,'1985-05-15'),(2,'Gestor Principal','gestor@cinearchive.com','$2a$12$qMgPs/St/FL/vqVPQEvJ/eYZ4iP8VWBj7gXsPZkYClFvYMi30VnNS','GESTOR_INVENTARIO','2025-10-21 19:54:15',1,'1990-08-22'),(3,'Analista Datos','analista@cinearchive.com','$2a$12$vDa1JJlVgbJCLMVJElIHpuUT10ig8KA41TSz2KGBd/pyLOoPoJBeC','ANALISTA_DATOS','2025-10-21 19:54:15',1,'1988-12-03'),(4,'María García','maria@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1995-03-15'),(5,'Juan Pérez','juan@example.com','$2a$12$D/HJVimCulvb0c71fhzfTOj/ZP3X3HTNWGtB3UNfh6NSQfhjvY/Au','USUARIO_REGULAR','2025-10-21 19:54:15',1,'1992-07-20'),(6,'francisco','franciscofchiminelli@hotmail.com','$2a$12$HAQCBunfwsrtshUkJyhdB.ui1fuHb.j.1c/mDfJR2sqgScRsJ1XTC','USUARIO_REGULAR','2025-11-02 03:00:00',1,NULL);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,4 +468,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-01 17:46:09
+-- Dump completed on 2025-11-02 20:12:52
