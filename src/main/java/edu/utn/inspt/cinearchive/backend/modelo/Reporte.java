@@ -107,4 +107,3 @@ public class Reporte implements Serializable {
         this.periodoFin = periodoFin;
     }
 }
-

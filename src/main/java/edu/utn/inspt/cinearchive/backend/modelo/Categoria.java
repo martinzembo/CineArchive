@@ -50,4 +50,3 @@ public class Categoria implements Serializable {
         this.descripcion = descripcion;
     }
 }
-
