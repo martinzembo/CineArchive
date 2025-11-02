@@ -152,6 +152,7 @@ public class RegistroController {
 
         } catch (Exception e) {
             // Cualquier otro error inesperado
+            System.err.println("ERROR EN REGISTRO: " + e.getMessage());
             model.addAttribute("error", "Error al registrar el usuario. Por favor, intenta nuevamente.");
             model.addAttribute("nombre", nombre);
             model.addAttribute("email", email);

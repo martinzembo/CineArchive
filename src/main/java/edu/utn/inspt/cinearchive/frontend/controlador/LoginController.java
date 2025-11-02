@@ -127,6 +127,7 @@ public class LoginController {
 
         } catch (Exception e) {
             // Manejar cualquier error inesperado
+            System.err.println("ERROR EN LOGIN: " + e.getMessage());
             model.addAttribute("error", "Error en el sistema. Por favor, intenta nuevamente.");
             model.addAttribute("email", email);
             return "login";

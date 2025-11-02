@@ -196,7 +196,8 @@ public class UsuarioRepository {
      * @return true si existe, false si no
      */
     public boolean existeEmail(String email) {
-        String sql = "SELECT COUNT(*) FROM usuarios WHERE email = ?";
+        String sql = "SELECT COUNT(*) FROM usuario WHERE email = ?";
+        System.out.println("[DEBUG] existeEmail - SQL: " + sql + " | Email: " + email);
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
     }
@@ -208,7 +209,7 @@ public class UsuarioRepository {
      * @return Número de usuarios con ese rol
      */
     public int contarPorRol(Usuario.Rol rol) {
-        String sql = "SELECT COUNT(*) FROM usuarios WHERE rol = ?";
+        String sql = "SELECT COUNT(*) FROM usuario WHERE rol = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, rol.name());
         return count != null ? count : 0;
     }
