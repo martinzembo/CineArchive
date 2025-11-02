@@ -3,52 +3,43 @@
 
 ---
 
-## 🚨 PASO 0: CONFIGURACIÓN PREVIA (OBLIGATORIO)
+## 🔐 CREDENCIALES DE ACCESO
 
-### ❗ **PROBLEMA CRÍTICO: Contraseñas de prueba inválidas**
+### 📋 Usuarios de Prueba Disponibles
 
-Los usuarios en la BD tienen contraseñas que NO son hashes BCrypt válidos. **Debes corregir esto PRIMERO.**
+**Las contraseñas ya están configuradas en la BD. Solo úsalas para iniciar sesión:**
 
-### ✅ Solución - Opción 1: Ejecutar programa Java
+| Email | Contraseña | Rol |
+|-------|-----------|-----|
+| `admin@cinearchive.com` | `Admin123` | ADMINISTRADOR |
+| `gestor@cinearchive.com` | `Gestor123` | GESTOR_INVENTARIO |
+| `analista@cinearchive.com` | `Analista123` | ANALISTA_DATOS |
+| `maria@example.com` | `User123` | USUARIO_REGULAR |
+| `juan@example.com` | `User123` | USUARIO_REGULAR |
 
-```bash
-# Compilar y ejecutar el generador de hashes
-cd C:\Users\Francisco\Desktop\CineArchive
-mvn compile
-mvn exec:java -Dexec.mainClass="edu.utn.inspt.cinearchive.util.GenerarHashesParaBD"
-```
+> 📄 **Más información:** Ver archivo `CREDENCIALES_DE_PRUEBA.md` para detalles completos sobre las contraseñas y herramientas de testing.
 
-Esto te dará los UPDATE statements para MySQL.
+---
 
-### ✅ Solución - Opción 2: Actualizar manualmente en MySQL
+## 🚨 SOLUCIÓN DE PROBLEMAS
 
-```sql
--- Ejecutar estos UPDATE en MySQL Workbench:
+### ❓ Si las contraseñas no funcionan
 
-UPDATE usuarios SET contrasena = '$2a$12$[HASH_GENERADO_1]' WHERE email = 'admin@cinearchive.com';
-UPDATE usuarios SET contrasena = '$2a$12$[HASH_GENERADO_2]' WHERE email = 'gestor@cinearchive.com';
-UPDATE usuarios SET contrasena = '$2a$12$[HASH_GENERADO_3]' WHERE email = 'analista@cinearchive.com';
-UPDATE usuarios SET contrasena = '$2a$12$[HASH_GENERADO_4]' WHERE email = 'maria@example.com';
-UPDATE usuarios SET contrasena = '$2a$12$[HASH_GENERADO_5]' WHERE email = 'juan@example.com';
-```
+Las contraseñas están encriptadas con BCrypt. Si no puedes iniciar sesión:
 
-### ✅ Solución - Opción 3: Usar hashes pre-generados (solo para testing)
+1. **Verifica que la BD tenga los datos correctos:**
+   - Ejecuta el script `cineArchiveBD.sql` para recrear la base de datos
+   - Los hashes ya están incluidos en el script SQL
 
-```sql
--- Estos son hashes reales para las contraseñas indicadas:
+2. **Prueba las herramientas de testing:**
+   ```
+   http://localhost:8080/cinearchive/test/password/verificar?password=Admin123&hash=$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6
+   ```
 
--- Password: Admin123
-UPDATE usuarios SET contrasena = '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6' 
-WHERE email = 'admin@cinearchive.com';
-
--- Password: Gestor123
-UPDATE usuarios SET contrasena = '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6' 
-WHERE email = 'gestor@cinearchive.com';
-
--- Password: User123 (para todos los demás)
-UPDATE usuarios SET contrasena = '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5koQKeWcrmyS6' 
-WHERE email IN ('analista@cinearchive.com', 'maria@example.com', 'juan@example.com');
-```
+3. **Genera un nuevo hash si es necesario:**
+   ```
+   http://localhost:8080/cinearchive/test/password/encriptar?password=TuNuevaPassword123
+   ```
 
 ### ✅ Verificar nombre de base de datos
 
