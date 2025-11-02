@@ -305,6 +305,189 @@ document.addEventListener('DOMContentLoaded', function() {
             this.addEventListener('mouseleave', () => tooltip.remove(), { once: true });
         });
     });
+
+    // ============================================
+    // VALIDACIÓN DE FORMULARIO DE REGISTRO
+    // ============================================
+
+    const registroForm = document.getElementById('registroForm');
+    if (registroForm) {
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('passwordConfirm');
+        const passwordRequirements = document.getElementById('passwordRequirements');
+        const passwordMatch = document.getElementById('passwordMatch');
+        const submitBtn = document.getElementById('submitBtn');
+        const fechaNacimientoInput = document.getElementById('fechaNacimiento');
+
+        // Requisitos de contraseña
+        const requirements = {
+            length: document.getElementById('req-length'),
+            uppercase: document.getElementById('req-uppercase'),
+            lowercase: document.getElementById('req-lowercase'),
+            number: document.getElementById('req-number')
+        };
+
+        // Mostrar requisitos cuando el usuario comienza a escribir la contraseña
+        if (passwordInput) {
+            passwordInput.addEventListener('focus', function() {
+                if (passwordRequirements) {
+                    passwordRequirements.style.display = 'block';
+                }
+            });
+
+            // Validar contraseña mientras el usuario escribe
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+
+                // Validar longitud mínima (8 caracteres)
+                if (password.length >= 8) {
+                    requirements.length.classList.remove('invalid');
+                    requirements.length.classList.add('valid');
+                } else {
+                    requirements.length.classList.remove('valid');
+                    requirements.length.classList.add('invalid');
+                }
+
+                // Validar al menos una mayúscula
+                if (/[A-Z]/.test(password)) {
+                    requirements.uppercase.classList.remove('invalid');
+                    requirements.uppercase.classList.add('valid');
+                } else {
+                    requirements.uppercase.classList.remove('valid');
+                    requirements.uppercase.classList.add('invalid');
+                }
+
+                // Validar al menos una minúscula
+                if (/[a-z]/.test(password)) {
+                    requirements.lowercase.classList.remove('invalid');
+                    requirements.lowercase.classList.add('valid');
+                } else {
+                    requirements.lowercase.classList.remove('valid');
+                    requirements.lowercase.classList.add('invalid');
+                }
+
+                // Validar al menos un número
+                if (/[0-9]/.test(password)) {
+                    requirements.number.classList.remove('invalid');
+                    requirements.number.classList.add('valid');
+                } else {
+                    requirements.number.classList.remove('valid');
+                    requirements.number.classList.add('invalid');
+                }
+
+                // Verificar coincidencia si ya hay algo en el campo de confirmación
+                if (passwordConfirmInput && passwordConfirmInput.value) {
+                    checkPasswordMatch();
+                }
+            });
+        }
+
+        // Verificar si las contraseñas coinciden
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = passwordConfirmInput.value;
+
+            // Si el campo de confirmación está vacío, ocultar mensaje
+            if (confirmPassword === '') {
+                if (passwordMatch) {
+                    passwordMatch.style.display = 'none';
+                }
+                return;
+            }
+
+            // Mostrar mensaje
+            if (passwordMatch) {
+                passwordMatch.style.display = 'block';
+
+                // Verificar coincidencia
+                if (password === confirmPassword) {
+                    passwordMatch.textContent = '✓ Las contraseñas coinciden';
+                    passwordMatch.classList.remove('no-match');
+                    passwordMatch.classList.add('match');
+                } else {
+                    passwordMatch.textContent = '✗ Las contraseñas no coinciden';
+                    passwordMatch.classList.remove('match');
+                    passwordMatch.classList.add('no-match');
+                }
+            }
+        }
+
+        // Ejecutar verificación cuando el usuario escribe en el campo de confirmación
+        if (passwordConfirmInput) {
+            passwordConfirmInput.addEventListener('input', checkPasswordMatch);
+        }
+
+        // Validar formulario antes de enviar
+        registroForm.addEventListener('submit', function(e) {
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value;
+            const passwordConfirm = passwordConfirmInput.value;
+            const terms = document.getElementById('terms').checked;
+
+            // Validar nombre (mínimo 3 caracteres)
+            if (nombre === '' || nombre.length < 3) {
+                alert('⚠️ El nombre debe tener al menos 3 caracteres');
+                e.preventDefault();
+                return false;
+            }
+
+            // Validar email (formato válido)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('⚠️ Por favor, ingresa un email válido');
+                e.preventDefault();
+                return false;
+            }
+
+            // Validar contraseña (mínimo 8 caracteres)
+            if (password.length < 8) {
+                alert('⚠️ La contraseña debe tener al menos 8 caracteres');
+                e.preventDefault();
+                return false;
+            }
+
+            // Validar que las contraseñas coincidan
+            if (password !== passwordConfirm) {
+                alert('⚠️ Las contraseñas no coinciden');
+                e.preventDefault();
+                return false;
+            }
+
+            // Validar términos y condiciones
+            if (!terms) {
+                alert('⚠️ Debes aceptar los Términos y Condiciones para continuar');
+                e.preventDefault();
+                return false;
+            }
+
+            // Deshabilitar botón para evitar doble envío
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creando cuenta...';
+            }
+
+            return true;
+        });
+
+        // Establecer fecha máxima para fecha de nacimiento (hoy)
+        if (fechaNacimientoInput) {
+            const today = new Date().toISOString().split('T')[0];
+            fechaNacimientoInput.setAttribute('max', today);
+        }
+
+        // Auto-ocultar mensajes después de 5 segundos
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500);
+            });
+        }, 5000);
+    }
 });
 
 console.log('🎬 CineArchive - Sistema cargado correctamente');
