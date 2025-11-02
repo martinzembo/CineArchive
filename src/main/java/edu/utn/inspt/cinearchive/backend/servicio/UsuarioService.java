@@ -62,7 +62,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setEmail(email);
-        usuario.setContrasena(hashPassword); // ⚠️ Guardar el HASH, no el texto plano
+        usuario.setContrasena(hashPassword); // IMPORTANTE: Guardar el HASH, no el texto plano
         usuario.setRol(rol != null ? rol : Rol.USUARIO_REGULAR);
         usuario.setFechaRegistro(LocalDate.now());
         usuario.setActivo(true);
@@ -430,7 +430,7 @@ public class UsuarioService {
     }
 
     // ============================================================
-    // MÉTODOS DE ESTADÍSTICAS
+    // METODOS DE ESTADISTICAS
     // ============================================================
 
     /**
