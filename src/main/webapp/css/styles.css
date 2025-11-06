@@ -1233,6 +1233,57 @@ footer {
     color: var(--danger-color);
 }
 
+/* Estilos para el botón de categorías */
+.categories-btn {
+    background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+    color: #ffffff;
+    border: 1px solid #333333;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin: 15px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.categories-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #2d2d2d, #1a1a1a);
+    border-color: #e50914;
+    box-shadow: 0 6px 15px rgba(229, 9, 20, 0.2);
+}
+
+.categories-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.15);
+}
+
+.categories-btn i {
+    font-size: 1.1rem;
+    color: #e50914;
+    transition: all 0.3s ease;
+}
+
+.categories-btn:hover i {
+    transform: scale(1.1);
+    color: #ff0f1b;
+}
+
+/* Centrar el botón en el contenedor de login */
+.login-container .categories-btn {
+    display: block;
+    width: fit-content;
+    margin: 20px auto 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .menu-toggle {
