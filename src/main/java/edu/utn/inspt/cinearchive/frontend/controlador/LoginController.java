@@ -113,7 +113,7 @@ public class LoginController {
             // 6. Redirigir según el rol del usuario
             switch (usuario.getRol()) {
                 case ADMINISTRADOR:
-                    return "redirect:/admin/panel";
+                    return "redirect:/admin/usuarios";
 
                 case GESTOR_INVENTARIO:
                     return "redirect:/inventario/panel";
