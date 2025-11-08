@@ -163,7 +163,7 @@ public class UsuarioService {
      * @param passwordNueva Nueva contraseña en texto plano
      * @throws IllegalArgumentException si la contraseña actual es incorrecta o la nueva no es segura
      */
-    public void cambiarContrasena(int usuarioId, String passwordActual, String passwordNueva) {
+    public void cambiarContrasena(Long usuarioId, String passwordActual, String passwordNueva) {
         // 1. Buscar usuario
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         if (usuario == null) {
@@ -199,7 +199,7 @@ public class UsuarioService {
      * @param passwordNueva Nueva contraseña en texto plano
      * @throws IllegalArgumentException si la contraseña no es segura
      */
-    public void restablecerContrasena(int usuarioId, String passwordNueva) {
+    public void restablecerContrasena(Long usuarioId, String passwordNueva) {
         // 1. Buscar usuario
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         if (usuario == null) {
@@ -232,7 +232,7 @@ public class UsuarioService {
      * @return Usuario actualizado
      * @throws IllegalArgumentException si el email ya está en uso por otro usuario
      */
-    public Usuario actualizarPerfil(int usuarioId, String nombre, String email, LocalDate fechaNacimiento) {
+    public Usuario actualizarPerfil(Long usuarioId, String nombre, String email, LocalDate fechaNacimiento) {
         // 1. Buscar usuario existente
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         if (usuario == null) {
@@ -305,7 +305,7 @@ public class UsuarioService {
      * @param id ID del usuario
      * @return Usuario encontrado o null si no existe
      */
-    public Usuario buscarPorId(int id) {
+    public Usuario buscarPorId(Long id) {
         return usuarioRepository.buscarPorId(id);
     }
 
@@ -377,7 +377,7 @@ public class UsuarioService {
      * @param id ID del usuario a desactivar
      * @return true si se desactivó, false si no existe
      */
-    public boolean desactivar(int id) {
+    public boolean desactivar(Long id) {
         return usuarioRepository.cambiarEstado(id, false);
     }
 
@@ -387,7 +387,7 @@ public class UsuarioService {
      * @param id ID del usuario a activar
      * @return true si se activó, false si no existe
      */
-    public boolean activar(int id) {
+    public boolean activar(Long id) {
         return usuarioRepository.cambiarEstado(id, true);
     }
 
@@ -398,7 +398,7 @@ public class UsuarioService {
      * @param activo Nuevo estado (true/false)
      * @return true si se cambió, false si no existe
      */
-    public boolean cambiarEstado(int id, boolean activo) {
+    public boolean cambiarEstado(Long id, boolean activo) {
         return usuarioRepository.cambiarEstado(id, activo);
     }
 
@@ -409,7 +409,7 @@ public class UsuarioService {
      * @param id ID del usuario a eliminar
      * @return true si se eliminó, false si no existe
      */
-    public boolean eliminar(int id) {
+    public boolean eliminar(Long id) {
         return usuarioRepository.eliminarFisicamente(id);
     }
 
@@ -420,7 +420,7 @@ public class UsuarioService {
      * @param nuevoRol Nuevo rol a asignar
      * @throws IllegalArgumentException si el usuario no existe
      */
-    public void cambiarRol(int usuarioId, Rol nuevoRol) {
+    public void cambiarRol(Long usuarioId, Rol nuevoRol) {
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
@@ -491,7 +491,7 @@ public class UsuarioService {
      * @param rol Rol a verificar
      * @return true si el usuario tiene ese rol, false si no
      */
-    public boolean tieneRol(int usuarioId, Rol rol) {
+    public boolean tieneRol(Long usuarioId, Rol rol) {
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         return usuario != null && usuario.tieneRol(rol);
     }
@@ -502,9 +502,8 @@ public class UsuarioService {
      * @param usuarioId ID del usuario
      * @return true si está activo, false si no
      */
-    public boolean estaActivo(int usuarioId) {
+    public boolean estaActivo(Long usuarioId) {
         Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
         return usuario != null && usuario.estaActivo();
     }
 }
-

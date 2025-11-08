@@ -1,9 +1,8 @@
 package edu.utn.inspt.cinearchive.backend.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletRegistration;
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletRegistration;
 
 /**
  * Inicializador de la aplicación web sin web.xml

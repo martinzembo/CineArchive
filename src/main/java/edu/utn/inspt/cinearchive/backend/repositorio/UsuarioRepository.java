@@ -29,7 +29,7 @@ public class UsuarioRepository {
      */
     private static final RowMapper<Usuario> USUARIO_ROW_MAPPER = (rs, rowNum) -> {
         Usuario usuario = new Usuario();
-        usuario.setId(rs.getInt("id"));
+        usuario.setId(rs.getLong("id"));
         usuario.setNombre(rs.getString("nombre"));
         usuario.setEmail(rs.getString("email"));
         usuario.setContrasena(rs.getString("contrasena"));
@@ -84,7 +84,7 @@ public class UsuarioRepository {
         }, keyHolder);
 
         // Asignar el ID generado al usuario
-        usuario.setId(keyHolder.getKey().intValue());
+        usuario.setId(keyHolder.getKey().longValue());
         return usuario;
     }
 
@@ -93,7 +93,7 @@ public class UsuarioRepository {
      * @param id ID del usuario
      * @return Usuario encontrado o null si no existe
      */
-    public Usuario buscarPorId(int id) {
+    public Usuario buscarPorId(Long id) {
         String sql = "SELECT * FROM usuario WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, USUARIO_ROW_MAPPER, id);
@@ -155,7 +155,7 @@ public class UsuarioRepository {
      * @param id ID del usuario
      * @return true si se eliminó, false si no existe
      */
-    public boolean eliminarFisicamente(int id) {
+    public boolean eliminarFisicamente(Long id) {
         String sql = "DELETE FROM usuario WHERE id = ?";
         int filasEliminadas = jdbcTemplate.update(sql, id);
         return filasEliminadas > 0;
@@ -240,7 +240,7 @@ public class UsuarioRepository {
      * @param activo Nuevo estado (true/false)
      * @return true si se actualizó, false si no existe
      */
-    public boolean cambiarEstado(int id, boolean activo) {
+    public boolean cambiarEstado(Long id, boolean activo) {
         String sql = "UPDATE usuario SET activo = ? WHERE id = ?";
         int filasActualizadas = jdbcTemplate.update(sql, activo, id);
         return filasActualizadas > 0;
@@ -253,9 +253,9 @@ public class UsuarioRepository {
      * @param nuevaContrasena Nueva contraseña (ya debe estar hasheada)
      * @return true si se actualizó, false si no existe
      */
-    public boolean actualizarContrasena(int id, String nuevaContrasena) {
+    public boolean actualizarContrasena(Long usuarioId, String nuevaContrasena) {
         String sql = "UPDATE usuario SET contrasena = ? WHERE id = ?";
-        int filasActualizadas = jdbcTemplate.update(sql, nuevaContrasena, id);
+        int filasActualizadas = jdbcTemplate.update(sql, nuevaContrasena, usuarioId);
         return filasActualizadas > 0;
     }
 

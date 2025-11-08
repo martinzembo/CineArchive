@@ -1,11 +1,10 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Usuario implements Serializable {
+public class Usuario {
 
     public enum Rol {
         USUARIO_REGULAR,
@@ -14,7 +13,7 @@ public class Usuario implements Serializable {
         ANALISTA_DATOS
     }
 
-    private int id;
+    private Long id;
 
     @NotNull(message = "El nombre es obligatorio")
     @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres")
@@ -56,11 +55,11 @@ public class Usuario implements Serializable {
         this.activo = true;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

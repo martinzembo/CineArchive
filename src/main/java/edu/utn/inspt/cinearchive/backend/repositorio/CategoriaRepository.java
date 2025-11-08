@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public interface CategoriaRepository {
     List<Categoria> findAll();
-    Optional<Categoria> findById(int id);
+    Optional<Categoria> findById(Long id);
     List<Categoria> findByTipo(Categoria.Tipo tipo);
     Optional<Categoria> findByNombre(String nombre);
     Categoria save(Categoria categoria);
-    void deleteById(int id);
-    boolean existsById(int id);
+    void deleteById(Long id);
+    boolean existsById(Long id);
     boolean existsByNombre(String nombre);
 }

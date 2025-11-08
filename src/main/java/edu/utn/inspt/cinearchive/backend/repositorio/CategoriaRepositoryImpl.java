@@ -26,7 +26,7 @@ public class CategoriaRepositoryImpl implements CategoriaRepository {
 
     private final RowMapper<Categoria> categoriaRowMapper = (rs, rowNum) -> {
         Categoria categoria = new Categoria();
-        categoria.setId(rs.getInt("id"));
+        categoria.setId(rs.getLong("id"));
         categoria.setNombre(rs.getString("nombre"));
         categoria.setTipo(Categoria.Tipo.valueOf(rs.getString("tipo")));
         categoria.setDescripcion(rs.getString("descripcion"));
@@ -42,7 +42,7 @@ public class CategoriaRepositoryImpl implements CategoriaRepository {
     }
 
     @Override
-    public Optional<Categoria> findById(int id) {
+    public Optional<Categoria> findById(Long id) {
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(
                     "SELECT id, nombre, tipo, descripcion FROM categoria WHERE id = ?",
@@ -78,7 +78,7 @@ public class CategoriaRepositoryImpl implements CategoriaRepository {
 
     @Override
     public Categoria save(Categoria categoria) {
-        if (categoria.getId() == 0) {
+        if (categoria.getId() == null) {
             return insert(categoria);
         }
         return update(categoria);
@@ -98,7 +98,7 @@ public class CategoriaRepositoryImpl implements CategoriaRepository {
             return ps;
         }, keyHolder);
 
-        categoria.setId(keyHolder.getKey().intValue());
+        categoria.setId(keyHolder.getKey().longValue());
         return categoria;
     }
 
@@ -114,12 +114,12 @@ public class CategoriaRepositoryImpl implements CategoriaRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         jdbcTemplate.update("DELETE FROM categoria WHERE id = ?", id);
     }
 
     @Override
-    public boolean existsById(int id) {
+    public boolean existsById(Long id) {
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM categoria WHERE id = ?",
                 Integer.class,

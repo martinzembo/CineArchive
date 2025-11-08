@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +27,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> obtenerCategoria(@PathVariable int id) {
+    public ResponseEntity<Categoria> obtenerCategoria(@PathVariable Long id) {
         return categoriaService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -64,7 +64,7 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Categoria> actualizarCategoria(
-            @PathVariable int id,
+            @PathVariable Long id,
             @Valid @RequestBody Categoria categoria) {
         if (!categoriaService.existePorId(id)) {
             return ResponseEntity.notFound().build();
@@ -74,7 +74,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCategoria(@PathVariable int id) {
+    public ResponseEntity<Void> eliminarCategoria(@PathVariable Long id) {
         if (!categoriaService.existePorId(id)) {
             return ResponseEntity.notFound().build();
         }

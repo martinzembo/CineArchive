@@ -2,15 +2,13 @@ package edu.utn.inspt.cinearchive.frontend.controlador;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Usuario;
 import edu.utn.inspt.cinearchive.backend.servicio.UsuarioService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Controlador para gestionar el login y logout de usuarios
@@ -241,4 +239,3 @@ public class LoginController {
         return "perfil"; // Vista del perfil (crear perfil.jsp)
     }
 }
-

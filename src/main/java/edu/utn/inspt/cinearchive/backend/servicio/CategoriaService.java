@@ -6,12 +6,12 @@ import java.util.Optional;
 
 public interface CategoriaService {
     List<Categoria> obtenerTodas();
-    Optional<Categoria> obtenerPorId(int id);
+    Optional<Categoria> obtenerPorId(Long id);
     List<Categoria> obtenerPorTipo(Categoria.Tipo tipo);
     Optional<Categoria> obtenerPorNombre(String nombre);
     Categoria guardar(Categoria categoria);
-    void eliminar(int id);
-    boolean existePorId(int id);
+    void eliminar(Long id);
+    boolean existePorId(Long id);
     boolean existePorNombre(String nombre);
     List<Categoria> obtenerGeneros();
     List<Categoria> obtenerTags();

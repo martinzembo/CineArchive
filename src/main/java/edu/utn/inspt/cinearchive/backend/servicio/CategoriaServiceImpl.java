@@ -28,7 +28,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Categoria> obtenerPorId(int id) {
+    public Optional<Categoria> obtenerPorId(Long id) {
         return categoriaRepository.findById(id);
     }
 
@@ -51,7 +51,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void eliminar(int id) {
+    public void eliminar(Long id) {
         if (!categoriaRepository.existsById(id)) {
             throw new IllegalArgumentException("No existe una categoría con el ID: " + id);
         }
@@ -60,7 +60,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorId(int id) {
+    public boolean existePorId(Long id) {
         return categoriaRepository.existsById(id);
     }
 
@@ -98,7 +98,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         if (categoria.getTipo() == null) {
             throw new IllegalArgumentException("El tipo de categoría es obligatorio");
         }
-        if (categoria.getId() == 0 && categoriaRepository.existsByNombre(categoria.getNombre())) {
+        if (categoria.getId() == null && categoriaRepository.existsByNombre(categoria.getNombre())) {
             throw new IllegalArgumentException("Ya existe una categoría con el nombre: " + categoria.getNombre());
         }
     }
