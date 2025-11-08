@@ -52,17 +52,17 @@
                 </div>
             </c:if>
 
-            <%-- Mensajes de Éxito --%>
-            <c:if test="${not empty mensaje}">
-                <div class="alert alert-success">
-                    <strong>✅ Éxito:</strong> ${mensaje}
-                </div>
-            </c:if>
-
             <%-- Mensajes Específicos según parámetros URL --%>
             <c:if test="${param.mensaje == 'logout'}">
                 <div class="alert alert-info">
                     <strong>👋 Sesión cerrada:</strong> Has cerrado sesión exitosamente.
+                </div>
+            </c:if>
+
+            <%-- Otros mensajes de éxito --%>
+            <c:if test="${not empty mensaje}">
+                <div class="alert alert-success">
+                    <strong>✅ Éxito:</strong> ${mensaje}
                 </div>
             </c:if>
 
