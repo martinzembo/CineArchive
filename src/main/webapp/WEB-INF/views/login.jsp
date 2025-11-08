@@ -94,10 +94,6 @@
                        placeholder="Contraseña"
                        required>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Recordarme</label>
-                </div>
 
                 <button type="submit">Iniciar Sesión</button>
             </form>
