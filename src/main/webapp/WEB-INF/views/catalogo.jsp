@@ -1,6 +1,7 @@
 explanation: Crear una vista JSP para el catálogo basada en el diseño en `disenio/Index.html`. La vista muestra una barra de búsqueda, filtros (estáticos), e iterará sobre `${contenidos}` para mostrar cards. También incluye enlaces a los scripts JS.
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
