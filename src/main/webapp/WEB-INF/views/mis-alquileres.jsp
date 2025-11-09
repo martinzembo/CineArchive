@@ -19,6 +19,12 @@
 </header>
 <div class="container">
     <h1 class="page-title">🎫 Mis Alquileres</h1>
+    <c:if test="${not empty error}">
+        <div class="alert alert-error">${error}</div>
+    </c:if>
+    <c:if test="${not empty msg}">
+        <div class="alert alert-success">${msg}</div>
+    </c:if>
     <c:choose>
         <c:when test="${not empty alquileres}">
             <div class="movie-row">

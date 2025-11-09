@@ -2,21 +2,21 @@
 console.log('catalogo.js loaded');
 
 function rentNow(contenidoId) {
-    // Redirigir al detalle o disparar un alquiler rápido
-    const url = `/alquilar`;
-    fetch(url, {
+    // Usar la utilidad global de alquiler para mantener comportamiento consistente
+    if (typeof window.alquilar === 'function') {
+        window.alquilar(contenidoId, 3);
+        return;
+    }
+    // Fallback: POST directo
+    fetch('/alquilar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `contenidoId=${encodeURIComponent(contenidoId)}&periodo=3`
     })
     .then(resp => {
-        if (resp.ok) return resp.json();
+        if (resp.redirected) { window.location.href = resp.url; return; }
+        if (resp.ok) { window.location.href = '/mis-alquileres'; return; }
         throw new Error('Error en la petición de alquiler');
-    })
-    .then(data => {
-        alert('Alquiler realizado correctamente');
-        // opción: redirigir a mis-alquileres
-        window.location.href = '/mis-alquileres';
     })
     .catch(err => {
         console.error(err);

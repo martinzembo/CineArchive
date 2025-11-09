@@ -40,7 +40,7 @@ async function onAlquilerSubmit(event) {
 
 // Utilidad para alquilar programáticamente (por ejemplo, desde botones en catálogo)
 // Nota: no espera JSON; redirige a mis-alquileres en éxito
-export async function alquilar(contenidoId, periodo = 3) {
+function alquilar(contenidoId, periodo = 3) {
   try {
     const resp = await fetch('/alquilar', {
       method: 'POST',
@@ -61,3 +61,5 @@ export async function alquilar(contenidoId, periodo = 3) {
     alert('Error de red al realizar el alquiler');
   }
 }
+
+window.alquilar = alquilar;
