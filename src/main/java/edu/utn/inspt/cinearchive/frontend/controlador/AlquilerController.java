@@ -1,5 +1,6 @@
 package edu.utn.inspt.cinearchive.frontend.controlador;
 
+import edu.utn.inspt.cinearchive.backend.modelo.AlquilerDetalle;
 import edu.utn.inspt.cinearchive.backend.servicio.AlquilerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class AlquilerController {
 
     @GetMapping("/mis-alquileres")
     public String misAlquileres(Model model) {
-        model.addAttribute("alquileres", alquilerService.getByUsuario(1L));
+        model.addAttribute("alquileres", alquilerService.getByUsuarioConContenido(1L));
         return "mis-alquileres";
     }
 

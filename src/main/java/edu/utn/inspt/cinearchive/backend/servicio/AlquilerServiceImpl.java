@@ -1,6 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Alquiler;
+import edu.utn.inspt.cinearchive.backend.modelo.AlquilerDetalle;
 import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import edu.utn.inspt.cinearchive.backend.repositorio.AlquilerRepository;
 import edu.utn.inspt.cinearchive.backend.repositorio.ContenidoRepository;
@@ -31,6 +32,11 @@ public class AlquilerServiceImpl implements AlquilerService {
     @Override
     public List<Alquiler> getByUsuario(Long usuarioId) {
         return alquilerRepository.findByUsuarioId(usuarioId);
+    }
+
+    @Override
+    public java.util.List<AlquilerDetalle> getByUsuarioConContenido(Long usuarioId) {
+        return alquilerRepository.findByUsuarioIdWithContenido(usuarioId);
     }
 
     @Override
