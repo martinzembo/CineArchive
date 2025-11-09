@@ -107,11 +107,6 @@
                     </label>
                 </div>
 
-                <%-- Newsletter (Opcional) --%>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="newsletter" name="newsletter">
-                    <label for="newsletter">Deseo recibir novedades y ofertas por correo electrónico</label>
-                </div>
 
                 <%-- Botón Submit --%>
                 <button type="submit" id="submitBtn">Crear Cuenta</button>

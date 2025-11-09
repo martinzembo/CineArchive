@@ -51,12 +51,11 @@
       <version>2.10.1</version>
     </dependency>
 
-    <!-- Servlet API (provided by the servlet container) -->
+    <!-- Servlet API (needed for Jetty) -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- Validation API (javax.validation) -->
@@ -87,6 +86,21 @@
       <version>0.4</version>
     </dependency>
 
+    <!-- JSTL para JSP -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+    <!-- JSP API (necesario para compilación) -->
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>2.3.3</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>cinearchive</finalName>
@@ -94,7 +108,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.34.v20201102</version>
+        <version>9.4.48.v20220622</version>
         <configuration>
           <webApp>
             <contextPath>/cinearchive</contextPath>
@@ -104,6 +118,7 @@
           </httpConnector>
           <stopKey>stop</stopKey>
           <stopPort>8081</stopPort>
+          <scanIntervalSeconds>5</scanIntervalSeconds>
         </configuration>
         <dependencies>
           <!-- Habilita el escaneo de anotaciones (WebApplicationInitializer) -->
@@ -115,6 +130,17 @@
           <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-plus</artifactId>
+            <version>9.4.48.v20220622</version>
+          </dependency>
+          <!-- Soporte JSP con Apache Jasper (versión consistente) -->
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jsp</artifactId>
+            <version>9.4.48.v20220622</version>
+          </dependency>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jstl</artifactId>
             <version>9.4.48.v20220622</version>
           </dependency>
         </dependencies>

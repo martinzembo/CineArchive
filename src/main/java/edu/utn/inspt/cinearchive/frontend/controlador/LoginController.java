@@ -48,10 +48,10 @@ public class LoginController {
             model.addAttribute("error", "Credenciales inválidas o cuenta desactivada");
         }
 
-        if (mensaje != null) {
-            if (mensaje.equals("logout")) {
-                model.addAttribute("mensaje", "Has cerrado sesión exitosamente");
-            } else if (mensaje.equals("registroExitoso")) {
+        // Nota: El mensaje 'logout' se maneja mediante param.mensaje en el JSP
+        // Solo agregamos al modelo otros mensajes
+        if (mensaje != null && !mensaje.equals("logout")) {
+            if (mensaje.equals("registroExitoso")) {
                 model.addAttribute("mensaje", "¡Registro exitoso! Ya puedes iniciar sesión");
             }
         }
@@ -113,7 +113,7 @@ public class LoginController {
             // 6. Redirigir según el rol del usuario
             switch (usuario.getRol()) {
                 case ADMINISTRADOR:
-                    return "redirect:/admin/panel";
+                    return "redirect:/admin/usuarios";
 
                 case GESTOR_INVENTARIO:
                     return "redirect:/inventario/panel";
