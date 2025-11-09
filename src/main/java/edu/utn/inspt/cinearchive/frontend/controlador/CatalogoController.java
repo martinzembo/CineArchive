@@ -21,16 +21,17 @@ public class CatalogoController {
     }
 
     @GetMapping({"/catalogo","/"})
-    public String catalogo(@RequestParam(value = "q", required = false) String q, Model model) {
-        List<Contenido> lista;
-        if (q != null && !q.trim().isEmpty()) {
-            String pattern = "%" + q.trim() + "%";
-            lista = contenidoService.searchByTitulo(pattern);
-        } else {
-            lista = contenidoService.getAll();
-        }
+    public String catalogo(@RequestParam(value = "q", required = false) String q,
+                           @RequestParam(value = "genero", required = false) String genero,
+                           @RequestParam(value = "tipo", required = false) String tipo,
+                           @RequestParam(value = "orden", required = false) String orden,
+                           Model model) {
+        List<Contenido> lista = contenidoService.search(q, genero, tipo, orden);
         model.addAttribute("contenidos", lista);
         model.addAttribute("query", q);
+        model.addAttribute("genero", genero);
+        model.addAttribute("tipo", tipo);
+        model.addAttribute("orden", orden);
         return "catalogo";
     }
 }

@@ -10,4 +10,6 @@ public interface ContenidoRepository {
     int save(Contenido contenido);
     int update(Contenido contenido);
     int delete(Long id);
+    // Búsqueda con filtros opcionales
+    List<Contenido> search(String q, String genero, String tipo, String orden);
 }

@@ -10,4 +10,6 @@ public interface ContenidoService {
     void update(Contenido contenido);
     void delete(Long id);
     List<Contenido> searchByTitulo(String tituloPattern);
+    // Nuevo: búsqueda con filtros
+    List<Contenido> search(String q, String genero, String tipo, String orden);
 }

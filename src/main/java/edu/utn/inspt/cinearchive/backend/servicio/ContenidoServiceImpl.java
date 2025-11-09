@@ -28,8 +28,8 @@ public class ContenidoServiceImpl implements ContenidoService {
     }
 
     @Override
-    public List<Contenido> searchByTitulo(String tituloPattern) {
-        return contenidoRepository.findByTituloLike(tituloPattern);
+    public List<Contenido> search(String q, String genero, String tipo, String orden) {
+        return contenidoRepository.search(q, genero, tipo, orden);
     }
 
     @Override

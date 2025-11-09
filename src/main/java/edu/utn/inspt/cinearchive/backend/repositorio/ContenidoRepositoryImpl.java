@@ -125,4 +125,38 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         String sql = "DELETE FROM contenido WHERE id = ?";
         return jdbcTemplate.update(sql, id);
     }
+
+    @Override
+    public List<Contenido> search(String q, String genero, String tipo, String orden) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND titulo LIKE ?");
+            params.add("%" + q.trim() + "%");
+        }
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(genero) = LOWER(?)");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        // Orden permitido: fecha (anio desc), nombre (titulo asc)
+        if (orden != null) {
+            switch (orden) {
+                case "fecha":
+                    sql.append(" ORDER BY anio DESC, titulo ASC");
+                    break;
+                case "nombre":
+                    sql.append(" ORDER BY titulo ASC");
+                    break;
+                default:
+                    sql.append(" ORDER BY titulo ASC");
+            }
+        } else {
+            sql.append(" ORDER BY titulo ASC");
+        }
+        return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
+    }
 }
