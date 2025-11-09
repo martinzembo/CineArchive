@@ -159,4 +159,10 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         }
         return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
     }
+
+    @Override
+    public int updateCopiasDisponibles(Long contenidoId, int delta) {
+        String sql = "UPDATE contenido SET copias_disponibles = GREATEST(copias_disponibles + ?, 0) WHERE id = ?";
+        return jdbcTemplate.update(sql, delta, contenidoId);
+    }
 }

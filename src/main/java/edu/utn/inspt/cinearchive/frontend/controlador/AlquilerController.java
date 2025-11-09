@@ -1,6 +1,5 @@
 package edu.utn.inspt.cinearchive.frontend.controlador;
 
-import edu.utn.inspt.cinearchive.backend.modelo.Alquiler;
 import edu.utn.inspt.cinearchive.backend.servicio.AlquilerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,20 +20,13 @@ public class AlquilerController {
 
     @GetMapping("/mis-alquileres")
     public String misAlquileres(Model model) {
-        // placeholder: en el futuro filtrar por usuario logueado
         model.addAttribute("alquileres", alquilerService.getByUsuario(1L));
         return "mis-alquileres";
     }
 
     @PostMapping("/alquilar")
     public String alquilar(@RequestParam("contenidoId") Long contenidoId, @RequestParam("periodo") Integer periodo) {
-        // placeholder: crear un Alquiler y persistir
-        Alquiler a = new Alquiler();
-        a.setContenidoId(contenidoId);
-        a.setUsuarioId(1L); // temporal
-        a.setPeriodoAlquiler(periodo);
-        alquilerService.create(a);
+        alquilerService.rent(1L, contenidoId, periodo);
         return "redirect:/mis-alquileres";
     }
 }
-

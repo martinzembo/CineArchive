@@ -12,4 +12,6 @@ public interface ContenidoRepository {
     int delete(Long id);
     // Búsqueda con filtros opcionales
     List<Contenido> search(String q, String genero, String tipo, String orden);
+    // Ajuste de stock de copias disponibles
+    int updateCopiasDisponibles(Long contenidoId, int delta);
 }

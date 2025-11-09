@@ -9,5 +9,6 @@ public interface AlquilerService {
     void create(Alquiler alquiler);
     void update(Alquiler alquiler);
     void delete(Long id);
+    // Nuevo: flujo de alquiler con validaciones
+    void rent(Long usuarioId, Long contenidoId, Integer periodoDias);
 }
-
