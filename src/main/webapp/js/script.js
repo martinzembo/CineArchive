@@ -517,6 +517,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         });
     }, 5000);
+
+    // ============================================
+    // PÁGINA ACCESO DENEGADO
+    // ============================================
+    // Efecto de shake en el icono al cargar
+    const errorIcon = document.querySelector('.error-icon');
+    if (errorIcon) {
+        errorIcon.classList.add('animated', 'shake');
+    }
+
+    // Efecto hover en botones de la página de acceso denegado
+    const btnHome = document.querySelectorAll('.btn-home');
+    btnHome.forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.classList.add('shadow-lg');
+        });
+        btn.addEventListener('mouseleave', function() {
+            this.classList.remove('shadow-lg');
+        });
+    });
 });
 
 console.log('🎬 CineArchive - Sistema cargado correctamente');

@@ -196,23 +196,7 @@
 <!-- Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    // Efecto de shake en el icono al cargar
-    $(document).ready(function() {
-        $('.error-icon').addClass('animated shake');
-    });
-
-    // Efecto hover en botones
-    $('.btn-home').hover(
-        function() {
-            $(this).addClass('shadow-lg');
-        },
-        function() {
-            $(this).removeClass('shadow-lg');
-        }
-    );
-</script>
+<script src="${pageContext.request.contextPath}/js/script.js"></script>
 
 </body>
 </html>
