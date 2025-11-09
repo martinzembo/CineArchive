@@ -26,14 +26,16 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
             a.setId(rs.getLong("id"));
             a.setUsuarioId(rs.getLong("usuario_id"));
             a.setContenidoId(rs.getLong("contenido_id"));
-            // mapear fechas y demás
-            a.setFechaInicio(rs.getObject("fecha_inicio", java.time.LocalDateTime.class));
-            a.setFechaFin(rs.getObject("fecha_fin", java.time.LocalDateTime.class));
-            a.setPeriodoAlquiler(rs.getInt("periodo_alquiler"));
+            a.setFechaInicio(rs.getTimestamp("fecha_inicio") != null ? rs.getTimestamp("fecha_inicio").toLocalDateTime() : null);
+            a.setFechaFin(rs.getTimestamp("fecha_fin") != null ? rs.getTimestamp("fecha_fin").toLocalDateTime() : null);
+            a.setPeriodoAlquiler((Integer) rs.getObject("periodo_alquiler"));
             a.setPrecio(rs.getBigDecimal("precio"));
-            a.setEstado(Alquiler.Estado.valueOf(rs.getString("estado")));
-            a.setVisto(rs.getBoolean("visto"));
-            a.setFechaVista(rs.getObject("fecha_vista", java.time.LocalDateTime.class));
+            String estado = rs.getString("estado");
+            if (estado != null) {
+                try { a.setEstado(Alquiler.Estado.valueOf(estado)); } catch (IllegalArgumentException ignored) {}
+            }
+            a.setVisto((Boolean) rs.getObject("visto"));
+            a.setFechaVista(rs.getTimestamp("fecha_vista") != null ? rs.getTimestamp("fecha_vista").toLocalDateTime() : null);
             return a;
         }
     };
@@ -68,7 +70,7 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
     @Override
     public int update(Alquiler alquiler) {
         String sql = "UPDATE alquileres SET fecha_fin = ?, estado = ?, visto = ?, fecha_vista = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, alquiler.getFechaFin(), alquiler.getEstado().name(), alquiler.getVisto(), alquiler.getFechaVista(), alquiler.getId());
+        return jdbcTemplate.update(sql, alquiler.getFechaFin(), alquiler.getEstado() != null ? alquiler.getEstado().name() : null, alquiler.getVisto(), alquiler.getFechaVista(), alquiler.getId());
     }
 
     @Override

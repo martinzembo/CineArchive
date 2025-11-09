@@ -28,6 +28,11 @@ public class ContenidoServiceImpl implements ContenidoService {
     }
 
     @Override
+    public List<Contenido> searchByTitulo(String tituloPattern) {
+        return contenidoRepository.findByTituloLike(tituloPattern);
+    }
+
+    @Override
     @Transactional
     public void create(Contenido contenido) {
         contenidoRepository.save(contenido);

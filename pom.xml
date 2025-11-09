@@ -80,6 +80,13 @@
       <version>8.0.33</version>
     </dependency>
 
+    <!-- JPA API (javax.persistence) required by entity annotations -->
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>2.2</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>cinearchive</finalName>

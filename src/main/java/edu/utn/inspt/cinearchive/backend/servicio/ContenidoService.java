@@ -9,5 +9,5 @@ public interface ContenidoService {
     void create(Contenido contenido);
     void update(Contenido contenido);
     void delete(Long id);
+    List<Contenido> searchByTitulo(String tituloPattern);
 }
-

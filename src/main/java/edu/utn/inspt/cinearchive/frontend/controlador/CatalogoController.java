@@ -22,11 +22,15 @@ public class CatalogoController {
 
     @GetMapping({"/catalogo","/"})
     public String catalogo(@RequestParam(value = "q", required = false) String q, Model model) {
-        // Por ahora devolvemos todo; en el futuro aplicar filtros por 'q'
-        List<Contenido> lista = contenidoService.getAll();
+        List<Contenido> lista;
+        if (q != null && !q.trim().isEmpty()) {
+            String pattern = "%" + q.trim() + "%";
+            lista = contenidoService.searchByTitulo(pattern);
+        } else {
+            lista = contenidoService.getAll();
+        }
         model.addAttribute("contenidos", lista);
         model.addAttribute("query", q);
         return "catalogo";
     }
 }
-

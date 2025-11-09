@@ -1,4 +1,4 @@
--- Seed de ejemplo para la tabla contenido (20 registros)
+-- Seed de ejemplo para la tabla contenido (50+ registros)
 INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_url, tipo, disponible_para_alquiler, precio_alquiler, copias_disponibles, copias_totales, duracion, director, temporadas, capitulos_totales, en_emision) VALUES
 ('The Matrix', 'Ciencia ficción', 1999, 'Un programador descubre la verdad sobre la realidad.', '', '', 'PELICULA', TRUE, 3.99, 5, 5, 136, 'Lana Wachowski', NULL, NULL, FALSE),
 ('Inception', 'Ciencia ficción', 2010, 'Robo de ideas mediante sueños compartidos.', '', '', 'PELICULA', TRUE, 4.50, 4, 4, 148, 'Christopher Nolan', NULL, NULL, FALSE),
@@ -19,5 +19,34 @@ INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_ur
 ('Mad Max: Fury Road', 'Acción', 2015, 'Carrera por supervivencia en el desierto.', '', '', 'PELICULA', TRUE, 3.49, 4, 4, 120, 'George Miller', NULL, NULL, FALSE),
 ('Toy Story', 'Animación', 1995, 'Juguetes que cobran vida.', '', '', 'PELICULA', TRUE, 1.99, 5, 5, 81, 'John Lasseter', NULL, NULL, FALSE),
 ('The Witcher - Temporada 1', 'Fantasía', 2019, 'Cazador de monstruos en un mundo de fantasía.', '', '', 'SERIE', TRUE, 0.00, 5, 5, NULL, NULL, 1, 8, FALSE),
-('Chernobyl', 'Drama', 2019, 'Miniserie sobre el desastre nuclear.', '', '', 'SERIE', TRUE, 0.00, 4, 4, NULL, NULL, 1, 5, FALSE);
-
+('Chernobyl', 'Drama', 2019, 'Miniserie sobre el desastre nuclear.', '', '', 'SERIE', TRUE, 0.00, 4, 4, NULL, NULL, 1, 5, FALSE),
+('The Mandalorian - Temporada 1', 'Ciencia ficción', 2019, 'Cazarrecompensas en la galaxia post-Imperio.', '', '', 'SERIE', TRUE, 0.00, 5, 5, NULL, NULL, 1, 8, TRUE),
+('The Mandalorian - Temporada 2', 'Ciencia ficción', 2020, 'Continuación de la travesía del Mandalorian.', '', '', 'SERIE', TRUE, 0.00, 5, 5, NULL, NULL, 2, 8, TRUE),
+('The Avengers', 'Acción', 2012, 'Héroes se unen contra amenaza mundial.', '', '', 'PELICULA', TRUE, 3.99, 5, 5, 143, 'Joss Whedon', NULL, NULL, FALSE),
+('Avengers: Endgame', 'Acción', 2019, 'Batalla final contra Thanos.', '', '', 'PELICULA', TRUE, 4.99, 6, 6, 181, 'Anthony Russo', NULL, NULL, FALSE),
+('The Hobbit: An Unexpected Journey', 'Fantasía', 2012, 'Bilbo comienza su aventura.', '', '', 'PELICULA', TRUE, 3.49, 4, 4, 169, 'Peter Jackson', NULL, NULL, FALSE),
+('The Hobbit: The Desolation of Smaug', 'Fantasía', 2013, 'Smaug y el viaje continua.', '', '', 'PELICULA', TRUE, 3.49, 4, 4, 186, 'Peter Jackson', NULL, NULL, FALSE),
+('The Hobbit: The Battle of the Five Armies', 'Fantasía', 2014, 'Batalla épica en la Montaña Solitaria.', '', '', 'PELICULA', TRUE, 3.99, 4, 4, 144, 'Peter Jackson', NULL, NULL, FALSE),
+('Pirates of the Caribbean', 'Aventura', 2003, 'Jack Sparrow y corsarios.', '', '', 'PELICULA', TRUE, 2.99, 5, 5, 143, 'Gore Verbinski', NULL, NULL, FALSE),
+('Pirates of the Caribbean: Dead Man\'s Chest', 'Aventura', 2006, 'Davy Jones y el cofre maldito.', '', '', 'PELICULA', TRUE, 2.99, 5, 5, 150, 'Gore Verbinski', NULL, NULL, FALSE),
+('Pirates of the Caribbean: At World\'s End', 'Aventura', 2007, 'Final de la trilogía inicial.', '', '', 'PELICULA', TRUE, 2.99, 5, 5, 168, 'Gore Verbinski', NULL, NULL, FALSE),
+('Game of Thrones - Temporada 1', 'Fantasía', 2011, 'Tronos y casas en conflicto.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 1, 10, FALSE),
+('Game of Thrones - Temporada 2', 'Fantasía', 2012, 'La guerra de los cinco reyes.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 2, 10, FALSE),
+('Game of Thrones - Temporada 3', 'Fantasía', 2013, 'Bodas y traiciones.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 3, 10, FALSE),
+('Game of Thrones - Temporada 4', 'Fantasía', 2014, 'Batallas decisivas.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 4, 10, FALSE),
+('Game of Thrones - Temporada 5', 'Fantasía', 2015, 'Cambios en Poniente.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 5, 10, FALSE),
+('Game of Thrones - Temporada 6', 'Fantasía', 2016, 'Resurgimientos inesperados.', '', '', 'SERIE', TRUE, 0.00, 10, 10, NULL, NULL, 6, 10, FALSE),
+('Game of Thrones - Temporada 7', 'Fantasía', 2017, 'Alianzas contra la amenaza.', '', '', 'SERIE', TRUE, 0.00, 7, 7, NULL, NULL, 7, 7, FALSE),
+('Game of Thrones - Temporada 8', 'Fantasía', 2019, 'Conclusión de la saga.', '', '', 'SERIE', TRUE, 0.00, 6, 6, NULL, NULL, 8, 6, FALSE),
+('The Boys - Temporada 1', 'Acción', 2019, 'Vigilantes contra superhéroes corruptos.', '', '', 'SERIE', TRUE, 0.00, 8, 8, NULL, NULL, 1, 8, TRUE),
+('The Boys - Temporada 2', 'Acción', 2020, 'Aumentan los conflictos.', '', '', 'SERIE', TRUE, 0.00, 8, 8, NULL, NULL, 2, 8, TRUE),
+('The Boys - Temporada 3', 'Acción', 2022, 'Nuevas amenazas y poderes.', '', '', 'SERIE', TRUE, 0.00, 8, 8, NULL, NULL, 3, 8, TRUE),
+('The Boys - Temporada 4', 'Acción', 2024, 'Escalada de tensión política.', '', '', 'SERIE', TRUE, 0.00, 8, 8, NULL, NULL, 4, 8, TRUE),
+('Dune', 'Ciencia ficción', 2021, 'Paul Atreides y Arrakis.', '', '', 'PELICULA', TRUE, 4.99, 6, 6, 155, 'Denis Villeneuve', NULL, NULL, FALSE),
+('Dune: Part Two', 'Ciencia ficción', 2024, 'Continuación de la épica saga.', '', '', 'PELICULA', TRUE, 4.99, 6, 6, 166, 'Denis Villeneuve', NULL, NULL, FALSE),
+('Oppenheimer', 'Drama', 2023, 'Creación de la bomba atómica.', '', '', 'PELICULA', TRUE, 4.99, 5, 5, 180, 'Christopher Nolan', NULL, NULL, FALSE),
+('Barbie', 'Comedia', 2023, 'Autodescubrimiento en Barbieland.', '', '', 'PELICULA', TRUE, 3.99, 5, 5, 114, 'Greta Gerwig', NULL, NULL, FALSE),
+('John Wick', 'Acción', 2014, 'Ex asesino regresa.', '', '', 'PELICULA', TRUE, 3.49, 4, 4, 101, 'Chad Stahelski', NULL, NULL, FALSE),
+('John Wick: Chapter 2', 'Acción', 2017, 'Reglas del gremio.', '', '', 'PELICULA', TRUE, 3.49, 4, 4, 122, 'Chad Stahelski', NULL, NULL, FALSE),
+('John Wick: Chapter 3', 'Acción', 2019, 'Huida frenética.', '', '', 'PELICULA', TRUE, 3.99, 4, 4, 130, 'Chad Stahelski', NULL, NULL, FALSE),
+('John Wick: Chapter 4', 'Acción', 2023, 'Enfrentamiento final.', '', '', 'PELICULA', TRUE, 4.49, 4, 4, 169, 'Chad Stahelski', NULL, NULL, FALSE);

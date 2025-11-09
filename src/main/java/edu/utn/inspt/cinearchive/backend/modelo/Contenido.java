@@ -1,10 +1,16 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "contenido")
 public class Contenido implements Serializable {
 
     public enum Tipo {
@@ -12,46 +18,73 @@ public class Contenido implements Serializable {
         SERIE
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @Column(name = "genero")
     private String genero;
 
+    @Min(1880) @Max(2100)
+    @Column(name = "anio")
     private Integer anio;
 
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
+    @Column(name = "imagen_url")
     private String imagenUrl;
 
+    @Column(name = "trailer_url")
     private String trailerUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo")
     private Tipo tipo;
 
+    @Column(name = "disponible_para_alquiler")
     private Boolean disponibleParaAlquiler;
 
+    @Column(name = "precio_alquiler")
     private BigDecimal precioAlquiler;
 
+    @Min(0)
+    @Column(name = "copias_disponibles")
     private Integer copiasDisponibles;
 
+    @Min(0)
+    @Column(name = "copias_totales")
     private Integer copiasTotales;
 
+    @Column(name = "fecha_vencimiento_licencia")
     private LocalDate fechaVencimientoLicencia;
 
+    @Column(name = "id_api_externa")
     private String idApiExterna;
 
+    @Column(name = "gestor_inventario_id")
     private Long gestorInventarioId;
 
     // Atributos específicos de Películas
+    @Min(1)
+    @Column(name = "duracion")
     private Integer duracion;
 
+    @Column(name = "director")
     private String director;
 
     // Atributos específicos de Series
+    @Column(name = "temporadas")
     private Integer temporadas;
 
+    @Column(name = "capitulos_totales")
     private Integer capitulosTotales;
 
+    @Column(name = "en_emision")
     private Boolean enEmision;
 
     public Contenido() {
