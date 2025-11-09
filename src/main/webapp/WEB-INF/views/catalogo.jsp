@@ -1,33 +1,33 @@
 explanation: Crear una vista JSP para el catálogo basada en el diseño en `disenio/Index.html`. La vista muestra una barra de búsqueda, filtros (estáticos), e iterará sobre `${contenidos}` para mostrar cards. También incluye enlaces a los scripts JS.
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineArchive - Catálogo</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <script>window.APP_CTX='${pageContext.request.contextPath}';</script>
 </head>
 <body>
 <header>
     <nav>
-        <a href="/" class="logo">CineArchive</a>
+        <a href="${pageContext.request.contextPath}/" class="logo">CineArchive</a>
         <button class="menu-toggle">☰</button>
         <div class="nav-links">
-            <a href="/">Inicio</a>
-            <a href="/mi-lista">Mi Lista</a>
-            <a href="/para-ver">Para Ver</a>
+            <a href="${pageContext.request.contextPath}/">Inicio</a>
+            <a href="${pageContext.request.contextPath}/mi-lista">Mi Lista</a>
+            <a href="${pageContext.request.contextPath}/para-ver">Para Ver</a>
             <a href="#" class="user-profile">👤 Mi Perfil</a>
-            <button class="login-btn" onclick="window.location.href='/login'">Cerrar sesión</button>
+            <button class="login-btn" onclick="window.location.href='${pageContext.request.contextPath}/login'">Cerrar sesión</button>
         </div>
     </nav>
 </header>
 
 <div class="container">
     <section class="search-section">
-        <form action="/catalogo" method="get" id="searchForm">
+        <form action="${pageContext.request.contextPath}/catalogo" method="get" id="searchForm">
             <div class="search-container">
                 <input type="text" name="q" class="search-input" placeholder="Buscar películas, series, actores..." value="${param.q}">
                 <button type="submit" class="search-btn">🔍 Buscar</button>
@@ -95,9 +95,8 @@ explanation: Crear una vista JSP para el catálogo basada en el diseño en `dise
     <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
 </footer>
 
-<script src="/js/catalogo.js"></script>
-<script src="/js/alquiler.js"></script>
-<script src="/js/listas.js"></script>
+<script src="${pageContext.request.contextPath}/js/catalogo.js"></script>
+<script src="${pageContext.request.contextPath}/js/alquiler.js"></script>
+<script src="${pageContext.request.contextPath}/js/listas.js"></script>
 </body>
 </html>
-

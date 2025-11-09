@@ -1,19 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Mis Alquileres - CineArchive</title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
+    <script>window.APP_CTX='${pageContext.request.contextPath}';</script>
 </head>
 <body>
 <header>
     <nav>
-        <a href="/" class="logo">CineArchive</a>
+        <a href="${pageContext.request.contextPath}/" class="logo">CineArchive</a>
         <button class="menu-toggle">☰</button>
         <div class="nav-links">
-            <a href="/catalogo">Catálogo</a>
-            <a href="/mi-lista">Mi Lista</a>
-            <a href="/para-ver">Para Ver</a>
+            <a href="${pageContext.request.contextPath}/catalogo">Catálogo</a>
+            <a href="${pageContext.request.contextPath}/mi-lista">Mi Lista</a>
+            <a href="${pageContext.request.contextPath}/para-ver">Para Ver</a>
         </div>
     </nav>
 </header>
@@ -52,5 +53,6 @@
 <footer>
     <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
 </footer>
+<script src="${pageContext.request.contextPath}/js/alquiler.js"></script>
 </body>
 </html>

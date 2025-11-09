@@ -1,6 +1,11 @@
 // Placeholder JS for catalog interactions
 console.log('catalogo.js loaded');
 
+function endpoint(path) {
+  if (window.APP_CTX && path.startsWith('/')) return window.APP_CTX + path;
+  return path;
+}
+
 function rentNow(contenidoId) {
     // Usar la utilidad global de alquiler para mantener comportamiento consistente
     if (typeof window.alquilar === 'function') {
@@ -8,14 +13,14 @@ function rentNow(contenidoId) {
         return;
     }
     // Fallback: POST directo
-    fetch('/alquilar', {
+    fetch(endpoint('/alquilar'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `contenidoId=${encodeURIComponent(contenidoId)}&periodo=3`
     })
     .then(resp => {
         if (resp.redirected) { window.location.href = resp.url; return; }
-        if (resp.ok) { window.location.href = '/mis-alquileres'; return; }
+        if (resp.ok) { window.location.href = endpoint('/mis-alquileres'); return; }
         throw new Error('Error en la petición de alquiler');
     })
     .catch(err => {

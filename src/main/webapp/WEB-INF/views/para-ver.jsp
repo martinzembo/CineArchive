@@ -3,7 +3,8 @@
 <html>
 <head>
     <title>Para Ver - CineArchive</title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="<c:url value='/css/styles.css'/>">
+    <script>window.APP_CTX='${pageContext.request.contextPath}';</script>
 </head>
 <body>
 <header>
@@ -45,6 +46,6 @@
 <footer>
     <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
 </footer>
-<script src="/js/listas.js"></script>
+<script src="<c:url value='/js/listas.js'/>"></script>
 </body>
 </html>

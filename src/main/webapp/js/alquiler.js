@@ -3,6 +3,11 @@
 
 console.log('alquiler.js loaded');
 
+function endpoint(path) {
+  if (window.APP_CTX && path.startsWith('/')) return window.APP_CTX + path;
+  return path;
+}
+
 // Adjunta manejador al formulario de alquiler en detalle.jsp (si existe)
 document.addEventListener('DOMContentLoaded', () => {
   const forms = document.querySelectorAll('form[action="/alquilar"][method="post"]');
@@ -16,7 +21,7 @@ async function onAlquilerSubmit(event) {
   const form = event.target;
   const params = new URLSearchParams(new FormData(form));
   try {
-    const resp = await fetch('/alquilar', {
+    const resp = await fetch(endpoint('/alquilar'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString()
@@ -28,7 +33,7 @@ async function onAlquilerSubmit(event) {
       return;
     }
     if (resp.ok) {
-      window.location.href = '/mis-alquileres';
+      window.location.href = endpoint('/mis-alquileres');
     } else {
       alert('No se pudo confirmar el alquiler. Intenta nuevamente.');
     }
@@ -40,9 +45,9 @@ async function onAlquilerSubmit(event) {
 
 // Utilidad para alquilar programáticamente (por ejemplo, desde botones en catálogo)
 // Nota: no espera JSON; redirige a mis-alquileres en éxito
-function alquilar(contenidoId, periodo = 3) {
+async function alquilar(contenidoId, periodo = 3) {
   try {
-    const resp = await fetch('/alquilar', {
+    const resp = await fetch(endpoint('/alquilar'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `contenidoId=${encodeURIComponent(contenidoId)}&periodo=${encodeURIComponent(periodo)}`
@@ -52,7 +57,7 @@ function alquilar(contenidoId, periodo = 3) {
       return;
     }
     if (resp.ok) {
-      window.location.href = '/mis-alquileres';
+      window.location.href = endpoint('/mis-alquileres');
     } else {
       alert('No se pudo realizar el alquiler');
     }
