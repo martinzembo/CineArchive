@@ -7,30 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineArchive - Iniciar Sesión</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-    <style>
-        /* Estilos adicionales para mensajes */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -199,40 +175,7 @@
         </div>
     </footer>
 
-    <%-- JavaScript para validación en el cliente (opcional) --%>
-    <script>
-        // Validación del formulario en el cliente
-        document.querySelector('.login-form').addEventListener('submit', function(e) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            if (!email || !password) {
-                e.preventDefault();
-                alert('Por favor, completa todos los campos');
-                return false;
-            }
-
-            // Validación básica de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                e.preventDefault();
-                alert('Por favor, ingresa un email válido');
-                return false;
-            }
-        });
-
-        // Auto-ocultar mensajes después de 5 segundos
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                alert.style.transition = 'opacity 0.5s';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            });
-        }, 5000);
-    </script>
+    <script src="${pageContext.request.contextPath}/js/script.js"></script>
 </body>
 </html>
 
