@@ -1,36 +1,21 @@
-explanation: Crear una vista JSP para el catálogo basada en el diseño en `disenio/Index.html`. La vista muestra una barra de búsqueda, filtros (estáticos), e iterará sobre `${contenidos}` para mostrar cards. También incluye enlaces a los scripts JS.
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineArchive - Catálogo</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
     <script>window.APP_CTX='${pageContext.request.contextPath}';</script>
 </head>
 <body>
-<header>
-    <nav>
-        <a href="${pageContext.request.contextPath}/" class="logo">CineArchive</a>
-        <button class="menu-toggle">☰</button>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/">Inicio</a>
-            <a href="${pageContext.request.contextPath}/mi-lista">Mi Lista</a>
-            <a href="${pageContext.request.contextPath}/para-ver">Para Ver</a>
-            <a href="#" class="user-profile">👤 Mi Perfil</a>
-            <button class="login-btn" onclick="window.location.href='${pageContext.request.contextPath}/login'">Cerrar sesión</button>
-        </div>
-    </nav>
-</header>
-
+<jsp:include page="/WEB-INF/views/fragments/header.jsp" />
 <div class="container">
     <section class="search-section">
         <form action="${pageContext.request.contextPath}/catalogo" method="get" id="searchForm">
             <div class="search-container">
-                <input type="text" name="q" class="search-input" placeholder="Buscar películas, series, actores..." value="${param.q}">
+                <input type="text" name="q" class="search-input" placeholder="Buscar películas, series, actores..." value="${param.q}" />
                 <button type="submit" class="search-btn">🔍 Buscar</button>
             </div>
             <div class="filter-container">
@@ -60,7 +45,6 @@ explanation: Crear una vista JSP para el catálogo basada en el diseño en `dise
             </div>
         </form>
     </section>
-
     <section class="category">
         <h2>Resultados</h2>
         <div class="movie-row">
@@ -68,16 +52,16 @@ explanation: Crear una vista JSP para el catálogo basada en el diseño en `dise
                 <c:when test="${not empty contenidos}">
                     <c:forEach var="c" items="${contenidos}">
                         <div class="movie-card">
-                            <img src="${c.imagenUrl}" alt="${c.titulo}">
+                            <img src="${c.imagenUrl}" alt="${c.titulo}" />
                             <div class="movie-info">
                                 <div class="movie-title">${c.titulo}</div>
                                 <div class="movie-rating">★★★★★</div>
                                 <div class="rental-price">${c.precioAlquiler != null ? '$' + c.precioAlquiler : ''} / 3 días</div>
                                 <div class="movie-actions">
-                                    <button class="rent-btn" data-id="${c.id}" onclick="rentNow(${c.id})">Alquilar</button>
-                                    <button class="btn-secondary" onclick="window.location.href='/contenido/${c.id}'">Ver detalles</button>
-                                    <button class="btn-link" onclick="addToList(${c.id}, 'mi-lista')">➕ Mi Lista</button>
-                                    <button class="btn-link" onclick="addToList(${c.id}, 'para-ver')">📋 Para Ver</button>
+                                    <button class="rent-btn" onclick="rentNow(${c.id})">Alquilar</button>
+                                    <button class="btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/contenido/${c.id}'">Ver detalles</button>
+                                    <button class="btn-link" onclick="addToListAjax(${c.id}, 'mi-lista')">➕ Mi Lista</button>
+                                    <button class="btn-link" onclick="addToListAjax(${c.id}, 'para-ver')">📋 Para Ver</button>
                                 </div>
                             </div>
                         </div>
@@ -89,13 +73,8 @@ explanation: Crear una vista JSP para el catálogo basada en el diseño en `dise
             </c:choose>
         </div>
     </section>
-
 </div>
-
-<footer>
-    <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
-</footer>
-
+<jsp:include page="/WEB-INF/views/fragments/footer.jsp" />
 <script src="${pageContext.request.contextPath}/js/catalogo.js"></script>
 <script src="${pageContext.request.contextPath}/js/alquiler.js"></script>
 <script src="${pageContext.request.contextPath}/js/listas.js"></script>

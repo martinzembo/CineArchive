@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,25 +8,9 @@
     <script>window.APP_CTX='${pageContext.request.contextPath}';</script>
 </head>
 <body>
-<header>
-    <nav>
-        <a href="${pageContext.request.contextPath}/" class="logo">CineArchive</a>
-        <button class="menu-toggle">☰</button>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/catalogo">Catálogo</a>
-            <a href="${pageContext.request.contextPath}/mi-lista">Mi Lista</a>
-            <a href="${pageContext.request.contextPath}/para-ver">Para Ver</a>
-        </div>
-    </nav>
-</header>
+<jsp:include page="/WEB-INF/views/fragments/header.jsp" />
 <div class="container">
     <h1 class="page-title">🎫 Mis Alquileres</h1>
-    <c:if test="${not empty error}">
-        <div class="alert alert-error">${error}</div>
-    </c:if>
-    <c:if test="${not empty msg}">
-        <div class="alert alert-success">${msg}</div>
-    </c:if>
     <c:choose>
         <c:when test="${not empty alquileres}">
             <div class="movie-row">
@@ -39,7 +24,7 @@
                             <p>Estado: ${a.estado}</p>
                             <p>Días restantes: ${a.diasRestantes}</p>
                             <p>Precio: $${a.precio}</p>
-                            <button class="btn-secondary" onclick="window.location.href='/contenido/${a.contenidoId}'">Ver detalles</button>
+                            <button class="btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/contenido/${a.contenidoId}'">Ver detalles</button>
                         </div>
                     </div>
                 </c:forEach>
@@ -50,9 +35,7 @@
         </c:otherwise>
     </c:choose>
 </div>
-<footer>
-    <p>&copy; 2025 CineArchive. Todos los derechos reservados.</p>
-</footer>
+<jsp:include page="/WEB-INF/views/fragments/footer.jsp" />
 <script src="${pageContext.request.contextPath}/js/alquiler.js"></script>
 </body>
 </html>
