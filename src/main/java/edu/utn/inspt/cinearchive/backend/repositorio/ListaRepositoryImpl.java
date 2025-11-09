@@ -1,6 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.repositorio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
+import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -81,5 +82,20 @@ public class ListaRepositoryImpl implements ListaRepository {
         String sql = "SELECT COUNT(*) FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
         Integer cnt = jdbcTemplate.queryForObject(sql, new Object[]{listaId, contenidoId}, Integer.class);
         return cnt != null && cnt > 0;
+    }
+
+    @Override
+    public List<Contenido> findContenidoByLista(Long listaId) {
+        String sql = "SELECT c.* FROM lista_contenido lc JOIN contenido c ON c.id = lc.contenido_id WHERE lc.lista_id = ? ORDER BY COALESCE(lc.orden,999999), lc.fecha_agregado DESC";
+        return jdbcTemplate.query(sql, new Object[]{listaId}, (rs, rowNum) -> {
+            Contenido c = new Contenido();
+            c.setId(rs.getLong("id"));
+            c.setTitulo(rs.getString("titulo"));
+            c.setImagenUrl(rs.getString("imagen_url"));
+            c.setGenero(rs.getString("genero"));
+            c.setAnio((Integer) rs.getObject("anio"));
+            c.setPrecioAlquiler(rs.getBigDecimal("precio_alquiler"));
+            return c; // mapeo ligero suficiente para vista
+        });
     }
 }

@@ -1,6 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
+import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import java.util.List;
 
 public interface ListaService {
@@ -13,4 +14,6 @@ public interface ListaService {
     void addContenido(Long listaId, Long contenidoId);
     void removeContenido(Long listaId, Long contenidoId);
     boolean existeContenido(Long listaId, Long contenidoId);
+    // Nuevo: obtener contenidos de una lista
+    List<Contenido> getContenidoByLista(Long listaId);
 }

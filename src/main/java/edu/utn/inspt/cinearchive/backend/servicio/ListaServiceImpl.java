@@ -1,5 +1,6 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
+import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
 import edu.utn.inspt.cinearchive.backend.repositorio.ListaRepository;
 import java.util.List;
@@ -64,5 +65,10 @@ public class ListaServiceImpl implements ListaService {
     @Override
     public boolean existeContenido(Long listaId, Long contenidoId) {
         return listaRepository.existeContenido(listaId, contenidoId);
+    }
+
+    @Override
+    public List<Contenido> getContenidoByLista(Long listaId) {
+        return listaRepository.findContenidoByLista(listaId);
     }
 }

@@ -1,6 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.repositorio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
+import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import java.util.List;
 
 public interface ListaRepository {
@@ -13,4 +14,6 @@ public interface ListaRepository {
     int addContenido(Long listaId, Long contenidoId);
     int removeContenido(Long listaId, Long contenidoId);
     boolean existeContenido(Long listaId, Long contenidoId);
+    // Nuevo: obtener contenidos de una lista
+    List<Contenido> findContenidoByLista(Long listaId);
 }
