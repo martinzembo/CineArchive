@@ -27,6 +27,9 @@ public class ListaRepositoryImpl implements ListaRepository {
             l.setUsuarioId(rs.getLong("usuarioId"));
             l.setNombre(rs.getString("nombre"));
             l.setDescripcion(rs.getString("descripcion"));
+            l.setPublica(rs.getBoolean("publica"));
+            l.setFechaCreacion(rs.getTimestamp("fechaCreacion") != null ? rs.getTimestamp("fechaCreacion").toLocalDateTime() : null);
+            l.setFechaModificacion(rs.getTimestamp("fechaModificacion") != null ? rs.getTimestamp("fechaModificacion").toLocalDateTime() : null);
             return l;
         }
     };
@@ -45,19 +48,38 @@ public class ListaRepositoryImpl implements ListaRepository {
 
     @Override
     public int save(Lista lista) {
-        String sql = "INSERT INTO listas (usuarioId, nombre, descripcion, publica, fechaCreacion) VALUES (?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, lista.getUsuarioId(), lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getFechaCreacion());
+        String sql = "INSERT INTO listas (usuarioId, nombre, descripcion, publica, fechaCreacion) VALUES (?, ?, ?, ?, NOW())";
+        return jdbcTemplate.update(sql, lista.getUsuarioId(), lista.getNombre(), lista.getDescripcion(), lista.getPublica());
     }
 
     @Override
     public int update(Lista lista) {
-        String sql = "UPDATE listas SET nombre = ?, descripcion = ?, publica = ?, fechaModificacion = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getFechaModificacion(), lista.getId());
+        String sql = "UPDATE listas SET nombre = ?, descripcion = ?, publica = ?, fechaModificacion = NOW() WHERE id = ?";
+        return jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getId());
     }
 
     @Override
     public int delete(Long id) {
         String sql = "DELETE FROM listas WHERE id = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public int addContenido(Long listaId, Long contenidoId) {
+        String sql = "INSERT INTO lista_contenido (lista_id, contenido_id, fecha_agregado) VALUES (?, ?, NOW())";
+        return jdbcTemplate.update(sql, listaId, contenidoId);
+    }
+
+    @Override
+    public int removeContenido(Long listaId, Long contenidoId) {
+        String sql = "DELETE FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
+        return jdbcTemplate.update(sql, listaId, contenidoId);
+    }
+
+    @Override
+    public boolean existeContenido(Long listaId, Long contenidoId) {
+        String sql = "SELECT COUNT(*) FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
+        Integer cnt = jdbcTemplate.queryForObject(sql, new Object[]{listaId, contenidoId}, Integer.class);
+        return cnt != null && cnt > 0;
     }
 }
