@@ -117,19 +117,29 @@ function renderSkeletons(n=8) {
 (function enhanceAllCatalogSlides(){
   const rows = Array.from(document.querySelectorAll('.catalogo-slide'));
   if (!rows.length) return;
+
   function onWheelFactory(row){
     return function(e){
-      const raw = (e.deltaY || e.wheelDeltaY || 0) + (e.deltaX || e.wheelDeltaX || 0);
-      if (Math.abs(raw) !== 0) {
-        e.preventDefault();
-        const factor = 6.5; // velocidad mucho mayor por paso de rueda
-        const delta = raw * factor;
+      // Cualquier wheel dentro del carrusel se transforma en scroll horizontal
+      // Evitamos el scroll vertical de la página mientras el puntero esté sobre el carrusel
+      e.preventDefault();
+
+      const factor = row.id === 'catalogoRow' ? 6.5 : 4.0;
+      // Preferimos deltaY para simular arrastre horizontal con la rueda vertical; sumamos deltaX si existe
+      const raw = (e.deltaY || 0) + (e.deltaX || 0);
+      const delta = raw * factor;
+      if (delta !== 0) {
         row.scrollBy({ left: delta, behavior: 'auto' });
       }
+
+      // Pausa temporal del autoslide en carruseles secundarios
+      try { row.__ca_userInteraction = Date.now(); } catch(_){}
     };
   }
+
   rows.forEach(row => {
     row.addEventListener('wheel', onWheelFactory(row), { passive: false });
+    row.classList.add('no-select');
   });
 })();
 
@@ -207,8 +217,9 @@ function marcarAlquilados(ids){
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({ids:ids})
   }).then(r=> r.ok ? r.json() : Promise.reject())
-    .then data => {
-      const activos = new Set(data.activos||[]);
+    .then((data) => {
+      // Normalizar ids a String para comparar con atributos data-contenido
+      const activos = new Set((data.activos||[]).map(String));
       activos.forEach(id => {
         const btn = document.querySelector(`.rent-btn[data-contenido='${id}']`);
         const det = document.querySelector(`.details-btn[data-contenido='${id}']`);

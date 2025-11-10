@@ -121,18 +121,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Botón de alquilar
+    // Botón de alquilar (removida confirmación para flujo directo)
     const rentButtons = document.querySelectorAll('.rent-btn-large');
     rentButtons.forEach(btn => {
+        // No interceptamos el submit: si el botón está dentro de un form con action /alquilar, dejamos que el form se envíe
+        // Opcionalmente podemos reflejar estado visual inmediato sin bloquear
         btn.addEventListener('click', function() {
-            const movieTitle = this.closest('.detail-info')?.querySelector('h1')?.textContent || 'Película';
-            if (confirm(`¿Deseas alquilar "${movieTitle}"?`)) {
-                showMessage(`¡"${movieTitle}" alquilado exitosamente! 🎬`);
-                setTimeout(() => {
-                    window.location.href = 'Index.html';
-                }, 2000);
-            }
-        });
+            // No confirm(), no preventDefault(). El form se enviará y alquiler.js gestionará la redirección.
+            // Si se quisiera feedback instantáneo antes de redirección, se puede descomentar:
+            // if (typeof window.showToast === 'function') showToast('Procesando alquiler...', 'info');
+        }, { once: false });
     });
 
     // Validación de formularios
