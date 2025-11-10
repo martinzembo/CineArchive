@@ -25,18 +25,34 @@ public class CatalogoController {
     }
 
     @GetMapping("/catalogo")
-    public String catalogo(@RequestParam(value = "q", required = false) String q, Model model) {
-        // Por ahora devolvemos todo; en el futuro aplicar filtros por 'q'
-        List<Contenido> lista = contenidoService.getAll();
+    public String catalogo(
+            @RequestParam(value = "q", required = false) String q,
+            @RequestParam(value = "genero", required = false) String genero,
+            @RequestParam(value = "tipo", required = false) String tipo,
+            @RequestParam(value = "orden", required = false) String orden,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            HttpSession session,
+            Model model) {
+        // Normalizar parámetros
+        if (orden == null || orden.trim().isEmpty()) orden = "nombre"; // default
+        if (page < 1) page = 1;
+        final int size = 50; // fijo por requerimiento
+
+        // Obtener lista paginada ligera para catálogo
+        List<Contenido> lista = contenidoService.searchPagedLight(q, genero, tipo, orden, page, size);
+        long total = contenidoService.searchCount(q, genero, tipo);
+        long totalPages = (long) Math.ceil(total / (double) size);
+
         model.addAttribute("contenidos", lista);
         model.addAttribute("query", q);
         model.addAttribute("genero", genero);
         model.addAttribute("tipo", tipo);
         model.addAttribute("orden", orden);
         model.addAttribute("page", page);
-        model.addAttribute("size", size); // aún disponible para JSP si lo muestra
+        model.addAttribute("size", size);
         model.addAttribute("total", total);
         model.addAttribute("totalPages", totalPages);
+
         // IDs alquilados activos para el usuario (para marcar estado en tarjetas)
         Long usuarioId = obtenerUsuarioId(session);
         java.util.Set<Long> alquilados = new java.util.HashSet<>();
@@ -53,13 +69,12 @@ public class CatalogoController {
         for (Long idC : alquilados) alquiladoMap.put(idC, Boolean.TRUE);
         model.addAttribute("alquiladoMap", alquiladoMap);
 
-        // Secciones destacadas para portada de catálogo (diseño dev2)
+        // Secciones destacadas para portada de catálogo (diseño dev2) - siempre primera página para cada sección
         try {
             java.util.List<Contenido> novedades = contenidoService.searchPagedLight(null, null, null, "fecha", 1, 12);
             model.addAttribute("novedades", novedades);
         } catch (Exception ignore) {}
         try {
-            // Sin campo de popularidad, usamos nombre como orden estable (placeholder)
             java.util.List<Contenido> populares = contenidoService.searchPagedLight(null, null, null, "nombre", 1, 12);
             model.addAttribute("populares", populares);
         } catch (Exception ignore) {}
@@ -80,6 +95,6 @@ public class CatalogoController {
         if (u instanceof edu.utn.inspt.cinearchive.backend.modelo.Usuario) {
             return (long) ((edu.utn.inspt.cinearchive.backend.modelo.Usuario) u).getId();
         }
-        return 1L;
+        return 1L; // usuario por defecto (invitado) para tests locales
     }
 }

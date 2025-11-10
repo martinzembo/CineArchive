@@ -14,7 +14,6 @@
     <junit.version>4.13.2</junit.version>
   </properties>
   <dependencies>
-    <!-- Eliminar JUnit 3.x obsoleto y usar JUnit 4 -->
     <!-- Dependencias Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -64,8 +63,6 @@
       <artifactId>h2</artifactId>
       <version>2.1.214</version>
     </dependency>
-    <!-- Servlet / JSP -->
-
     <!-- Servlet API (needed for Jetty) -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -90,21 +87,12 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-
     <!-- BCrypt para hasheo de contraseñas -->
     <dependency>
       <groupId>org.mindrot</groupId>
       <artifactId>jbcrypt</artifactId>
       <version>0.4</version>
     </dependency>
-
-    <!-- JSTL para JSP -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-    </dependency>
-
     <!-- JSP API (necesario para compilación) -->
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
@@ -112,7 +100,6 @@
       <version>2.3.3</version>
       <scope>provided</scope>
     </dependency>
-
   </dependencies>
   <build>
     <finalName>cinearchive</finalName>
@@ -132,44 +119,7 @@
         <version>3.10.1</version>
         <configuration>
           <release>${maven.compiler.release}</release>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.48.v20220622</version>
-        <configuration>
-          <webApp>
-            <contextPath>/cinearchive</contextPath>
-          </webApp>
-          <httpConnector>
-            <port>8080</port>
-          </httpConnector>
-          <stopKey>stop</stopKey>
-          <stopPort>8081</stopPort>
-          <scanIntervalSeconds>5</scanIntervalSeconds>
         </configuration>
-        <dependencies>
-          <!-- Habilita el escaneo de anotaciones (WebApplicationInitializer) -->
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-annotations</artifactId>
-            <version>9.4.48.v20220622</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-plus</artifactId>
-            <version>9.4.48.v20220622</version>
-          </dependency>
-          <!-- Soporte JSP con Apache Jasper (versión consistente) -->
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>apache-jsp</artifactId>
-            <version>9.4.48.v20220622</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>apache-jstl</artifactId>
-            <version>9.4.48.v20220622</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -192,9 +142,6 @@
             <port>8080</port>
           </httpConnector>
           <scanIntervalSeconds>10</scanIntervalSeconds>
-          <source>1.8</source>
-          <target>1.8</target>
-          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
