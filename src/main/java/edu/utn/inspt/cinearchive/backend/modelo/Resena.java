@@ -1,53 +1,40 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Entidad que representa una reseña de un contenido realizada por un usuario.
+ * Clase que representa una reseña de un contenido realizada por un usuario.
  * Incluye calificación, título, texto y fechas de creación/modificación.
  */
-@Entity
-@Table(name = "resena")
 public class Resena implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
     @NotNull(message = "El usuario es obligatorio")
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contenido_id", nullable = false)
     @NotNull(message = "El contenido es obligatorio")
     private Contenido contenido;
 
     @DecimalMin(value = "0.0", message = "La calificación no puede ser menor a 0")
     @DecimalMax(value = "5.0", message = "La calificación no puede ser mayor a 5")
-    @Column(nullable = false)
+    @NotNull(message = "La calificación es obligatoria")
     private Double calificacion;
 
-    @NotBlank(message = "El título es obligatorio")
+    @NotNull(message = "El título es obligatorio")
     @Size(min = 3, max = 100, message = "El título debe tener entre 3 y 100 caracteres")
-    @Column(nullable = false, length = 100)
     private String titulo;
 
-    @NotBlank(message = "El texto es obligatorio")
+    @NotNull(message = "El texto es obligatorio")
     @Size(max = 2000, message = "El texto no puede exceder los 2000 caracteres")
-    @Column(nullable = false, length = 2000)
     private String texto;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDate fechaCreacion;
 
-    @Column(name = "fecha_modificacion")
     private LocalDate fechaModificacion;
 
     public Resena() {
@@ -62,13 +49,17 @@ public class Resena implements Serializable {
         this.fechaCreacion = LocalDate.now();
     }
 
-    @PrePersist
-    protected void onCreate() {
+    /**
+     * Establece la fecha de creación
+     */
+    public void onCreate() {
         fechaCreacion = LocalDate.now();
     }
 
-    @PreUpdate
-    protected void onUpdate() {
+    /**
+     * Establece la fecha de modificación
+     */
+    public void onUpdate() {
         fechaModificacion = LocalDate.now();
     }
 

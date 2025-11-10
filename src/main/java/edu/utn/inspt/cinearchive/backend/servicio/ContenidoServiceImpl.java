@@ -33,7 +33,7 @@ public class ContenidoServiceImpl implements ContenidoService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Contenido> obtenerPorId(Long id) {
-        return contenidoRepository.findById(id);
+        return contenidoRepository.findById(id.intValue());
     }
 
     @Override
@@ -62,16 +62,16 @@ public class ContenidoServiceImpl implements ContenidoService {
 
     @Override
     public void eliminar(Long id) {
-        if (!contenidoRepository.existsById(id)) {
+        if (!contenidoRepository.existsById(id.intValue())) {
             throw new IllegalArgumentException("No existe un contenido con el ID: " + id);
         }
-        contenidoRepository.deleteById(id);
+        contenidoRepository.deleteById(id.intValue());
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existePorId(Long id) {
-        return contenidoRepository.existsById(id);
+        return contenidoRepository.existsById(id.intValue());
     }
 
     @Override

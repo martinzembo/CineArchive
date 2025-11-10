@@ -5,44 +5,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineArchive - Iniciar Sesión</title>
+    <title>Login - CineArchive</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-title {
+            text-align: center;
+            color: #dc2626;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #dc2626;
+            outline: none;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #b91c1c;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc2626;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #16a34a;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #dc2626;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-container">
-            <h1 class="page-title">Iniciar Sesión</h1>
-            <p class="subtitle">Ingresa a tu cuenta de CineArchive</p>
+    <div class="login-container">
+        <h1 class="login-title">CineArchive</h1>
 
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger">${error}</div>
-            </c:if>
+        <c:if test="${not empty error}">
+            <div class="error-message">
+                ${error}
+            </div>
+        </c:if>
 
-            <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
-                <input type="email" name="email" placeholder="Correo electrónico" required autofocus>
-                <input type="password" name="password" placeholder="Contraseña" required>
+        <c:if test="${not empty mensaje}">
+            <div class="success-message">
+                ${mensaje}
+            </div>
+        </c:if>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Recordarme</label>
-                </div>
-
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-
-            <div class="login-links">
-                <a href="${pageContext.request.contextPath}/recuperar-password">¿Olvidaste tu contraseña?</a>
-                <div class="divider"><span>o</span></div>
-                <a href="${pageContext.request.contextPath}/registro">Regístrate</a>
+        <form action="${pageContext.request.contextPath}/login" method="post">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="${email}" required>
             </div>
 
-            <!-- Botón para ver categorías -->
-            <a href="${pageContext.request.contextPath}/categorias" class="categories-btn">
-                <i class="fas fa-tags"></i>
-                Ver Categorías
-            </a>
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
+
+        <div class="register-link">
+            <p>¿No tienes cuenta? <a href="${pageContext.request.contextPath}/registro">Regístrate aquí</a></p>
         </div>
     </div>
 </body>
 </html>
+

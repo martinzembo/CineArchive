@@ -5,7 +5,7 @@ import java.util.Objects;
 
 /**
  * Clase identificadora compuesta para la relación entre Contenido y Categoria.
- * Implementa Serializable para permitir la serialización JPA.
+ * Implementa Serializable para permitir la serialización.
  */
 public class ContenidoCategoriaId implements Serializable {
 

@@ -45,7 +45,7 @@ public class UsuarioService {
      */
     public Usuario registrar(String nombre, String email, String password, Rol rol) {
         // 1. Validar que el email no exista
-        if (usuarioRepository.existeEmail(email)) {
+        if (usuarioRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
 
@@ -68,7 +68,7 @@ public class UsuarioService {
         usuario.setActivo(true);
 
         // 5. Guardar en la base de datos
-        return usuarioRepository.crear(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     /**
@@ -123,7 +123,7 @@ public class UsuarioService {
         }
 
         // 2. Buscar usuario por email
-        Usuario usuario = usuarioRepository.buscarPorEmail(email.trim());
+        Usuario usuario = usuarioRepository.findByEmail(email.trim());
         if (usuario == null) {
             return null; // Usuario no existe
         }
@@ -143,7 +143,7 @@ public class UsuarioService {
         if (PasswordUtil.necesitaRegenerar(hashGuardado)) {
             String nuevoHash = PasswordUtil.encriptar(password);
             usuario.setContrasena(nuevoHash);
-            usuarioRepository.actualizar(usuario);
+            usuarioRepository.save(usuario);
         }
 
         // 6. Autenticación exitosa
@@ -165,7 +165,7 @@ public class UsuarioService {
      */
     public void cambiarContrasena(Long usuarioId, String passwordActual, String passwordNueva) {
         // 1. Buscar usuario
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
@@ -188,7 +188,7 @@ public class UsuarioService {
 
         // 5. Encriptar y actualizar
         String nuevoHash = PasswordUtil.encriptar(passwordNueva);
-        usuarioRepository.actualizarContrasena(usuario.getId(), nuevoHash);
+        usuarioRepository.updatePassword(usuario.getId().intValue(), nuevoHash);
     }
 
     /**
@@ -201,7 +201,7 @@ public class UsuarioService {
      */
     public void restablecerContrasena(Long usuarioId, String passwordNueva) {
         // 1. Buscar usuario
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
@@ -214,7 +214,7 @@ public class UsuarioService {
 
         // 3. Encriptar y actualizar
         String nuevoHash = PasswordUtil.encriptar(passwordNueva);
-        usuarioRepository.actualizarContrasena(usuario.getId(), nuevoHash);
+        usuarioRepository.updatePassword(usuario.getId().intValue(), nuevoHash);
     }
 
     // ============================================================
@@ -234,14 +234,14 @@ public class UsuarioService {
      */
     public Usuario actualizarPerfil(Long usuarioId, String nombre, String email, LocalDate fechaNacimiento) {
         // 1. Buscar usuario existente
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
 
         // 2. Si se cambió el email, verificar que no exista
         if (!usuario.getEmail().equals(email)) {
-            if (usuarioRepository.existeEmail(email)) {
+            if (usuarioRepository.existsByEmail(email)) {
                 throw new IllegalArgumentException("El email ya está en uso por otro usuario");
             }
         }
@@ -252,7 +252,7 @@ public class UsuarioService {
         usuario.setFechaNacimiento(fechaNacimiento);
 
         // 4. Guardar cambios
-        usuarioRepository.actualizar(usuario);
+        usuarioRepository.save(usuario);
         return usuario;
     }
 
@@ -267,14 +267,14 @@ public class UsuarioService {
      */
     public Usuario actualizar(Usuario usuario) {
         // 1. Verificar que el usuario existe
-        Usuario existente = usuarioRepository.buscarPorId(usuario.getId());
+        Usuario existente = usuarioRepository.findById(usuario.getId().intValue()).orElse(null);
         if (existente == null) {
             throw new IllegalArgumentException("El usuario no existe");
         }
 
         // 2. Si se cambió el email, verificar que no exista
         if (!existente.getEmail().equals(usuario.getEmail())) {
-            if (usuarioRepository.existeEmail(usuario.getEmail())) {
+            if (usuarioRepository.existsByEmail(usuario.getEmail())) {
                 throw new IllegalArgumentException("El email ya está en uso");
             }
         }
@@ -291,7 +291,7 @@ public class UsuarioService {
         }
 
         // 4. Actualizar en BD
-        usuarioRepository.actualizar(usuario);
+        usuarioRepository.save(usuario);
         return usuario;
     }
 
@@ -306,7 +306,7 @@ public class UsuarioService {
      * @return Usuario encontrado o null si no existe
      */
     public Usuario buscarPorId(Long id) {
-        return usuarioRepository.buscarPorId(id);
+        return usuarioRepository.findById(id.intValue()).orElse(null);
     }
 
     /**
@@ -316,7 +316,7 @@ public class UsuarioService {
      * @return Usuario encontrado o null si no existe
      */
     public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.buscarPorEmail(email);
+        return usuarioRepository.findByEmail(email);
     }
 
     /**
@@ -325,7 +325,7 @@ public class UsuarioService {
      * @return Lista de todos los usuarios (activos e inactivos)
      */
     public List<Usuario> listarTodos() {
-        return usuarioRepository.listarTodos();
+        return usuarioRepository.findAll();
     }
 
     /**
@@ -335,7 +335,7 @@ public class UsuarioService {
      * @return Lista de usuarios con ese rol
      */
     public List<Usuario> listarPorRol(Rol rol) {
-        return usuarioRepository.buscarPorRol(rol);
+        return usuarioRepository.findByRol(rol);
     }
 
     /**
@@ -344,7 +344,7 @@ public class UsuarioService {
      * @return Lista de usuarios con activo = true
      */
     public List<Usuario> listarActivos() {
-        return usuarioRepository.listarActivos();
+        return usuarioRepository.findByActivo(true);
     }
 
     /**
@@ -354,7 +354,7 @@ public class UsuarioService {
      * @return true si existe, false si no
      */
     public boolean existeEmail(String email) {
-        return usuarioRepository.existeEmail(email);
+        return usuarioRepository.existsByEmail(email);
     }
 
     /**
@@ -364,7 +364,7 @@ public class UsuarioService {
      * @return Lista de usuarios que coinciden
      */
     public List<Usuario> buscarPorNombre(String nombre) {
-        return usuarioRepository.buscarPorNombre(nombre);
+        return usuarioRepository.findByNombre(nombre);
     }
 
     // ============================================================
@@ -378,7 +378,7 @@ public class UsuarioService {
      * @return true si se desactivó, false si no existe
      */
     public boolean desactivar(Long id) {
-        return usuarioRepository.cambiarEstado(id, false);
+        return usuarioRepository.updateActivo(id.intValue(), false) > 0;
     }
 
     /**
@@ -388,7 +388,7 @@ public class UsuarioService {
      * @return true si se activó, false si no existe
      */
     public boolean activar(Long id) {
-        return usuarioRepository.cambiarEstado(id, true);
+        return usuarioRepository.updateActivo(id.intValue(), true) > 0;
     }
 
     /**
@@ -399,7 +399,7 @@ public class UsuarioService {
      * @return true si se cambió, false si no existe
      */
     public boolean cambiarEstado(Long id, boolean activo) {
-        return usuarioRepository.cambiarEstado(id, activo);
+        return usuarioRepository.updateActivo(id.intValue(), activo) > 0;
     }
 
     /**
@@ -421,12 +421,12 @@ public class UsuarioService {
      * @throws IllegalArgumentException si el usuario no existe
      */
     public void cambiarRol(Long usuarioId, Rol nuevoRol) {
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
         usuario.setRol(nuevoRol);
-        usuarioRepository.actualizar(usuario);
+        usuarioRepository.save(usuario);
     }
 
     // ============================================================
@@ -440,7 +440,7 @@ public class UsuarioService {
      * @return Número de usuarios con ese rol
      */
     public int contarPorRol(Rol rol) {
-        return usuarioRepository.contarPorRol(rol);
+        return (int) usuarioRepository.countByRol(rol);
     }
 
     /**
@@ -492,7 +492,7 @@ public class UsuarioService {
      * @return true si el usuario tiene ese rol, false si no
      */
     public boolean tieneRol(Long usuarioId, Rol rol) {
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         return usuario != null && usuario.tieneRol(rol);
     }
 
@@ -503,7 +503,7 @@ public class UsuarioService {
      * @return true si está activo, false si no
      */
     public boolean estaActivo(Long usuarioId) {
-        Usuario usuario = usuarioRepository.buscarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId.intValue()).orElse(null);
         return usuario != null && usuario.estaActivo();
     }
 }

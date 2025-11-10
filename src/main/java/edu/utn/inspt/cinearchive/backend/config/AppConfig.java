@@ -14,7 +14,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
     "edu.utn.inspt.cinearchive.frontend.controlador",
     "edu.utn.inspt.cinearchive.backend.servicio",
     "edu.utn.inspt.cinearchive.backend.repositorio",
-    "edu.utn.inspt.cinearchive.backend.config"
+    "edu.utn.inspt.cinearchive.backend.config",
+    "edu.utn.inspt.cinearchive.backend.util"
 })
 public class AppConfig {
 

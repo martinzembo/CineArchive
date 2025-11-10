@@ -1,18 +1,15 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
 /**
- * Entidad que representa un contenido multimedia (película o serie) en el sistema.
+ * Clase que representa un contenido multimedia (película o serie) en el sistema.
  * Contiene toda la información relevante para la gestión del catálogo y alquileres.
  */
-@Entity
-@Table(name = "contenido")
 public class Contenido implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,77 +19,55 @@ public class Contenido implements Serializable {
         SERIE
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El título es obligatorio")
-    @Column(nullable = false)
+    @NotNull(message = "El título es obligatorio")
+    @Size(min = 1, max = 255, message = "El título debe tener entre 1 y 255 caracteres")
     private String titulo;
 
-    @Column
     private String genero;
 
     @NotNull(message = "El año es obligatorio")
     @Min(value = 1900, message = "El año debe ser mayor a 1900")
-    @Column(nullable = false)
     private Integer anio;
 
-    @Column(length = 2000)
+    @Size(max = 2000, message = "La descripción no puede exceder los 2000 caracteres")
     private String descripcion;
 
-    @Column(name = "imagen_url")
     private String imagenUrl;
 
-    @Column(name = "trailer_url")
     private String trailerUrl;
 
     @NotNull(message = "El tipo de contenido es obligatorio")
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Tipo tipo;
 
-    @Column(name = "disponible_para_alquiler")
     private Boolean disponibleParaAlquiler = true;
 
     @DecimalMin(value = "0.0", message = "El precio no puede ser negativo")
-    @Column(name = "precio_alquiler", precision = 10, scale = 2)
     private BigDecimal precioAlquiler;
 
     @Min(value = 0, message = "Las copias disponibles no pueden ser negativas")
-    @Column(name = "copias_disponibles")
     private Integer copiasDisponibles = 0;
 
     @Min(value = 0, message = "Las copias totales no pueden ser negativas")
-    @Column(name = "copias_totales")
     private Integer copiasTotales = 0;
 
-    @Future(message = "La fecha de vencimiento debe ser futura")
-    @Column(name = "fecha_vencimiento_licencia")
     private LocalDate fechaVencimientoLicencia;
 
-    @Column(name = "id_api_externa")
     private String idApiExterna;
 
-    @Column(name = "gestor_inventario_id")
     private Long gestorInventarioId;
 
-    @Column
     private Integer duracion;
 
-    @Column
     private String director;
 
-    @Column
     private Integer temporadas;
 
-    @Column(name = "capitulos_totales")
     private Integer capitulosTotales;
 
-    @Column(name = "en_emision")
     private Boolean enEmision;
 
-    @OneToMany(mappedBy = "contenido", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ContenidoCategoria> categorias = new HashSet<>();
 
     // Constructores
@@ -342,9 +317,10 @@ public class Contenido implements Serializable {
                 '}';
     }
 
-    @PrePersist
-    @PreUpdate
-    protected void validar() {
+    /**
+     * Valida el estado del contenido
+     */
+    public void validar() {
         if (copiasDisponibles > copiasTotales) {
             throw new IllegalStateException("Las copias disponibles no pueden superar a las totales");
         }

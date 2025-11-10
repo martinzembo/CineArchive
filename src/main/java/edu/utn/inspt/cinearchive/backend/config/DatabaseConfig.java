@@ -3,6 +3,8 @@ package edu.utn.inspt.cinearchive.backend.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -17,31 +19,20 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
+@PropertySource("classpath:application.properties")
 public class DatabaseConfig {
-
-    @Value("${db.driver}")
-    private String driver;
-
-    @Value("${db.url}")
-    private String url;
-
-    @Value("${db.username}")
-    private String username;
-
-    @Value("${db.password}")
-    private String password;
 
     /**
      * Configura el DataSource para conectar con MySQL
-     * Lee las propiedades desde application.properties
+     * Usando valores hardcodeados temporalmente para diagnosticar
      */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/cinearchive_v2?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        dataSource.setUsername("root");
+        dataSource.setPassword("root");
         return dataSource;
     }
 
@@ -61,5 +52,14 @@ public class DatabaseConfig {
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    /**
+     * Bean para procesar las propiedades de application.properties
+     * Necesario para que funcionen las anotaciones @Value
+     */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }

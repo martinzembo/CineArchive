@@ -4,9 +4,9 @@ import edu.utn.inspt.cinearchive.backend.modelo.Usuario;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Interceptor de seguridad para proteger rutas según roles de usuario
@@ -103,6 +103,8 @@ public class SecurityInterceptor implements HandlerInterceptor {
                path.equals("/registro") ||
                path.equals("/") ||
                path.equals("/index") ||
+               path.equals("/acceso-denegado") || // Permitir acceso a la página de acceso denegado
+               path.equals("/test-acceso-denegado") || // Ruta de prueba
                path.startsWith("/api/") || // Permitir acceso a los endpoints de la API
                path.startsWith("/css/") ||
                path.startsWith("/js/") ||

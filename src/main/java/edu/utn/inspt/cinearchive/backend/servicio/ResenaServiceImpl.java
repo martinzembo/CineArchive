@@ -1,7 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Resena;
-import edu.utn.inspt.cinearchive.backend.repositorio.ResenaRepository;
+import edu.utn.inspt.cinearchive.backend.repositorio.ResenaRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +17,10 @@ import java.util.Optional;
 @Transactional
 public class ResenaServiceImpl implements ResenaService {
 
-    private final ResenaRepository resenaRepository;
+    private final ResenaRepositoryImpl resenaRepository;
 
     @Autowired
-    public ResenaServiceImpl(ResenaRepository resenaRepository) {
+    public ResenaServiceImpl(ResenaRepositoryImpl resenaRepository) {
         this.resenaRepository = resenaRepository;
     }
 

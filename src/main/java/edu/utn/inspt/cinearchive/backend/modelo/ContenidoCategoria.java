@@ -1,37 +1,25 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Entidad que representa la relación muchos a muchos entre Contenido y Categoria.
+ * Clase que representa la relación muchos a muchos entre Contenido y Categoria.
  * Esta es una tabla de unión con atributos adicionales que permite asociar contenidos con categorías.
  */
-@Entity
-@Table(name = "contenido_categoria")
-@IdClass(ContenidoCategoriaId.class)
 public class ContenidoCategoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "contenido_id", nullable = false)
     private Long contenidoId;
 
-    @Id
-    @Column(name = "categoria_id", nullable = false)
     private Long categoriaId;
 
     @NotNull(message = "El contenido es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contenido_id", insertable = false, updatable = false)
     private Contenido contenido;
 
     @NotNull(message = "La categoría es obligatoria")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id", insertable = false, updatable = false)
     private Categoria categoria;
 
     public ContenidoCategoria() {
@@ -104,9 +92,10 @@ public class ContenidoCategoria implements Serializable {
                 '}';
     }
 
-    @PrePersist
-    @PreUpdate
-    protected void validarIds() {
+    /**
+     * Valida que los IDs coincidan con los objetos relacionados
+     */
+    public void validarIds() {
         if (contenido != null && !Objects.equals(contenidoId, contenido.getId())) {
             throw new IllegalStateException("El ID del contenido no coincide con la relación");
         }

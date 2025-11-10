@@ -1,6 +1,6 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
