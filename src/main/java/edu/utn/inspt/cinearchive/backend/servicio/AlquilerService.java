@@ -10,7 +10,8 @@ public interface AlquilerService {
     void create(Alquiler alquiler);
     void update(Alquiler alquiler);
     void delete(Long id);
-    // Nuevo: flujo de alquiler con validaciones
-    void rent(Long usuarioId, Long contenidoId, Integer periodoDias);
+    // Flujo de alquiler con validaciones
+    void rent(Long usuarioId, Long contenidoId, Integer periodoDias, String metodoPago);
     List<AlquilerDetalle> getByUsuarioConContenido(Long usuarioId);
+    boolean existeAlquilerActivo(Long usuarioId, Long contenidoId);
 }

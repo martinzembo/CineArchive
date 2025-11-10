@@ -16,6 +16,7 @@ public class AlquilerDetalle {
     private Alquiler.Estado estado;
     private boolean visto;
     private long diasRestantes;
+    private int progresoPct;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -41,5 +42,6 @@ public class AlquilerDetalle {
     public void setVisto(boolean visto) { this.visto = visto; }
     public long getDiasRestantes() { return diasRestantes; }
     public void setDiasRestantes(long diasRestantes) { this.diasRestantes = diasRestantes; }
+    public int getProgresoPct() { return progresoPct; }
+    public void setProgresoPct(int progresoPct) { this.progresoPct = progresoPct; }
 }
-

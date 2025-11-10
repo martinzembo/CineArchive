@@ -10,6 +10,13 @@ public interface ContenidoService {
     void update(Contenido contenido);
     void delete(Long id);
     List<Contenido> searchByTitulo(String tituloPattern);
-    // Nuevo: búsqueda con filtros
+    // Búsqueda con filtros
     List<Contenido> search(String q, String genero, String tipo, String orden);
+    // Paginada + total para UI
+    List<Contenido> searchPaged(String q, String genero, String tipo, String orden, int page, int size);
+    long searchCount(String q, String genero, String tipo);
+    // Nuevo: versión ligera para catálogo
+    List<Contenido> searchPagedLight(String q, String genero, String tipo, String orden, int page, int size);
+    // Nuevo: temporadas por prefijo de título
+    List<Contenido> getSeasonsByTitlePrefix(String titlePrefix);
 }

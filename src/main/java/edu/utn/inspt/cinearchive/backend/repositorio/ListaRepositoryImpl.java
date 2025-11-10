@@ -9,9 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Repository
 public class ListaRepositoryImpl implements ListaRepository {
+
+    private static final Logger logger = Logger.getLogger(ListaRepositoryImpl.class.getName());
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -50,31 +54,41 @@ public class ListaRepositoryImpl implements ListaRepository {
     @Override
     public int save(Lista lista) {
         String sql = "INSERT INTO listas (usuarioId, nombre, descripcion, publica, fechaCreacion) VALUES (?, ?, ?, ?, NOW())";
-        return jdbcTemplate.update(sql, lista.getUsuarioId(), lista.getNombre(), lista.getDescripcion(), lista.getPublica());
+        int res = jdbcTemplate.update(sql, lista.getUsuarioId(), lista.getNombre(), lista.getDescripcion(), lista.getPublica());
+        logger.log(Level.INFO, "Lista creada: {0} (usuario {1})", new Object[]{lista.getNombre(), lista.getUsuarioId()});
+        return res;
     }
 
     @Override
     public int update(Lista lista) {
         String sql = "UPDATE listas SET nombre = ?, descripcion = ?, publica = ?, fechaModificacion = NOW() WHERE id = ?";
-        return jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getId());
+        int res = jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getId());
+        logger.log(Level.INFO, "Lista actualizada: {0} (id {1})", new Object[]{lista.getNombre(), lista.getId()});
+        return res;
     }
 
     @Override
     public int delete(Long id) {
         String sql = "DELETE FROM listas WHERE id = ?";
-        return jdbcTemplate.update(sql, id);
+        int res = jdbcTemplate.update(sql, id);
+        logger.log(Level.INFO, "Lista eliminada: id {0}", id);
+        return res;
     }
 
     @Override
     public int addContenido(Long listaId, Long contenidoId) {
         String sql = "INSERT INTO lista_contenido (lista_id, contenido_id, fecha_agregado) VALUES (?, ?, NOW())";
-        return jdbcTemplate.update(sql, listaId, contenidoId);
+        int res = jdbcTemplate.update(sql, listaId, contenidoId);
+        logger.log(Level.INFO, "Contenido {0} agregado a lista {1}", new Object[]{contenidoId, listaId});
+        return res;
     }
 
     @Override
     public int removeContenido(Long listaId, Long contenidoId) {
         String sql = "DELETE FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
-        return jdbcTemplate.update(sql, listaId, contenidoId);
+        int res = jdbcTemplate.update(sql, listaId, contenidoId);
+        logger.log(Level.INFO, "Contenido {0} removido de lista {1}", new Object[]{contenidoId, listaId});
+        return res;
     }
 
     @Override

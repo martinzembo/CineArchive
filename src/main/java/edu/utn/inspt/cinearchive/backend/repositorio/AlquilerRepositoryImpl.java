@@ -5,7 +5,11 @@ import edu.utn.inspt.cinearchive.backend.modelo.AlquilerDetalle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -57,16 +61,24 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
     @Override
     public int save(Alquiler alquiler) {
         String sql = "INSERT INTO alquileres (usuario_id, contenido_id, fecha_inicio, fecha_fin, periodo_alquiler, precio, estado, visto, fecha_vista) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                alquiler.getUsuarioId(),
-                alquiler.getContenidoId(),
-                alquiler.getFechaInicio(),
-                alquiler.getFechaFin(),
-                alquiler.getPeriodoAlquiler(),
-                alquiler.getPrecio(),
-                alquiler.getEstado() != null ? alquiler.getEstado().name() : null,
-                alquiler.getVisto(),
-                alquiler.getFechaVista());
+        KeyHolder kh = new GeneratedKeyHolder();
+        int updated = jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setLong(1, alquiler.getUsuarioId());
+            ps.setLong(2, alquiler.getContenidoId());
+            ps.setObject(3, alquiler.getFechaInicio());
+            ps.setObject(4, alquiler.getFechaFin());
+            ps.setObject(5, alquiler.getPeriodoAlquiler());
+            ps.setBigDecimal(6, alquiler.getPrecio());
+            ps.setString(7, alquiler.getEstado() != null ? alquiler.getEstado().name() : null);
+            ps.setObject(8, alquiler.getVisto());
+            ps.setObject(9, alquiler.getFechaVista());
+            return ps;
+        }, kh);
+        if (kh.getKey() != null) {
+            alquiler.setId(kh.getKey().longValue());
+        }
+        return updated;
     }
 
     @Override
@@ -114,5 +126,22 @@ public class AlquilerRepositoryImpl implements AlquilerRepository {
             d.setDiasRestantes(diasRestantes);
             return d;
         });
+    }
+
+    @Override
+    public boolean existsActiveByUsuarioAndContenido(Long usuarioId, Long contenidoId) {
+        String sql = "SELECT COUNT(*) FROM alquileres WHERE usuario_id = ? AND contenido_id = ? AND estado = 'ACTIVO'";
+        Integer cnt = jdbcTemplate.queryForObject(sql, Integer.class, usuarioId, contenidoId);
+        return cnt != null && cnt > 0;
+    }
+
+    @Override
+    public java.util.List<Alquiler> findExpiredActivos(java.time.LocalDateTime now) {
+        String sql = "SELECT * FROM alquileres WHERE estado = 'ACTIVO' AND fecha_fin IS NOT NULL AND fecha_fin < ?";
+        return jdbcTemplate.query(con -> {
+            java.sql.PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, now);
+            return ps;
+        }, mapper);
     }
 }

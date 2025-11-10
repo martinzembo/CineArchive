@@ -107,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
+    // Re-exponer showMessage como window.showToast si no existe (para integraciones de listas/alquiler)
+    if (typeof window.showToast !== 'function') {
+        window.showToast = function(message, type='info'){ showMessage(message, type === 'error' ? 'error' : (type==='success'?'success':'info')); };
+    }
+
     // Agregar a favoritos
     const addToFavButtons = document.querySelectorAll('.btn-add');
     addToFavButtons.forEach(btn => {
@@ -308,4 +313,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('🎬 CineArchive - Sistema cargado correctamente');
-

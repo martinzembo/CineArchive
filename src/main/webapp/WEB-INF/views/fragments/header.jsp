@@ -1,5 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%-- Header fragment reutilizable --%>
+<%-- Header fragment reutilizable (solo EL básica) --%>
 <header>
   <nav>
     <a href="${pageContext.request.contextPath}/catalogo" class="logo">CineArchive</a>
@@ -9,9 +8,7 @@
       <a href="${pageContext.request.contextPath}/mi-lista">Mi Lista</a>
       <a href="${pageContext.request.contextPath}/para-ver">Para Ver</a>
       <a href="${pageContext.request.contextPath}/mis-alquileres">Alquileres</a>
-      <a href="${pageContext.request.contextPath}/login" class="user-profile">👤 Perfil</a>
-      <button class="login-btn" onclick="window.location.href='${pageContext.request.contextPath}/login'">Cerrar sesión</button>
+      <a href="#" class="user-profile" title="Perfil (pendiente Dev 1)">👤 Perfil</a>
     </div>
   </nav>
 </header>
-
