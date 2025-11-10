@@ -47,10 +47,12 @@ public class DatabaseConfig {
     private boolean seedProperty; // configurable desde application.properties o -Ddb.seed=true
 
     private static final String[] DB_SCRIPTS = {
+            "src/main/resources/db/01_usuario.sql",
             "src/main/resources/db/02_contenido.sql",
             "src/main/resources/db/03_alquileres.sql",
             "src/main/resources/db/04_listas.sql",
-            "src/main/resources/db/05_transacciones.sql"
+            "src/main/resources/db/05_transacciones.sql",
+            "src/main/resources/db/06_indices_optimizacion.sql"
             // seed_contenido.sql se maneja aparte
     };
 
