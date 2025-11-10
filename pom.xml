@@ -7,49 +7,64 @@
   <version>1.0-SNAPSHOT</version>
   <name>CineArchive Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.release>8</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.version>5.3.30</spring.version>
+    <junit.version>4.13.2</junit.version>
+  </properties>
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Spring JDBC and core dependencies for repositories/services -->
+    <!-- Eliminar JUnit 3.x obsoleto y usar JUnit 4 -->
+    <!-- Dependencias Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>5.3.30</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.3.30</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>5.3.30</version>
+      <version>${spring.version}</version>
     </dependency>
-
-    <!-- Spring Web / MVC (needed by AppConfig, WebMvcConfig, RestTemplate, etc.) -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>5.3.30</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>5.3.30</version>
+      <version>${spring.version}</version>
     </dependency>
-
-    <!-- Gson (used by WebMvcConfig) -->
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
     </dependency>
+    <!-- Validación -->
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.2.5.Final</version>
+    </dependency>
+    <!-- JDBC / Driver -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.0.33</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.1.214</version>
+    </dependency>
+    <!-- Servlet / JSP -->
 
     <!-- Servlet API (needed for Jetty) -->
     <dependency>
@@ -57,26 +72,23 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
     </dependency>
-
-    <!-- Validation API (javax.validation) -->
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>2.0.1.Final</version>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
     </dependency>
-
-    <!-- Hibernate Validator - implementation of Bean Validation -->
+    <!-- JSON -->
     <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>6.2.5.Final</version>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
     </dependency>
-
-    <!-- MySQL driver (usar coordenadas correctas) -->
+    <!-- JUnit 4 -->
     <dependency>
-      <groupId>com.mysql</groupId>
-      <artifactId>mysql-connector-j</artifactId>
-      <version>8.0.33</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <!-- BCrypt para hasheo de contraseñas -->
@@ -104,8 +116,22 @@
   </dependencies>
   <build>
     <finalName>cinearchive</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.sql</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>9.4.48.v20220622</version>
@@ -145,12 +171,27 @@
           </dependency>
         </dependencies>
       </plugin>
-      <!-- Configurar compilador para usar release 8 (compatible con código antiguo) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M7</version>
         <configuration>
+          <useSystemClassLoader>true</useSystemClassLoader>
+          <skipTests>false</skipTests>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.4.34.v20201102</version>
+        <configuration>
+          <webApp>
+            <contextPath>/cinearchive</contextPath>
+          </webApp>
+          <httpConnector>
+            <port>8080</port>
+          </httpConnector>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
           <source>1.8</source>
           <target>1.8</target>
           <encoding>UTF-8</encoding>
@@ -158,4 +199,14 @@
       </plugin>
     </plugins>
   </build>
+  <!-- Perfil dev para ejecutar con seed en H2 sin propiedades en CLI -->
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <env>test</env>
+        <db.seed>true</db.seed>
+      </properties>
+    </profile>
+  </profiles>
 </project>

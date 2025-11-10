@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,41 +18,58 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<Transaccion> mapper = new RowMapper<Transaccion>() {
-        @Override
-        public Transaccion mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Transaccion t = new Transaccion();
-            t.setId(rs.getLong("id"));
-            t.setUsuarioId(rs.getLong("usuarioId"));
-            t.setAlquilerId(rs.getLong("alquilerId"));
-            t.setMonto(rs.getBigDecimal("monto"));
-            t.setMetodoPago(rs.getString("metodoPago"));
-            return t;
+    private final RowMapper<Transaccion> mapper = (rs, rowNum) -> {
+        Transaccion t = new Transaccion();
+        t.setId(rs.getLong("id"));
+        t.setUsuarioId(rs.getLong("usuario_id"));
+        t.setAlquilerId(rs.getLong("alquiler_id"));
+        t.setMonto(rs.getBigDecimal("monto"));
+        t.setMetodoPago(rs.getString("metodo_pago"));
+        java.sql.Timestamp ft = rs.getTimestamp("fecha_transaccion");
+        t.setFechaTransaccion(ft != null ? ft.toLocalDateTime() : null);
+        String estado = rs.getString("estado");
+        if (estado != null) {
+            try { t.setEstado(Transaccion.Estado.valueOf(estado)); } catch (IllegalArgumentException ignored) {}
         }
+        t.setReferenciaExterna(rs.getString("referencia_externa"));
+        return t;
     };
 
     @Override
     public Transaccion findById(Long id) {
         String sql = "SELECT * FROM transacciones WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
+        return jdbcTemplate.queryForObject(sql, mapper, id);
     }
 
     @Override
     public List<Transaccion> findByUsuarioId(Long usuarioId) {
-        String sql = "SELECT * FROM transacciones WHERE usuarioId = ?";
-        return jdbcTemplate.query(sql, new Object[]{usuarioId}, mapper);
+        String sql = "SELECT * FROM transacciones WHERE usuario_id = ? ORDER BY fecha_transaccion DESC";
+        return jdbcTemplate.query(sql, mapper, usuarioId);
     }
 
     @Override
     public int save(Transaccion transaccion) {
-        String sql = "INSERT INTO transacciones (usuarioId, alquilerId, monto, metodoPago, fechaTransaccion, estado, referenciaExterna) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, transaccion.getUsuarioId(), transaccion.getAlquilerId(), transaccion.getMonto(), transaccion.getMetodoPago(), transaccion.getFechaTransaccion(), transaccion.getEstado() != null ? transaccion.getEstado().name() : null, transaccion.getReferenciaExterna());
+        if (transaccion.getFechaTransaccion() == null) {
+            transaccion.setFechaTransaccion(LocalDateTime.now());
+        }
+        String sql = "INSERT INTO transacciones (usuario_id, alquiler_id, monto, metodo_pago, fecha_transaccion, estado, referencia_externa) VALUES (?,?,?,?,?,?,?)";
+        return jdbcTemplate.update(sql,
+                transaccion.getUsuarioId(),
+                transaccion.getAlquilerId(),
+                transaccion.getMonto(),
+                transaccion.getMetodoPago(),
+                transaccion.getFechaTransaccion(),
+                transaccion.getEstado() != null ? transaccion.getEstado().name() : null,
+                transaccion.getReferenciaExterna());
     }
 
     @Override
     public int update(Transaccion transaccion) {
-        String sql = "UPDATE transacciones SET estado = ?, referenciaExterna = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, transaccion.getEstado() != null ? transaccion.getEstado().name() : null, transaccion.getReferenciaExterna(), transaccion.getId());
+        String sql = "UPDATE transacciones SET estado = ?, referencia_externa = ? WHERE id = ?";
+        return jdbcTemplate.update(sql,
+                transaccion.getEstado() != null ? transaccion.getEstado().name() : null,
+                transaccion.getReferenciaExterna(),
+                transaccion.getId());
     }
 
     @Override

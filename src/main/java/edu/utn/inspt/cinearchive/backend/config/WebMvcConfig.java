@@ -103,7 +103,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.jsp");
+        // Redirigir raíz al endpoint de catálogo para asegurar carga de contenidos
+        registry.addRedirectViewController("/", "/catalogo");
     }
 
     /**

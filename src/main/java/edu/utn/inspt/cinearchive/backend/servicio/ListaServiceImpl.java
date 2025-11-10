@@ -1,5 +1,6 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
+import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import edu.utn.inspt.cinearchive.backend.modelo.Lista;
 import edu.utn.inspt.cinearchive.backend.repositorio.ListaRepository;
 import java.util.List;
@@ -43,5 +44,31 @@ public class ListaServiceImpl implements ListaService {
     @Transactional
     public void delete(Long id) {
         listaRepository.delete(id);
+    }
+
+    @Override
+    @Transactional
+    public void addContenido(Long listaId, Long contenidoId) {
+        if (!listaRepository.existeContenido(listaId, contenidoId)) {
+            listaRepository.addContenido(listaId, contenidoId);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeContenido(Long listaId, Long contenidoId) {
+        if (listaRepository.existeContenido(listaId, contenidoId)) {
+            listaRepository.removeContenido(listaId, contenidoId);
+        }
+    }
+
+    @Override
+    public boolean existeContenido(Long listaId, Long contenidoId) {
+        return listaRepository.existeContenido(listaId, contenidoId);
+    }
+
+    @Override
+    public List<Contenido> getContenidoByLista(Long listaId) {
+        return listaRepository.findContenidoByLista(listaId);
     }
 }

@@ -1,5 +1,8 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,10 +17,12 @@ public class Contenido implements Serializable {
 
     private Long id;
 
+    @NotBlank
     private String titulo;
 
     private String genero;
 
+    @Min(1880) @Max(2100)
     private Integer anio;
 
     private String descripcion;
@@ -32,8 +37,10 @@ public class Contenido implements Serializable {
 
     private BigDecimal precioAlquiler;
 
+    @Min(0)
     private Integer copiasDisponibles;
 
+    @Min(0)
     private Integer copiasTotales;
 
     private LocalDate fechaVencimientoLicencia;
@@ -43,6 +50,7 @@ public class Contenido implements Serializable {
     private Long gestorInventarioId;
 
     // Atributos específicos de Películas
+    @Min(1)
     private Integer duracion;
 
     private String director;

@@ -10,6 +10,8 @@
     --info-color: #17a2b8;
 }
 
+/* Global box-sizing to avoid overflow */
+*, *::before, *::after { box-sizing: border-box; }
 /* Estilos para mensajes de alerta */
 .alert {
     padding: 15px;
@@ -178,7 +180,7 @@ nav {
 .category {
     margin-top: 40px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .highlighted-section {
@@ -199,25 +201,21 @@ h2 {
     display: flex;
     gap: 20px;
     overflow-x: auto;
-    overflow-y: hidden;
-    padding: 20px 0;
+    overflow-y: visible; /* permitir que el scale no se corte verticalmente */
+    padding: 20px 40px; /* actualizar para coincidir con scroll-padding */
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) var(--surface-color);
+    /* scroll-snap eliminado: el acomodo se hará vía JS al soltar */
+    scroll-padding-left: 40px;
+    scroll-padding-right: 40px;
 }
 
-.movie-row::-webkit-scrollbar {
-    height: 8px;
-}
-
-.movie-row::-webkit-scrollbar-track {
-    background: var(--surface-color);
-}
-
-.movie-row::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
+/* Catálogo: una sola fila tipo slide */
+#catalogoRow.movie-row { /* revertido para permitir multi-2 grilla */ }
+#catalogoRow .movie-card { /* revertido */ }
+/* Evitar que el body se ensanche por sombras/hover */
+/* body { overflow-x: hidden; } */
 
 .movie-card {
     background-color: var(--surface-color);
@@ -226,21 +224,26 @@ h2 {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex: 0 0 auto;
     width: 200px;
+    position: relative; /* permitir z-index en hover */
 }
 
 .movie-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+    z-index: 5; /* sobre las vecinas y sin recorte */
 }
 
 .movie-card img {
     width: 100%;
-    height: 300px;
+    height: 270px;
     object-fit: cover;
 }
 
 .movie-info {
-    padding: 15px;
+    padding: 12px;
+    /* asegurar layout consistente */
+    display: flex;
+    flex-direction: column;
 }
 
 .movie-title {
@@ -252,6 +255,11 @@ h2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    /* forzar altura para 2 líneas aun si es corto */
+    line-height: 1.2em;
+    min-height: 2.4em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .movie-rating {
@@ -263,7 +271,7 @@ h2 {
 .rental-price {
     color: var(--success-color);
     font-weight: bold;
-    margin: 8px 0;
+    margin: 6px 0;
 }
 
 .rental-time {
@@ -277,6 +285,26 @@ h2 {
     font-size: 12px;
     margin: 5px 0;
 }
+
+.movie-actions { margin-top:auto; display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+.details-wrapper { width:100%; display:flex; justify-content:center; }
+
+.details-btn { width:100%; }
+
+.rent-btn[data-alquilado='true'] { background: var(--success-color); cursor: default; pointer-events: none; }
+/* Quitar cambio de color en hover para alquilado */
+.rent-btn[data-alquilado='true']:hover { background: var(--success-color); }
+/* Ocultar precio si la tarjeta está alquilada */
+.movie-card[data-alquilado='true'] .rental-price { display: none !important; }
+
+.rent-btn { position:relative; }
+
+.rent-btn.animating { transition: background-color .35s ease, transform .35s ease; }
+
+.btn-link.added { transition: background-color .25s ease, color .25s ease; }
+
+.btn-link.remove-mode { transition: background-color .25s ease, color .25s ease; }
 
 /* Priority Cards */
 .priority-high {
@@ -578,6 +606,11 @@ h2 {
 .badge-admin { background-color: #dc3545; }
 .badge-gestor { background-color: #fd7e14; }
 .badge-analista { background-color: #20c997; }
+.badge-estado { display:inline-block; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:bold; letter-spacing:.5px; }
+.estado-activo { background:rgba(40,167,69,.15); color:var(--success-color); border:1px solid var(--success-color); }
+.estado-finalizado { background:rgba(108,117,125,.15); color:#adb5bd; border:1px solid #6c757d; }
+.estado-cancelado { background:rgba(220,53,69,.15); color:var(--danger-color); border:1px solid var(--danger-color); }
+.badge-expirado { background:rgba(255,193,7,.2); color:var(--warning-color); padding:4px 8px; border-radius:12px; font-size:11px; border:1px solid var(--warning-color); margin-left:6px; }
 
 .rating-large {
     color: #ffd700;
@@ -921,6 +954,33 @@ h2 {
     gap: 20px;
     margin: 20px 0;
 }
+
+.page-link { color: var(--text-color); padding:6px 12px; margin:0 4px; background:var(--secondary-color); text-decoration:none; border-radius:4px; font-size:13px; }
+.page-link.active { background: var(--primary-color); font-weight:bold; }
+.page-link:hover { background: #333; }
+.btn-link { background:none; border:1px solid var(--primary-color); color: var(--primary-color); cursor:pointer; font-size:12px; margin-top:6px; text-decoration:none; border-radius:6px; padding:6px 10px; display:inline-block; }
+/* Override base btn-link inside list-actions for better readability */
+.list-actions .btn-link { font-size:13px; padding:8px 12px; border-radius:8px; margin-top:0; }
+/* Labels superpuestas para 4 estados */
+.btn-link .label-default, .btn-link .label-add, .btn-link .label-added, .btn-link .label-remove {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; width:100%; height:100%;
+  transition: opacity .18s ease, transform .18s ease; opacity:0; transform: translateY(6px);
+}
+/* Estado base: no agregado */
+.btn-link:not(.added) .label-default { opacity:1; transform: translateY(0); }
+/* Hover no agregado: mostrar Agregar */
+.btn-link:not(.added):hover .label-default { opacity:0; transform: translateY(-6px); }
+.btn-link:not(.added):hover .label-add { opacity:1; transform: translateY(0); }
+/* Estado agregado por defecto */
+.btn-link.added .label-added { opacity:1; transform: translateY(0); }
+/* Hover agregado (remove-mode controlado por JS) */
+.btn-link.added.remove-mode .label-added { opacity:0; transform: translateY(-6px); }
+.btn-link.added.remove-mode .label-remove { opacity:1; transform: translateY(0); }
+/* Colores de fondo/contorno por estado */
+.btn-link { position:relative; min-height: 34px; overflow:hidden; }
+.btn-link:not(.added):hover { background: var(--success-color); color:#fff; border-color: var(--success-color); }
+.btn-link.added { background: var(--success-color); color:#fff; border-color: var(--success-color); }
+.btn-link.added.remove-mode { background: var(--danger-color); border-color: var(--danger-color); }
 
 /* Config & Forms */
 .price-config-grid {
@@ -1403,20 +1463,10 @@ body.acceso-denegado {
 .trend-down { color: var(--danger-color); }
 .trend-stable { color: #888; }
 
-.progress-bar {
-    flex: 1;
-    height: 20px;
-    background-color: var(--secondary-color);
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 0 15px;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: var(--primary-color);
-    transition: width 0.3s;
-}
+.progress-wrapper { margin:8px 0; }
+.progress-bar { background:var(--secondary-color); height:8px; border-radius:6px; overflow:hidden; }
+.progress-fill { background:var(--primary-color); height:100%; width:0; transition:width .4s ease; }
+.progress-text { font-size:11px; color:#aaa; margin-top:4px; }
 
 .recommendations-container {
     display: flex;
@@ -1499,6 +1549,72 @@ footer {
     color: var(--primary-color);
 }
 
+/* Results Bar */
+.results-bar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #bbb;
+}
+
+.results-count {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn .5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton Loader */
+.skeleton-card {
+    background: var(--surface-color);
+    border-radius: 8px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-thumb {
+    height: 300px;
+    background: linear-gradient(90deg, #222, #2a2a2a, #222);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+}
+
+.skeleton-info {
+    padding: 12px;
+}
+
+.skeleton-line {
+    height: 12px;
+    background: #2a2a2a;
+    margin: 6px 0;
+    border-radius: 6px;
+    animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 /* ============================================
    ESTILOS DE REGISTRO
    ============================================ */
@@ -1625,11 +1741,159 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .movie-card {
-        width: 120px;
-    }
-
-    .movie-card img {
-        height: 180px;
-    }
+    .movie-grid .movie-card { width: calc(50% - 10px); }
+    .movie-card img { height: 180px; }
 }
+
+@media (max-width: 360px) {
+    .movie-grid .movie-card { width: 100%; }
+}
+
+.movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+/* Ajuste cuando se usa grilla: las tarjetas deben ocupar 100% del ancho de celda */
+.movie-grid .movie-card {
+    width: 200px;
+}
+
+/* Escopo al carrusel: tarjetas más compactas para evitar recortes en hover */
+.movie-row .movie-card { width: 190px; }
+.movie-row .movie-card img { height: 285px; }
+.movie-row .movie-card { transform-origin: center center; will-change: transform; }
+.movie-row .movie-card:hover { z-index:6; }
+/* Transición mejorada */
+.movie-card { transition: transform .25s cubic-bezier(.25,.8,.25,1), box-shadow .25s ease; }
+/* Enfoque accesible opcional cuando se navega con teclado */
+.movie-row:focus { outline: 2px solid var(--primary-color); outline-offset: 4px; }
+
+/* Carrusel multi-filas opcional */
+.movie-row.multi-2, .movie-row.multi-3 {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 190px; /* cada columna una tarjeta apilada verticalmente */
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 24px 40px; /* un poco más de aire en multi-fila */
+    scroll-behavior: smooth;
+}
+.movie-row.multi-2 { grid-template-rows: repeat(2, auto); }
+.movie-row.multi-3 { grid-template-rows: repeat(3, auto); }
+.movie-row.multi-2 .movie-card, .movie-row.multi-3 .movie-card {
+    width: 190px;
+    margin: 0; /* grid gestiona el espacio */
+}
+.movie-row.multi-2 .movie-card img, .movie-row.multi-3 .movie-card img { height: 260px; }
+/* Ajuste de hover en multi-fila para evitar solapado excesivo */
+.movie-row.multi-2 .movie-card:hover, .movie-row.multi-3 .movie-card:hover {
+    transform: scale(1.04);
+    z-index: 4;
+}
+/* Evitar escalado que rompa alineación vertical en multi-fila */
+.movie-row.multi-2 .movie-card, .movie-row.multi-3 .movie-card { transform-origin: center center; }
+
+/* Evitar selección en carrusel (sin bloquear clicks) */
+.movie-row.no-select, .movie-row.no-select * { user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+.movie-row img { -webkit-user-drag: none; user-drag: none; }
+
+.list-actions { display:flex; gap:4px; width:100%; justify-content:stretch; margin-top:6px; }
+.list-actions .btn-link { flex:1 1 0; text-align:center; min-height:38px; padding:8px 12px; font-size:13px; font-weight:600; border-radius:8px; }
+/* Estado estable para botones de listas (sin cambio de tamaño) */
+.list-actions .btn-link { position: relative; min-height: 34px; overflow: hidden; }
+.btn-link .label, .btn-link .label-remove { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; width:100%; height:100%; transition: opacity .2s ease, transform .2s ease; }
+.btn-link .label { opacity: 1; transform: translateY(0); }
+.btn-link .label-remove { opacity: 0; transform: translateY(8px); }
+.btn-link.remove-mode .label { opacity: 0; transform: translateY(-8px); }
+.btn-link.remove-mode .label-remove { opacity: 1; transform: translateY(0); }
+
+/* Compact card height tweak (mantener estructura, menos alto) */
+.movie-card img { height: 270px; }
+.movie-row .movie-card img { height: 250px; }
+.movie-row.multi-2 .movie-card img,
+.movie-row.multi-3 .movie-card img { height: 230px; }
+.movie-info { padding: 12px; }
+.rental-price { margin: 6px 0; }
+/* Evitar que algo bloquee los clicks en los botones de temporadas */
+.detail-cast ul li button { pointer-events:auto; position:relative; z-index:1; }
+.detail-cast ul, .detail-cast li { pointer-events:auto; }
+
+/* Slides en detalle: una sola fila horizontal sin ensanchar la página */
+.detail-page .detail-slide {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: visible;
+  gap: 20px;
+  padding: 20px 40px; /* margen interno para que hover no se corte */
+}
+.detail-page .detail-slide .movie-card { flex: 0 0 auto; }
+/* Scrollbar estilizado opcional en detalle */
+.detail-page .detail-slide::-webkit-scrollbar { height: 8px; }
+.detail-page .detail-slide::-webkit-scrollbar-track { background: var(--secondary-color); }
+.detail-page .detail-slide::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+
+.detail-page { overflow-x: hidden; }
+.detail-page .detail-slide {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px 0; /* quitar padding lateral que expandía ancho */
+}
+
+/* Ajustes de viewport y carrusel en detalle */
+.detail-page .detail-slide-viewport {
+  width: min(100%, 868px); /* 4 tarjetas (4*190=760) + 3 gaps (3*20=60) + sangría interna (2*24=48) => 868px */
+  margin: 0; /* alineado a la izquierda */
+  padding: 0; /* sin padding aquí */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.detail-page .detail-slide { padding: 16px 24px; }
+@media (max-width: 920px) {
+  .detail-page .detail-slide-viewport { width: 100%; } /* en pantallas más chicas se adapta al ancho completo */
+}
+
+/* Compactar la sección de alquiler para que no se vea cortada o demasiado grande */
+.detail-page .rental-section { padding: 16px; }
+.detail-page .rental-option label { padding: 12px; }
+.detail-page .rental-price-large { font-size: 20px; }
+.detail-page .rent-btn-large { padding: 12px; font-size: 16px; }
+
+/* Compactación avanzada del bloque de alquiler en detalle */
+.detail-page .rental-section {
+  max-width: 520px; /* limitar ancho visual */
+  width: 100%;
+  margin: 16px 0; /* separar del resto pero sin empujar layout */
+  border: 1px solid var(--secondary-color);
+  border-radius: 10px;
+}
+.detail-page .rental-options { gap: 12px; flex-wrap: wrap; }
+.detail-page .rental-option { flex: 1 1 240px; min-width: 200px; }
+.detail-page .rental-option label { padding: 10px; }
+.detail-page .rental-duration { font-size: 13px; }
+.detail-page .rental-price-large { font-size: 18px; }
+.detail-page .payment-method { display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; }
+.detail-page .payment-method label { font-size: 13px; color: #bbb; }
+.detail-page .payment-method select { flex: 1; min-width: 0; padding: 8px; border-radius: 6px; background: var(--secondary-color); color: var(--text-color); border: 1px solid var(--surface-color); }
+.detail-page .rent-btn-large { padding: 12px; font-size: 15px; }
+/* Alinear todo el bloque de detalle a la rejilla existente sin overflow */
+.detail-page .detail-info { min-width: 0; }
+
+/* Viewport para slides de catálogo (evita recortes en primeras/últimas) */
+.catalogo-slide-viewport { overflow: hidden; padding: 0; margin: 0; }
+.catalogo-slide { padding: 20px 40px; gap: 20px; }
+/* Asegurar una sola fila, sin wrap y scroll horizontal suave */
+.catalogo-slide { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: visible; scroll-behavior: smooth; }
+/* Tarjetas dentro del slide */
+.catalogo-slide .movie-card { flex: 0 0 auto; width: 190px; }
+.catalogo-slide .movie-card img { height: 250px; }
+/* Ocultar barra horizontal del documento, solo scrollea el slide */
+body { overflow-x: hidden; }
+/* Rueda del mouse se mapea a scroll horizontal via JS (catalogo.js) */
+

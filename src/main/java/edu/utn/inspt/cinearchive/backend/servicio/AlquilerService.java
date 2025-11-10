@@ -1,6 +1,7 @@
 package edu.utn.inspt.cinearchive.backend.servicio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Alquiler;
+import edu.utn.inspt.cinearchive.backend.modelo.AlquilerDetalle;
 import java.util.List;
 
 public interface AlquilerService {
@@ -9,5 +10,8 @@ public interface AlquilerService {
     void create(Alquiler alquiler);
     void update(Alquiler alquiler);
     void delete(Long id);
+    // Flujo de alquiler con validaciones
+    void rent(Long usuarioId, Long contenidoId, Integer periodoDias, String metodoPago);
+    List<AlquilerDetalle> getByUsuarioConContenido(Long usuarioId);
+    boolean existeAlquilerActivo(Long usuarioId, Long contenidoId);
 }
-
