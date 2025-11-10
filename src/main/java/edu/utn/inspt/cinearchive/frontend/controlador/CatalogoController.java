@@ -24,22 +24,10 @@ public class CatalogoController {
         this.alquilerService = alquilerService;
     }
 
-    @GetMapping({"/catalogo"})
-    public String catalogo(@RequestParam(value = "q", required = false) String q,
-                           @RequestParam(value = "genero", required = false) String genero,
-                           @RequestParam(value = "tipo", required = false) String tipo,
-                           @RequestParam(value = "orden", required = false) String orden,
-                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                           Model model, HttpSession session) {
-        // Normalizar orden soportado
-        if (orden != null && !(orden.equals("fecha") || orden.equals("nombre"))) {
-            orden = "nombre";
-        }
-        if (page < 1) page = 1;
-        final int size = 50; // tamaño fijo solicitado
-        long total = contenidoService.searchCount(q, genero, tipo);
-        List<Contenido> lista = contenidoService.searchPagedLight(q, genero, tipo, orden, page, size);
-        long totalPages = (long) Math.ceil(total / (double) size);
+    @GetMapping("/catalogo")
+    public String catalogo(@RequestParam(value = "q", required = false) String q, Model model) {
+        // Por ahora devolvemos todo; en el futuro aplicar filtros por 'q'
+        List<Contenido> lista = contenidoService.getAll();
         model.addAttribute("contenidos", lista);
         model.addAttribute("query", q);
         model.addAttribute("genero", genero);

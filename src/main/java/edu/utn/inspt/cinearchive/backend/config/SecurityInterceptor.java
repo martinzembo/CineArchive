@@ -1,0 +1,193 @@
+package edu.utn.inspt.cinearchive.backend.config;
+
+import edu.utn.inspt.cinearchive.backend.modelo.Usuario;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Interceptor de seguridad para proteger rutas según roles de usuario
+ * Se ejecuta ANTES de que el request llegue al Controller
+ *
+ * Verifica:
+ * - Si hay sesión activa (usuario logueado)
+ * - Si el usuario tiene el rol necesario para acceder a la ruta
+ *
+ * Configurado en WebMvcConfig.java
+ */
+@Component
+public class SecurityInterceptor implements HandlerInterceptor {
+
+    /**
+     * Se ejecuta ANTES de que el request llegue al Controller
+     *
+     * @param request Petición HTTP
+     * @param response Respuesta HTTP
+     * @param handler Handler del controller
+     * @return true si permite continuar, false si bloquea la petición
+     * @throws Exception Si hay algún error
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+
+        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+
+        // Remover el context path de la URI para obtener la ruta relativa
+        String path = uri.substring(contextPath.length());
+
+        // ===== RUTAS PÚBLICAS (no requieren autenticación) =====
+        if (esRutaPublica(path)) {
+            return true; // Permitir acceso
+        }
+
+        // ===== RUTAS PROTEGIDAS (requieren autenticación) =====
+        HttpSession session = request.getSession(false);
+        Usuario usuario = null;
+
+        if (session != null) {
+            usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        }
+
+        // Si no hay sesión o no hay usuario logueado, redirigir a login
+        if (usuario == null) {
+            response.sendRedirect(contextPath + "/login");
+            return false; // Bloquear acceso
+        }
+
+        // ===== VERIFICAR PERMISOS POR ROL =====
+
+        // Rutas de ADMINISTRADOR
+        if (path.startsWith("/admin")) {
+            if (usuario.getRol() != Usuario.Rol.ADMINISTRADOR) {
+                response.sendRedirect(contextPath + "/acceso-denegado");
+                return false;
+            }
+        }
+
+        // Rutas de GESTOR DE INVENTARIO
+        if (path.startsWith("/inventario")) {
+            if (usuario.getRol() != Usuario.Rol.GESTOR_INVENTARIO &&
+                usuario.getRol() != Usuario.Rol.ADMINISTRADOR) {
+                response.sendRedirect(contextPath + "/acceso-denegado");
+                return false;
+            }
+        }
+
+        // Rutas de ANALISTA DE DATOS
+        if (path.startsWith("/reportes") || path.startsWith("/analytics")) {
+            if (usuario.getRol() != Usuario.Rol.ANALISTA_DATOS &&
+                usuario.getRol() != Usuario.Rol.ADMINISTRADOR) {
+                response.sendRedirect(contextPath + "/acceso-denegado");
+                return false;
+            }
+        }
+
+        // Usuario autenticado con permisos correctos
+        return true;
+    }
+
+    /**
+     * Verifica si una ruta es pública (no requiere autenticación)
+     *
+     * @param path Ruta a verificar
+     * @return true si es pública, false si requiere autenticación
+     */
+    private boolean esRutaPublica(String path) {
+        // Rutas públicas exactas
+        if (path.equals("/") ||
+            path.equals("/login") ||
+            path.equals("/registro") ||
+            path.equals("/logout") ||
+            path.equals("/health") ||
+            path.equals("/acceso-denegado")) {
+            return true;
+        }
+
+        // Rutas de testing (TEMPORAL - ELIMINAR EN PRODUCCIÓN)
+        if (path.startsWith("/test")) {
+            return true;
+        }
+
+        // Rutas de verificación AJAX
+        if (path.startsWith("/registro/verificar-")) {
+            return true;
+        }
+
+        // Recursos estáticos (CSS, JS, imágenes)
+        if (path.startsWith("/css/") ||
+            path.startsWith("/js/") ||
+            path.startsWith("/img/") ||
+            path.startsWith("/images/") ||
+            path.startsWith("/fonts/") ||
+            path.startsWith("/disenio/") ||
+            path.startsWith("/resources/") ||
+            path.startsWith("/static/")) {
+            return true;
+        }
+
+        // Archivos estáticos comunes
+        if (path.endsWith(".css") ||
+            path.endsWith(".js") ||
+            path.endsWith(".jpg") ||
+            path.endsWith(".jpeg") ||
+            path.endsWith(".png") ||
+            path.endsWith(".gif") ||
+            path.endsWith(".ico") ||
+            path.endsWith(".svg") ||
+            path.endsWith(".woff") ||
+            path.endsWith(".woff2") ||
+            path.endsWith(".ttf")) {
+            return true;
+        }
+
+        // Por defecto, la ruta requiere autenticación
+        return false;
+    }
+
+    /**
+     * Se ejecuta DESPUÉS de que el Controller procese la petición
+     * pero ANTES de renderizar la vista
+     *
+     * Útil para logging, agregar headers, etc.
+     */
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response,
+                          Object handler, org.springframework.web.servlet.ModelAndView modelAndView)
+            throws Exception {
+
+        // Agregar información del usuario a todas las vistas
+        if (modelAndView != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+                if (usuario != null && !modelAndView.getModel().containsKey("usuarioActual")) {
+                    modelAndView.addObject("usuarioActual", usuario);
+                }
+            }
+        }
+    }
+
+    /**
+     * Se ejecuta DESPUÉS de que se complete toda la petición
+     * (después de renderizar la vista)
+     *
+     * Útil para limpieza de recursos, logging final, etc.
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                               Object handler, Exception ex)
+            throws Exception {
+
+        // Logging de acceso (opcional)
+        if (ex != null) {
+            // Hubo una excepción durante el procesamiento
+            System.err.println("Error en request " + request.getRequestURI() + ": " + ex.getMessage());
+        }
+    }
+}
+

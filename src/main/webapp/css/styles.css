@@ -12,6 +12,31 @@
 
 /* Global box-sizing to avoid overflow */
 *, *::before, *::after { box-sizing: border-box; }
+/* Estilos para mensajes de alerta */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
 
 body {
     font-family: 'Arial', sans-serif;
@@ -1059,7 +1084,321 @@ h2 {
 .log-time {
     color: #888;
     font-size: 12px;
-    min-width: 150px;
+}
+
+/* ==========================================================================
+   ADMIN PANEL - GESTIÓN DE USUARIOS
+   Estilos para el panel de administración de usuarios
+   ========================================================================== */
+
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Badges de Roles */
+.badge-rol {
+    font-size: 0.85em;
+    padding: 0.4em 0.8em;
+    font-weight: 600;
+}
+
+.badge-ADMINISTRADOR {
+    background-color: #dc3545;
+}
+
+.badge-GESTOR_INVENTARIO {
+    background-color: #17a2b8;
+}
+
+.badge-ANALISTA_DATOS {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-USUARIO_REGULAR {
+    background-color: #6c757d;
+}
+
+/* Tarjetas de Estadísticas */
+.estadistica-card {
+    border-left: 4px solid;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.estadistica-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-total {
+    border-left-color: #007bff;
+}
+
+.card-activos {
+    border-left-color: #28a745;
+}
+
+.card-inactivos {
+    border-left-color: #6c757d;
+}
+
+.card-admins {
+    border-left-color: #dc3545;
+}
+
+/* Tabla de Usuarios */
+.tabla-usuarios {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Botones de Acción */
+.btn-accion {
+    margin: 2px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Filtros */
+.filtros-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Formulario de Usuario */
+.form-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.password-strength {
+    height: 5px;
+    border-radius: 3px;
+    margin-top: 5px;
+    transition: all 0.3s;
+}
+
+.strength-weak {
+    background-color: #dc3545;
+    width: 33%;
+}
+
+.strength-medium {
+    background-color: #ffc107;
+    width: 66%;
+}
+
+.strength-strong {
+    background-color: #28a745;
+    width: 100%;
+}
+
+.form-section {
+    border-left: 4px solid #667eea;
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+.badge-rol-selector {
+    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.badge-rol-selector:hover {
+    transform: scale(1.05);
+}
+
+.info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Perfil de Usuario en Detalle */
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: white;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.section-title {
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Página de Acceso Denegado */
+.error-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.error-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    padding: 60px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-icon {
+    font-size: 120px;
+    color: #dc3545;
+    margin-bottom: 30px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.error-code {
+    font-size: 80px;
+    font-weight: bold;
+    color: #667eea;
+    margin: 0;
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin: 20px 0;
+}
+
+.error-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.btn-home {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    border-radius: 50px;
+    transition: all 0.3s;
+    margin: 10px;
+}
+
+.btn-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.rol-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin: 5px;
+}
+
+.rol-admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.rol-gestor {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.rol-analista {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.rol-regular {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Body especial para página de acceso denegado */
+body.acceso-denegado {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .log-user {
@@ -1276,6 +1615,78 @@ footer {
     100% {
         background-position: 200% 0;
     }
+/* ============================================
+   ESTILOS DE REGISTRO
+   ============================================ */
+
+/* Mensajes de Alerta */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* Requisitos de Contraseña */
+.password-requirements {
+    font-size: 12px;
+    color: #888;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+.password-requirements ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.password-requirements li {
+    margin: 3px 0;
+    transition: color 0.3s ease;
+}
+
+.password-requirements li.valid {
+    color: var(--success-color);
+}
+
+.password-requirements li.invalid {
+    color: var(--danger-color);
+}
+
+/* Coincidencia de Contraseñas */
+.password-match {
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.password-match.match {
+    color: var(--success-color);
+}
+
+.password-match.no-match {
+    color: var(--danger-color);
 }
 
 /* Responsive */

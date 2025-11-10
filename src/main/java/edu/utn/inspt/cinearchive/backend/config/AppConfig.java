@@ -29,7 +29,8 @@ import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator
     // previene problemas donde DispatcherServlet no detecta los controllers
     // y se producen 404 en rutas mapeadas por @Controller.
     "edu.utn.inspt.cinearchive.backend.servicio",
-    "edu.utn.inspt.cinearchive.backend.repositorio"
+    "edu.utn.inspt.cinearchive.backend.repositorio",
+    "edu.utn.inspt.cinearchive.backend.config"
 })
 @PropertySource("classpath:application.properties")
 @EnableScheduling
