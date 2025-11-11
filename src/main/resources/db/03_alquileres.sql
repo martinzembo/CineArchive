@@ -10,10 +10,9 @@ CREATE TABLE IF NOT EXISTS alquileres (
   estado VARCHAR(30),
   visto BOOLEAN DEFAULT FALSE,
   fecha_vista DATETIME,
-  CONSTRAINT fk_alquileres_contenido FOREIGN KEY (contenido_id) REFERENCES contenido(id)
-  -- CONSTRAINT fk_alquileres_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)  -- asumir tabla usuarios existe
+  CONSTRAINT fk_alquileres_contenido FOREIGN KEY (contenido_id) REFERENCES contenido(id),
+  CONSTRAINT fk_alquileres_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_alquileres_usuario ON alquileres(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_alquileres_contenido ON alquileres(contenido_id);
-

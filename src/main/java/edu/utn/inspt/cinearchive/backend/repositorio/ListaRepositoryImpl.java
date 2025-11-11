@@ -18,10 +18,14 @@ public class ListaRepositoryImpl implements ListaRepository {
     private static final Logger logger = Logger.getLogger(ListaRepositoryImpl.class.getName());
 
     private final JdbcTemplate jdbcTemplate;
+    private final String T_LISTAS;
+    private final String T_LC;
 
     @Autowired
     public ListaRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.T_LISTAS = "lista"; // nombre exacto en dump
+        this.T_LC = "lista_contenido"; // nombre exacto en dump
     }
 
     private final RowMapper<Lista> mapper = new RowMapper<Lista>() {
@@ -29,39 +33,40 @@ public class ListaRepositoryImpl implements ListaRepository {
         public Lista mapRow(ResultSet rs, int rowNum) throws SQLException {
             Lista l = new Lista();
             l.setId(rs.getLong("id"));
-            l.setUsuarioId(rs.getLong("usuarioId"));
+            l.setUsuarioId(rs.getLong("usuario_id")); // columna en dump
             l.setNombre(rs.getString("nombre"));
             l.setDescripcion(rs.getString("descripcion"));
             l.setPublica(rs.getBoolean("publica"));
-            l.setFechaCreacion(rs.getTimestamp("fechaCreacion") != null ? rs.getTimestamp("fechaCreacion").toLocalDateTime() : null);
-            l.setFechaModificacion(rs.getTimestamp("fechaModificacion") != null ? rs.getTimestamp("fechaModificacion").toLocalDateTime() : null);
+            l.setFechaCreacion(rs.getTimestamp("fecha_creacion") != null ? rs.getTimestamp("fecha_creacion").toLocalDateTime() : null);
+            // l.setFechaModificacion(null); // no disponible en dump
             return l;
         }
     };
 
     @Override
     public Lista findById(Long id) {
-        String sql = "SELECT * FROM listas WHERE id = ?";
+        String sql = "SELECT * FROM " + T_LISTAS + " WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
     }
 
     @Override
     public List<Lista> findByUsuarioId(Long usuarioId) {
-        String sql = "SELECT * FROM listas WHERE usuarioId = ?";
+        String sql = "SELECT * FROM " + T_LISTAS + " WHERE usuario_id = ?"; // dump usa usuario_id
         return jdbcTemplate.query(sql, new Object[]{usuarioId}, mapper);
     }
 
     @Override
     public int save(Lista lista) {
-        String sql = "INSERT INTO listas (usuarioId, nombre, descripcion, publica, fechaCreacion) VALUES (?, ?, ?, ?, NOW())";
-        int res = jdbcTemplate.update(sql, lista.getUsuarioId(), lista.getNombre(), lista.getDescripcion(), lista.getPublica());
+        String sql = "INSERT INTO " + T_LISTAS + " (nombre, descripcion, usuario_id, publica, fecha_creacion) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        int res = jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getUsuarioId(), lista.getPublica());
         logger.log(Level.INFO, "Lista creada: {0} (usuario {1})", new Object[]{lista.getNombre(), lista.getUsuarioId()});
         return res;
     }
 
     @Override
     public int update(Lista lista) {
-        String sql = "UPDATE listas SET nombre = ?, descripcion = ?, publica = ?, fechaModificacion = NOW() WHERE id = ?";
+        // fecha_modificacion no existe en dump; se actualizan campos básicos
+        String sql = "UPDATE " + T_LISTAS + " SET nombre = ?, descripcion = ?, publica = ? WHERE id = ?";
         int res = jdbcTemplate.update(sql, lista.getNombre(), lista.getDescripcion(), lista.getPublica(), lista.getId());
         logger.log(Level.INFO, "Lista actualizada: {0} (id {1})", new Object[]{lista.getNombre(), lista.getId()});
         return res;
@@ -69,7 +74,7 @@ public class ListaRepositoryImpl implements ListaRepository {
 
     @Override
     public int delete(Long id) {
-        String sql = "DELETE FROM listas WHERE id = ?";
+        String sql = "DELETE FROM " + T_LISTAS + " WHERE id = ?";
         int res = jdbcTemplate.update(sql, id);
         logger.log(Level.INFO, "Lista eliminada: id {0}", id);
         return res;
@@ -77,7 +82,7 @@ public class ListaRepositoryImpl implements ListaRepository {
 
     @Override
     public int addContenido(Long listaId, Long contenidoId) {
-        String sql = "INSERT INTO lista_contenido (lista_id, contenido_id, fecha_agregado) VALUES (?, ?, NOW())";
+        String sql = "INSERT INTO " + T_LC + " (lista_id, contenido_id, fecha_agregado) VALUES (?, ?, NOW())";
         int res = jdbcTemplate.update(sql, listaId, contenidoId);
         logger.log(Level.INFO, "Contenido {0} agregado a lista {1}", new Object[]{contenidoId, listaId});
         return res;
@@ -85,7 +90,7 @@ public class ListaRepositoryImpl implements ListaRepository {
 
     @Override
     public int removeContenido(Long listaId, Long contenidoId) {
-        String sql = "DELETE FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
+        String sql = "DELETE FROM " + T_LC + " WHERE lista_id = ? AND contenido_id = ?";
         int res = jdbcTemplate.update(sql, listaId, contenidoId);
         logger.log(Level.INFO, "Contenido {0} removido de lista {1}", new Object[]{contenidoId, listaId});
         return res;
@@ -93,14 +98,14 @@ public class ListaRepositoryImpl implements ListaRepository {
 
     @Override
     public boolean existeContenido(Long listaId, Long contenidoId) {
-        String sql = "SELECT COUNT(*) FROM lista_contenido WHERE lista_id = ? AND contenido_id = ?";
+        String sql = "SELECT COUNT(*) FROM " + T_LC + " WHERE lista_id = ? AND contenido_id = ?";
         Integer cnt = jdbcTemplate.queryForObject(sql, new Object[]{listaId, contenidoId}, Integer.class);
         return cnt != null && cnt > 0;
     }
 
     @Override
     public List<Contenido> findContenidoByLista(Long listaId) {
-        String sql = "SELECT c.* FROM lista_contenido lc JOIN contenido c ON c.id = lc.contenido_id WHERE lc.lista_id = ? ORDER BY COALESCE(lc.orden,999999), lc.fecha_agregado DESC";
+        String sql = "SELECT c.* FROM " + T_LC + " lc JOIN contenido c ON c.id = lc.contenido_id WHERE lc.lista_id = ? ORDER BY COALESCE(lc.orden,999999), lc.fecha_agregado DESC";
         return jdbcTemplate.query(sql, new Object[]{listaId}, (rs, rowNum) -> {
             Contenido c = new Contenido();
             c.setId(rs.getLong("id"));
@@ -109,7 +114,7 @@ public class ListaRepositoryImpl implements ListaRepository {
             c.setGenero(rs.getString("genero"));
             c.setAnio((Integer) rs.getObject("anio"));
             c.setPrecioAlquiler(rs.getBigDecimal("precio_alquiler"));
-            return c; // mapeo ligero suficiente para vista
+            return c;
         });
     }
 }

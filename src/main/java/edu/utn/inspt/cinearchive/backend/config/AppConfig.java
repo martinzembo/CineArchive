@@ -16,22 +16,26 @@ import javax.validation.Validator;
 
 // Agrego import para interpolador sin EL
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Configuración principal de Spring MVC
  * Define los componentes principales de la aplicación
  */
 @Configuration
-@ComponentScan(basePackages = {
-    // NOTA: Los controladores los escanea el contexto del DispatcherServlet
-    // (WebMvcConfig). Evitamos escanearlos aquí para que queden registrados
-    // en el servlet context y no en el root application context, lo que
-    // previene problemas donde DispatcherServlet no detecta los controllers
-    // y se producen 404 en rutas mapeadas por @Controller.
-    "edu.utn.inspt.cinearchive.backend.servicio",
-    "edu.utn.inspt.cinearchive.backend.repositorio",
-    "edu.utn.inspt.cinearchive.backend.config"
-})
+@ComponentScan(
+    basePackages = {
+        // Agregamos config para disponer de beans como SecurityInterceptor en el contexto raíz
+        "edu.utn.inspt.cinearchive.backend.config",
+        "edu.utn.inspt.cinearchive.backend.servicio",
+        "edu.utn.inspt.cinearchive.backend.repositorio"
+    },
+    excludeFilters = {
+        @Filter(type = FilterType.ANNOTATION, classes = EnableWebMvc.class)
+    }
+)
 @PropertySource("classpath:application.properties")
 @EnableScheduling
 @EnableCaching

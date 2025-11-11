@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public class TransaccionRepositoryImpl implements TransaccionRepository {
 
+    private static final String T_TRANS = "transaccion";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -37,13 +39,13 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
 
     @Override
     public Transaccion findById(Long id) {
-        String sql = "SELECT * FROM transacciones WHERE id = ?";
+        String sql = "SELECT * FROM " + T_TRANS + " WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, mapper, id);
     }
 
     @Override
     public List<Transaccion> findByUsuarioId(Long usuarioId) {
-        String sql = "SELECT * FROM transacciones WHERE usuario_id = ? ORDER BY fecha_transaccion DESC";
+        String sql = "SELECT * FROM " + T_TRANS + " WHERE usuario_id = ? ORDER BY fecha_transaccion DESC";
         return jdbcTemplate.query(sql, mapper, usuarioId);
     }
 
@@ -52,7 +54,7 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
         if (transaccion.getFechaTransaccion() == null) {
             transaccion.setFechaTransaccion(LocalDateTime.now());
         }
-        String sql = "INSERT INTO transacciones (usuario_id, alquiler_id, monto, metodo_pago, fecha_transaccion, estado, referencia_externa) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + T_TRANS + " (usuario_id, alquiler_id, monto, metodo_pago, fecha_transaccion, estado, referencia_externa) VALUES (?,?,?,?,?,?,?)";
         return jdbcTemplate.update(sql,
                 transaccion.getUsuarioId(),
                 transaccion.getAlquilerId(),
@@ -65,7 +67,7 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
 
     @Override
     public int update(Transaccion transaccion) {
-        String sql = "UPDATE transacciones SET estado = ?, referencia_externa = ? WHERE id = ?";
+        String sql = "UPDATE " + T_TRANS + " SET estado = ?, referencia_externa = ? WHERE id = ?";
         return jdbcTemplate.update(sql,
                 transaccion.getEstado() != null ? transaccion.getEstado().name() : null,
                 transaccion.getReferenciaExterna(),
@@ -74,7 +76,7 @@ public class TransaccionRepositoryImpl implements TransaccionRepository {
 
     @Override
     public int delete(Long id) {
-        String sql = "DELETE FROM transacciones WHERE id = ?";
+        String sql = "DELETE FROM " + T_TRANS + " WHERE id = ?";
         return jdbcTemplate.update(sql, id);
     }
 }
