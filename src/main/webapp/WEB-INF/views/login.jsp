@@ -13,6 +13,21 @@
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
         <p class="subtitle">Accede a tu cuenta de CineArchive</p>
+
+        <%-- Mostrar mensaje de registro exitoso --%>
+        <% if ("registroExitoso".equals(request.getParameter("mensaje"))) { %>
+            <div class="alert alert-success" style="background-color: #28a745; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center;">
+                ¡Registro exitoso! Ahora puedes iniciar sesión con tu cuenta.
+            </div>
+        <% } %>
+
+        <%-- Mostrar mensaje de error si existe --%>
+        <% if (request.getAttribute("error") != null) { %>
+            <div class="alert alert-error" style="background-color: #ff4444; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center;">
+                <%= request.getAttribute("error") %>
+            </div>
+        <% } %>
+
         <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
             <input type="email" name="email" placeholder="Correo electrónico" required />
             <input type="password" name="password" placeholder="Contraseña" required />

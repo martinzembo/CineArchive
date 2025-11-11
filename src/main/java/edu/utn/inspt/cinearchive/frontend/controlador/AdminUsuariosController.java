@@ -132,6 +132,9 @@ public class AdminUsuariosController {
         // Array de roles para el select del filtro
         model.addAttribute("roles", Rol.values());
 
+        // Usuario logueado para el header
+        model.addAttribute("usuarioLogueado", usuarioLogueado);
+
         return "admin/usuarios";
     }
 
@@ -164,6 +167,7 @@ public class AdminUsuariosController {
         model.addAttribute("roles", Rol.values());
         model.addAttribute("esNuevo", true);
         model.addAttribute("titulo", "Crear Nuevo Usuario");
+        model.addAttribute("usuarioLogueado", usuarioLogueado);
 
         return "admin/usuario-form";
     }
@@ -327,6 +331,7 @@ public class AdminUsuariosController {
             model.addAttribute("usuario", usuario);
             model.addAttribute("roles", Rol.values());
             model.addAttribute("esNuevo", false);
+            model.addAttribute("usuarioLogueado", usuarioLogueado);
             model.addAttribute("titulo", "Editar Usuario");
 
             return "admin/usuario-form";
@@ -791,6 +796,7 @@ public class AdminUsuariosController {
                     usuarioService.listarTodos().stream()
                             .filter(u -> u.getRol() == Rol.ADMINISTRADOR && u.getActivo())
                             .count() <= 1);
+            model.addAttribute("usuarioLogueado", usuarioLogueado);
 
             model.addAttribute("esMismaCuenta", usuario.getId() == usuarioLogueado.getId());
 

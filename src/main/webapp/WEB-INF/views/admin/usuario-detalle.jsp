@@ -11,19 +11,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-    <!-- Header CineArchive -->
-    <header>
-        <nav>
-            <a href="${pageContext.request.contextPath}/index" class="logo">CineArchive</a>
-            <button class="menu-toggle">☰</button>
-            <div class="nav-links">
-                <a href="${pageContext.request.contextPath}/admin/usuarios">👥 Panel Admin</a>
-                <a href="${pageContext.request.contextPath}/catalogo">🎬 Catálogo</a>
-                <a href="#" class="user-profile">👤 ${usuarioLogueado.nombre}</a>
-                <button class="login-btn" onclick="window.location.href='${pageContext.request.contextPath}/logout'">Cerrar sesión</button>
-            </div>
-        </nav>
-    </header>
+    <jsp:include page="/WEB-INF/views/fragments/header.jsp" />
 
     <div class="container">
         <div class="detail-container">
