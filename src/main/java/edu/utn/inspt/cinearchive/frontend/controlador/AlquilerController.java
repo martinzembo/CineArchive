@@ -34,6 +34,11 @@ public class AlquilerController {
     public String misAlquileres(Model model, HttpSession session) {
         Long usuarioId = obtenerUsuarioId(session);
         model.addAttribute("alquileres", alquilerService.getByUsuarioConContenido(usuarioId));
+        // Usuario logueado para el header
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado != null) {
+            model.addAttribute("usuarioLogueado", usuarioLogueado);
+        }
         return "mis-alquileres";
     }
 

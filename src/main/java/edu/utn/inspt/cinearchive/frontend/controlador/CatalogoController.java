@@ -87,6 +87,13 @@ public class CatalogoController {
             model.addAttribute("seriesRecomendadas", seriesRecomendadas);
         } catch (Exception ignore) {}
 
+        // Usuario logueado para el header
+        edu.utn.inspt.cinearchive.backend.modelo.Usuario usuarioLogueado =
+            (edu.utn.inspt.cinearchive.backend.modelo.Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado != null) {
+            model.addAttribute("usuarioLogueado", usuarioLogueado);
+        }
+
         return "catalogo";
     }
 

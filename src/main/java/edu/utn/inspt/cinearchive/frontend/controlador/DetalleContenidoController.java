@@ -92,6 +92,11 @@ public class DetalleContenidoController {
             }
         } catch (Exception ignore) {}
         model.addAttribute("masDelDirector", masDelDirector);
+        // Usuario logueado para el header
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado != null) {
+            model.addAttribute("usuarioLogueado", usuarioLogueado);
+        }
         return "detalle";
     }
 
