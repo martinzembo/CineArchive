@@ -37,6 +37,11 @@ public class ListaController {
         Lista lista = obtenerOCrearLista(usuarioId, "mi-lista", "Favoritos del usuario");
         List<Contenido> contenidos = lista != null ? listaService.getContenidoByLista(lista.getId()) : java.util.Collections.emptyList();
         model.addAttribute("contenidos", contenidos);
+        // Atributos auxiliares vacíos para evitar errores en JSP
+        if (!model.containsAttribute("favoritas")) model.addAttribute("favoritas", java.util.Collections.emptyList());
+        if (!model.containsAttribute("vistasRecientes")) model.addAttribute("vistasRecientes", java.util.Collections.emptyList());
+        if (!model.containsAttribute("misResenas")) model.addAttribute("misResenas", java.util.Collections.emptyList());
+        if (!model.containsAttribute("historialAlquileres")) model.addAttribute("historialAlquileres", java.util.Collections.emptyList());
         return "mi-lista";
     }
 
@@ -46,6 +51,7 @@ public class ListaController {
         Lista lista = obtenerOCrearLista(usuarioId, "para-ver", "Contenido pendiente por ver");
         List<Contenido> contenidos = lista != null ? listaService.getContenidoByLista(lista.getId()) : java.util.Collections.emptyList();
         model.addAttribute("contenidos", contenidos);
+        if (!model.containsAttribute("recomendaciones")) model.addAttribute("recomendaciones", java.util.Collections.emptyList());
         return "para-ver";
     }
 
