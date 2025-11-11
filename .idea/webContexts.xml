@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+feature/dev2-complete
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/detalle.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
+
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/usuario-detalle.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin" />
+develop
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,6 +1,8 @@
 package edu.utn.inspt.cinearchive.backend.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -19,7 +21,13 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
+@ComponentScan(basePackages = {
+        "edu.utn.inspt.cinearchive.frontend.controlador"
+})
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private SecurityInterceptor securityInterceptor;
 
     /**
      * Configura el ViewResolver para páginas JSP
@@ -95,7 +103,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.jsp");
+        // Redirigir raíz al endpoint de catálogo para asegurar carga de contenidos
+        registry.addRedirectViewController("/", "/catalogo");
     }
 
     /**
@@ -116,5 +125,25 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    /**
+     * Registra interceptores HTTP
+     * SecurityInterceptor protege rutas según roles de usuario
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(securityInterceptor)
+                .addPathPatterns("/**") // Intercepta todas las rutas
+                .excludePathPatterns(
+                        "/css/**",
+                        "/js/**",
+                        "/img/**",
+                        "/images/**",
+                        "/fonts/**",
+                        "/disenio/**",
+                        "/resources/**",
+                        "/static/**"
+                ); // Excepto recursos estáticos (por performance)
     }
 }

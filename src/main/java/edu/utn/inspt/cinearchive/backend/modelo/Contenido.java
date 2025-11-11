@@ -1,7 +1,12 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Contenido implements Serializable {
 
@@ -10,39 +15,61 @@ public class Contenido implements Serializable {
         SERIE
     }
 
-    private int id;
+    private Long id;
+
+    @NotBlank
     private String titulo;
+
     private String genero;
-    private int anio;
+
+    @Min(1880) @Max(2100)
+    private Integer anio;
+
     private String descripcion;
+
     private String imagenUrl;
+
     private String trailerUrl;
+
     private Tipo tipo;
+
     private Boolean disponibleParaAlquiler;
-    private float precioAlquiler;
-    private int copiasDisponibles;
-    private int copiasTotales;
+
+    private BigDecimal precioAlquiler;
+
+    @Min(0)
+    private Integer copiasDisponibles;
+
+    @Min(0)
+    private Integer copiasTotales;
+
     private LocalDate fechaVencimientoLicencia;
+
     private String idApiExterna;
-    private int gestorInventarioId;
+
+    private Long gestorInventarioId;
 
     // Atributos específicos de Películas
-    private int duracion;
+    @Min(1)
+    private Integer duracion;
+
     private String director;
 
     // Atributos específicos de Series
-    private int temporadas;
-    private int capitulosTotales;
+    private Integer temporadas;
+
+    private Integer capitulosTotales;
+
     private Boolean enEmision;
 
     public Contenido() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,11 +89,11 @@ public class Contenido implements Serializable {
         this.genero = genero;
     }
 
-    public int getAnio() {
+    public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(int anio) {
+    public void setAnio(Integer anio) {
         this.anio = anio;
     }
 
@@ -110,27 +137,27 @@ public class Contenido implements Serializable {
         this.disponibleParaAlquiler = disponibleParaAlquiler;
     }
 
-    public float getPrecioAlquiler() {
+    public BigDecimal getPrecioAlquiler() {
         return precioAlquiler;
     }
 
-    public void setPrecioAlquiler(float precioAlquiler) {
+    public void setPrecioAlquiler(BigDecimal precioAlquiler) {
         this.precioAlquiler = precioAlquiler;
     }
 
-    public int getCopiasDisponibles() {
+    public Integer getCopiasDisponibles() {
         return copiasDisponibles;
     }
 
-    public void setCopiasDisponibles(int copiasDisponibles) {
+    public void setCopiasDisponibles(Integer copiasDisponibles) {
         this.copiasDisponibles = copiasDisponibles;
     }
 
-    public int getCopiasTotales() {
+    public Integer getCopiasTotales() {
         return copiasTotales;
     }
 
-    public void setCopiasTotales(int copiasTotales) {
+    public void setCopiasTotales(Integer copiasTotales) {
         this.copiasTotales = copiasTotales;
     }
 
@@ -150,19 +177,19 @@ public class Contenido implements Serializable {
         this.idApiExterna = idApiExterna;
     }
 
-    public int getGestorInventarioId() {
+    public Long getGestorInventarioId() {
         return gestorInventarioId;
     }
 
-    public void setGestorInventarioId(int gestorInventarioId) {
+    public void setGestorInventarioId(Long gestorInventarioId) {
         this.gestorInventarioId = gestorInventarioId;
     }
 
-    public int getDuracion() {
+    public Integer getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(int duracion) {
+    public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
 
@@ -174,19 +201,19 @@ public class Contenido implements Serializable {
         this.director = director;
     }
 
-    public int getTemporadas() {
+    public Integer getTemporadas() {
         return temporadas;
     }
 
-    public void setTemporadas(int temporadas) {
+    public void setTemporadas(Integer temporadas) {
         this.temporadas = temporadas;
     }
 
-    public int getCapitulosTotales() {
+    public Integer getCapitulosTotales() {
         return capitulosTotales;
     }
 
-    public void setCapitulosTotales(int capitulosTotales) {
+    public void setCapitulosTotales(Integer capitulosTotales) {
         this.capitulosTotales = capitulosTotales;
     }
 
@@ -197,5 +224,26 @@ public class Contenido implements Serializable {
     public void setEnEmision(Boolean enEmision) {
         this.enEmision = enEmision;
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contenido)) return false;
+        Contenido contenido = (Contenido) o;
+        return Objects.equals(getId(), contenido.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Contenido{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", tipo=" + tipo +
+                '}';
+    }
+}

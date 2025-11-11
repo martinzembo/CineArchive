@@ -1,55 +1,79 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class ListaContenido implements Serializable {
 
-    private int listaId;
-    private int contenidoId;
-    private int orden;
-    private LocalDate fechaAgregado;
+    private Long listaId;
+    private Long contenidoId;
+
+    private Integer orden;
+
+    private LocalDateTime fechaAgregado;
 
     public ListaContenido() {
     }
 
-    public ListaContenido(int listaId, int contenidoId, int orden, LocalDate fechaAgregado) {
+    public ListaContenido(Long listaId, Long contenidoId, Integer orden, LocalDateTime fechaAgregado) {
         this.listaId = listaId;
         this.contenidoId = contenidoId;
         this.orden = orden;
         this.fechaAgregado = fechaAgregado;
     }
 
-    public int getListaId() {
+    public Long getListaId() {
         return listaId;
     }
 
-    public void setListaId(int listaId) {
+    public void setListaId(Long listaId) {
         this.listaId = listaId;
     }
 
-    public int getContenidoId() {
+    public Long getContenidoId() {
         return contenidoId;
     }
 
-    public void setContenidoId(int contenidoId) {
+    public void setContenidoId(Long contenidoId) {
         this.contenidoId = contenidoId;
     }
 
-    public int getOrden() {
+    public Integer getOrden() {
         return orden;
     }
 
-    public void setOrden(int orden) {
+    public void setOrden(Integer orden) {
         this.orden = orden;
     }
 
-    public LocalDate getFechaAgregado() {
+    public LocalDateTime getFechaAgregado() {
         return fechaAgregado;
     }
 
-    public void setFechaAgregado(LocalDate fechaAgregado) {
+    public void setFechaAgregado(LocalDateTime fechaAgregado) {
         this.fechaAgregado = fechaAgregado;
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ListaContenido)) return false;
+        ListaContenido that = (ListaContenido) o;
+        return Objects.equals(getListaId(), that.getListaId()) && Objects.equals(getContenidoId(), that.getContenidoId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getListaId(), getContenidoId());
+    }
+
+    @Override
+    public String toString() {
+        return "ListaContenido{" +
+                "listaId=" + listaId +
+                ", contenidoId=" + contenidoId +
+                ", orden=" + orden +
+                '}';
+    }
+}
