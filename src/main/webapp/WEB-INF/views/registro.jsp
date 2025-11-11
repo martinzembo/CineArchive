@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="/WEB-INF/views/fragments/header.jsp" />
 <div class="container">
-    <div class="register-container">
+    <div class="login-container">
         <h2>Crear Cuenta</h2>
         <p class="subtitle">Únete a CineArchive y disfruta del mejor contenido</p>
 
