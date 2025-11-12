@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.time.LocalDate;
@@ -27,10 +28,30 @@ public class RegistroController {
      * GET /registro
      *
      * @param model Modelo para pasar datos a la vista
-     * @return Vista del formulario de registro (registro.jsp)
+     * @param session Sesión HTTP para verificar si el usuario ya está logueado
+     * @return Vista del formulario de registro (registro.jsp) o redirección si ya está logueado
      */
     @GetMapping("/registro")
-    public String mostrarRegistro(Model model) {
+    public String mostrarRegistro(Model model, HttpSession session) {
+        // Si ya hay un usuario logueado, redirigir a su página principal según su rol
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado != null) {
+            // Redirigir según el rol del usuario
+            switch (usuarioLogueado.getRol()) {
+                case ADMINISTRADOR:
+                    return "redirect:/admin/usuarios";
+
+                case GESTOR_INVENTARIO:
+                    return "redirect:/inventario/panel";
+
+                case ANALISTA_DATOS:
+                    return "redirect:/reportes/panel";
+
+                default: // USUARIO_REGULAR
+                    return "redirect:/catalogo";
+            }
+        }
+
         // Crear un objeto Usuario vacío para el formulario
         model.addAttribute("usuario", new Usuario());
         return "registro"; // Retorna registro.jsp

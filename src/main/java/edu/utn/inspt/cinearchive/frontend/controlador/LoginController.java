@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controlador para gestionar el login y logout de usuarios
@@ -34,11 +35,24 @@ public class LoginController {
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "mensaje", required = false) String mensaje,
             Model model,
-            HttpSession session) {
+            HttpSession session,
+            HttpServletResponse response) {
 
-        // Si ya hay un usuario logueado, redirigir al home
-        if (session.getAttribute("usuarioLogueado") != null) {
-            return "redirect:/index";
+        // IMPORTANTE: Configurar headers para evitar caché del navegador
+        // Esto asegura que el navegador SIEMPRE haga una petición al servidor
+        // y ejecute la invalidación de sesión cada vez que se accede a /login
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        // IMPORTANTE: Invalidar cualquier sesión existente al acceder a /login
+        // Esto fuerza al usuario a volver a iniciar sesión siempre
+        if (session != null && session.getAttribute("usuarioLogueado") != null) {
+            try {
+                session.invalidate();
+            } catch (IllegalStateException e) {
+                // La sesión ya fue invalidada, continuar normalmente
+            }
         }
 
         // Agregar mensajes si existen
