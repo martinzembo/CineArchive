@@ -24,7 +24,7 @@
           <a href="${pageContext.request.contextPath}/reportes/panel" class="admin-link">📊 Reportes</a>
         </c:if>
 
-        <a href="#" class="user-profile">👤 Perfil</a>
+        <a href="${pageContext.request.contextPath}/perfil" class="user-profile">👤 Perfil</a>
         <a href="${pageContext.request.contextPath}/logout" class="logout-btn">🚪 Salir</a>
       </div>
     </c:if>
