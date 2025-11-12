@@ -148,4 +148,87 @@ public interface ContenidoService {
      * @param contenidoId ID del contenido
      */
     void devolverCopia(Long contenidoId);
+
+    // ===== MÉTODOS ALIAS (COMPATIBILIDAD) =====
+
+    /**
+     * Alias para getAll()
+     */
+    default List<Contenido> obtenerTodos() {
+        return getAll();
+    }
+
+    /**
+     * Alias para getById()
+     */
+    default Optional<Contenido> obtenerPorId(Long id) {
+        return getById(id);
+    }
+
+    /**
+     * Alias para searchByTitulo()
+     */
+    default List<Contenido> buscarPorTitulo(String titulo) {
+        return searchByTitulo(titulo);
+    }
+
+    /**
+     * Alias para findByGenero()
+     */
+    default List<Contenido> buscarPorGenero(String genero) {
+        return findByGenero(genero);
+    }
+
+    /**
+     * Alias para findByTipo()
+     */
+    default List<Contenido> buscarPorTipo(Contenido.Tipo tipo) {
+        return findByTipo(tipo);
+    }
+
+    /**
+     * Alias para findDisponiblesParaAlquiler()
+     */
+    default List<Contenido> obtenerDisponiblesParaAlquiler() {
+        return findDisponiblesParaAlquiler();
+    }
+
+    /**
+     * Alias para findByGestorInventario()
+     */
+    default List<Contenido> obtenerPorGestorInventario(Long gestorId) {
+        return findByGestorInventario(gestorId);
+    }
+
+    /**
+     * Alias para existsByTitulo()
+     */
+    default boolean existePorTitulo(String titulo) {
+        return existsByTitulo(titulo);
+    }
+
+    /**
+     * Alias para existsById()
+     */
+    default boolean existePorId(Long id) {
+        return existsById(id);
+    }
+
+    /**
+     * Alias combinado para create/update
+     */
+    default void guardar(Contenido contenido) {
+        if (contenido.getId() == null) {
+            create(contenido);
+        } else {
+            update(contenido);
+        }
+    }
+
+    /**
+     * Alias para delete()
+     */
+    default void eliminar(Long id) {
+        delete(id);
+    }
 }

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Controlador para gestión de inventario de contenidos, categorías y reseñas
@@ -82,8 +83,8 @@ public class GestorInventarioController {
     @ResponseBody
     public ResponseEntity<Contenido> crearContenido(@Valid @RequestBody Contenido contenido) {
         try {
-            Contenido contenidoGuardado = contenidoService.guardar(contenido);
-            return ResponseEntity.status(HttpStatus.CREATED).body(contenidoGuardado);
+            contenidoService.guardar(contenido);
+            return ResponseEntity.status(HttpStatus.CREATED).body(contenido);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
@@ -105,8 +106,8 @@ public class GestorInventarioController {
             }
 
             contenido.setId(id);
-            Contenido contenidoActualizado = contenidoService.guardar(contenido);
-            return ResponseEntity.ok(contenidoActualizado);
+            contenidoService.guardar(contenido);
+            return ResponseEntity.ok(contenido);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
@@ -325,12 +326,14 @@ public class GestorInventarioController {
             }
 
             List<Map<String, Object>> resumen = conteoGeneros.entrySet().stream()
-                .map(entry -> Map.of(
-                    "genero", (Object) entry.getKey(),
-                    "cantidad", (Object) entry.getValue()
-                ))
+                .map(entry -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("genero", entry.getKey());
+                    map.put("cantidad", entry.getValue());
+                    return map;
+                })
                 .sorted((a, b) -> Integer.compare((Integer) b.get("cantidad"), (Integer) a.get("cantidad")))
-                .toList();
+                .collect(Collectors.toList());
 
             return ResponseEntity.ok(resumen);
         } catch (Exception e) {
@@ -363,12 +366,11 @@ public class GestorInventarioController {
                 }
             }
 
-            Map<String, Object> resumen = Map.of(
-                "disponibles", disponibles,
-                "no_disponibles", noDisponibles,
-                "sin_copias", sinCopias,
-                "total", contenidos.size()
-            );
+            Map<String, Object> resumen = new HashMap<>();
+            resumen.put("disponibles", disponibles);
+            resumen.put("no_disponibles", noDisponibles);
+            resumen.put("sin_copias", sinCopias);
+            resumen.put("total", contenidos.size());
 
             return ResponseEntity.ok(resumen);
         } catch (Exception e) {
@@ -502,3 +504,4 @@ public class GestorInventarioController {
         }
     }
 }
+

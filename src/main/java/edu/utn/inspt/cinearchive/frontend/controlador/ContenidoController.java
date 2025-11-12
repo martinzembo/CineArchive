@@ -70,8 +70,8 @@ public class ContenidoController {
         if (contenidoService.existePorTitulo(contenido.getTitulo())) {
             return ResponseEntity.badRequest().build();
         }
-        Contenido nuevoContenido = contenidoService.guardar(contenido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoContenido);
+        contenidoService.guardar(contenido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(contenido);
     }
 
     @PutMapping("/{id}")
@@ -82,7 +82,8 @@ public class ContenidoController {
             return ResponseEntity.notFound().build();
         }
         contenido.setId(id);
-        return ResponseEntity.ok(contenidoService.guardar(contenido));
+        contenidoService.guardar(contenido);
+        return ResponseEntity.ok(contenido);
     }
 
     @DeleteMapping("/{id}")

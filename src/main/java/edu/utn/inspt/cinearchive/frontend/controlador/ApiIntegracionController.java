@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -212,11 +213,10 @@ public class ApiIntegracionController {
             List<Contenido> contenidosImportados = apiExternaService.importarContenidos(
                 idsExternos, fuente, gestorInventarioId);
 
-            Map<String, Object> resultado = Map.of(
-                "total_solicitados", idsExternos.size(),
-                "total_importados", contenidosImportados.size(),
-                "contenidos", contenidosImportados
-            );
+            Map<String, Object> resultado = new HashMap<>();
+            resultado.put("total_solicitados", idsExternos.size());
+            resultado.put("total_importados", contenidosImportados.size());
+            resultado.put("contenidos", contenidosImportados);
 
             return ResponseEntity.ok(resultado);
         } catch (Exception e) {
@@ -236,11 +236,10 @@ public class ApiIntegracionController {
         try {
             boolean actualizado = apiExternaService.actualizarContenidoDesdeApi(contenidoId);
 
-            Map<String, Object> resultado = Map.of(
-                "contenido_id", contenidoId,
-                "actualizado", actualizado,
-                "mensaje", actualizado ? "Contenido actualizado exitosamente" : "No se pudo actualizar el contenido"
-            );
+            Map<String, Object> resultado = new HashMap<>();
+            resultado.put("contenido_id", contenidoId);
+            resultado.put("actualizado", actualizado);
+            resultado.put("mensaje", actualizado ? "Contenido actualizado exitosamente" : "No se pudo actualizar el contenido");
 
             return ResponseEntity.ok(resultado);
         } catch (Exception e) {

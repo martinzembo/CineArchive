@@ -174,10 +174,15 @@ public class ApiExternaServiceImpl implements ApiExternaService {
                 return Optional.empty();
             }
             
-            Contenido guardado = contenidoRepository.save(contenido);
-            logger.info("Película importada exitosamente: " + guardado.getTitulo());
-            return Optional.of(guardado);
-            
+            int resultado = contenidoRepository.save(contenido);
+            if (resultado > 0) {
+                logger.info("Película importada exitosamente: " + contenido.getTitulo());
+                return Optional.of(contenido);
+            } else {
+                logger.severe("Error al guardar película: " + contenido.getTitulo());
+                return Optional.empty();
+            }
+
         } catch (Exception e) {
             logger.severe("Error al importar película: " + e.getMessage());
             return Optional.empty();
@@ -208,10 +213,15 @@ public class ApiExternaServiceImpl implements ApiExternaService {
                 return Optional.empty();
             }
             
-            Contenido guardado = contenidoRepository.save(contenido);
-            logger.info("Serie importada exitosamente: " + guardado.getTitulo());
-            return Optional.of(guardado);
-            
+            int resultado = contenidoRepository.save(contenido);
+            if (resultado > 0) {
+                logger.info("Serie importada exitosamente: " + contenido.getTitulo());
+                return Optional.of(contenido);
+            } else {
+                logger.severe("Error al guardar serie: " + contenido.getTitulo());
+                return Optional.empty();
+            }
+
         } catch (Exception e) {
             logger.severe("Error al importar serie: " + e.getMessage());
             return Optional.empty();
@@ -253,7 +263,7 @@ public class ApiExternaServiceImpl implements ApiExternaService {
 
     @Override
     public boolean actualizarContenidoDesdeApi(Long contenidoId) {
-        Optional<Contenido> contenidoOpt = contenidoRepository.findById(contenidoId.intValue());
+        Optional<Contenido> contenidoOpt = contenidoRepository.findById(contenidoId);
 
         if (!contenidoOpt.isPresent()) {
             logger.warning("Contenido no encontrado con ID: " + contenidoId);

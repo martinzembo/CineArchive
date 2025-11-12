@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class DetalleContenidoController {
@@ -26,11 +27,12 @@ public class DetalleContenidoController {
 
     @GetMapping("/contenido/{id}")
     public String detalle(@PathVariable("id") Long id, Model model, HttpSession session, @org.springframework.web.bind.annotation.RequestParam(value = "season", required = false) Integer season) {
-        Contenido c = contenidoService.getById(id);
-        if (c == null) {
+        Optional<Contenido> contenidoOpt = contenidoService.getById(id);
+        if (!contenidoOpt.isPresent()) {
             // Si no existe el contenido, redirigimos al catálogo en lugar de provocar 500
             return "redirect:/catalogo";
         }
+        Contenido c = contenidoOpt.get();
         Long usuarioId = obtenerUsuarioId(session);
         boolean alquilado = false;
         try { alquilado = alquilerService.existeAlquilerActivo(usuarioId, id); } catch (Exception ignored) {}
