@@ -5,16 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Mi Perfil - CineArchive</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     <style>
         .profile-container {
             max-width: 600px;
-            margin: 30px auto;
-            padding: 30px;
-            background: white;
+            margin: 50px auto;
+            padding: 40px;
+            background: var(--surface-color);
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .profile-header {
@@ -23,7 +26,7 @@
         }
 
         .profile-title {
-            color: #dc2626;
+            color: var(--primary-color);
             font-size: 28px;
             margin-bottom: 10px;
         }
@@ -31,7 +34,7 @@
         .profile-avatar {
             width: 80px;
             height: 80px;
-            background: #dc2626;
+            background: var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -43,7 +46,7 @@
         }
 
         .profile-info {
-            background: #f8f9fa;
+            background: var(--background-color);
             padding: 25px;
             border-radius: 8px;
             margin-bottom: 25px;
@@ -54,7 +57,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid var(--secondary-color);
         }
 
         .info-row:last-child {
@@ -63,12 +66,12 @@
 
         .info-label {
             font-weight: bold;
-            color: #333;
+            color: var(--text-color);
             flex: 1;
         }
 
         .info-value {
-            color: #666;
+            color: #aaa;
             flex: 2;
             text-align: right;
         }
@@ -81,13 +84,15 @@
         }
 
         .status-active {
-            background: #dcfce7;
-            color: #166534;
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
         .status-inactive {
-            background: #fee2e2;
-            color: #dc2626;
+            background: rgba(220, 38, 38, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .role-badge {
@@ -95,7 +100,7 @@
             border-radius: 5px;
             font-size: 12px;
             font-weight: bold;
-            background: #dc2626;
+            background: var(--primary-color);
             color: white;
         }
 
@@ -108,7 +113,7 @@
 
         .btn {
             padding: 12px 24px;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
@@ -116,36 +121,42 @@
         }
 
         .btn-primary {
-            background: #dc2626;
+            background: var(--primary-color);
             color: white;
-            border-color: #dc2626;
+            border-color: var(--primary-color);
         }
 
         .btn-primary:hover {
-            background: #b91c1c;
-            border-color: #b91c1c;
+            background: #f40612;
+            border-color: #f40612;
         }
 
         .btn-secondary {
-            background: white;
-            color: #333;
-            border-color: #ddd;
+            background: transparent;
+            color: var(--text-color);
+            border-color: var(--secondary-color);
         }
 
         .btn-secondary:hover {
-            background: #f8f9fa;
-            border-color: #999;
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
 
         .no-user-message {
             text-align: center;
-            color: #666;
+            color: var(--text-color);
             font-size: 18px;
             margin: 50px 0;
+        }
+
+        .no-user-message h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/views/fragments/header.jsp" />
     <div class="profile-container">
         <c:choose>
             <c:when test="${empty usuario}">
@@ -211,7 +222,7 @@
                 </div>
 
                 <div class="profile-actions">
-                    <a href="${pageContext.request.contextPath}/index" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/catalogo" class="btn btn-primary">
                         Ir al Inicio
                     </a>
                     <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary">
@@ -221,5 +232,6 @@
             </c:otherwise>
         </c:choose>
     </div>
+    <jsp:include page="/WEB-INF/views/fragments/footer.jsp" />
 </body>
 </html>

@@ -40,6 +40,12 @@ public class SecurityInterceptor implements HandlerInterceptor {
         // Remover el context path de la URI para obtener la ruta relativa
         String path = uri.substring(contextPath.length());
 
+        // ===== AGREGAR HEADERS DE NO-CACHE A TODAS LAS PÁGINAS =====
+        // Esto previene que el navegador guarde en caché las páginas protegidas
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+        response.setDateHeader("Expires", 0); // Proxies
+
         // ===== RUTAS PÚBLICAS (no requieren autenticación) =====
         if (esRutaPublica(path)) {
             return true; // Permitir acceso
