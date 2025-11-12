@@ -77,17 +77,5 @@ public class InventarioViewController {
         return "gestor-inventario";
     }
 
-    /**
-     * Mostrar estadísticas del inventario
-     *
-     * @param model el modelo para pasar datos a la vista
-     * @return el nombre de la vista JSP
-     */
-    @GetMapping("/estadisticas")
-    public String mostrarEstadisticasInventario(Model model) {
-        model.addAttribute("pageTitle", "Estadísticas de Inventario - CineArchive");
-        model.addAttribute("activeTab", "estadisticas");
-
-        return "gestor-inventario";
-    }
+    // Nota: El endpoint /estadisticas está manejado por GestorInventarioController
 }
