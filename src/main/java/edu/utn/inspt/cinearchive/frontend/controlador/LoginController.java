@@ -36,22 +36,13 @@ public class LoginController {
             Model model,
             HttpSession session) {
 
-        // Si ya hay un usuario logueado, redirigir a su página principal según su rol
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuarioLogueado != null) {
-            // Redirigir según el rol del usuario
-            switch (usuarioLogueado.getRol()) {
-                case ADMINISTRADOR:
-                    return "redirect:/admin/usuarios";
-
-                case GESTOR_INVENTARIO:
-                    return "redirect:/inventario/panel";
-
-                case ANALISTA_DATOS:
-                    return "redirect:/reportes/panel";
-
-                default: // USUARIO_REGULAR
-                    return "redirect:/catalogo";
+        // IMPORTANTE: Invalidar cualquier sesión existente al acceder a /login
+        // Esto fuerza al usuario a volver a iniciar sesión siempre
+        if (session != null && session.getAttribute("usuarioLogueado") != null) {
+            try {
+                session.invalidate();
+            } catch (IllegalStateException e) {
+                // La sesión ya fue invalidada, continuar normalmente
             }
         }
 
