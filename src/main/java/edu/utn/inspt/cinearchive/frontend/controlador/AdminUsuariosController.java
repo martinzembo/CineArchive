@@ -307,7 +307,7 @@ public class AdminUsuariosController {
      */
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(
-            @PathVariable int id,
+            @PathVariable Long id,
             Model model,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -361,7 +361,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/editar/{id}")
     public String editarUsuario(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestParam String nombre,
             @RequestParam String email,
             @RequestParam(required = false) String passwordNueva,
@@ -500,7 +500,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/cambiar-estado/{id}")
     public String cambiarEstado(
-            @PathVariable int id,
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
 
@@ -571,7 +571,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/activar/{id}")
     public String activarUsuario(
-            @PathVariable int id,
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
 
@@ -618,7 +618,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/desactivar/{id}")
     public String desactivarUsuario(
-            @PathVariable int id,
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
 
@@ -693,7 +693,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/eliminar/{id}")
     public String eliminarUsuario(
-            @PathVariable int id,
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
 
@@ -767,7 +767,7 @@ public class AdminUsuariosController {
      */
     @GetMapping("/detalle/{id}")
     public String verDetalle(
-            @PathVariable int id,
+            @PathVariable Long id,
             Model model,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -825,7 +825,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/cambiar-rol/{id}")
     public String cambiarRol(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestParam Rol nuevoRol,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
@@ -887,7 +887,7 @@ public class AdminUsuariosController {
      */
     @PostMapping("/restablecer-password/{id}")
     public String restablecerPassword(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestParam String passwordNueva,
             @RequestParam String passwordConfirm,
             RedirectAttributes redirectAttributes,

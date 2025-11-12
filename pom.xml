@@ -48,6 +48,11 @@
     </dependency>
     <!-- Validación -->
     <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+    <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>6.2.5.Final</version>
@@ -58,11 +63,12 @@
       <artifactId>mysql-connector-j</artifactId>
       <version>8.0.33</version>
     </dependency>
-    <!-- Servlet API (needed for Jetty) -->
+    <!-- Servlet API (provided por el servidor) -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -74,6 +80,12 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
+    </dependency>
+    <!-- HTTP Client para APIs externas -->
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.14</version>
     </dependency>
     <!-- JUnit 4 -->
     <dependency>
@@ -103,7 +115,6 @@
         <directory>src/main/resources</directory>
         <includes>
           <include>**/*.properties</include>
-          <!-- Removido: no empaquetar SQL -->
         </includes>
       </resource>
     </resources>
@@ -128,7 +139,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.34.v20201102</version>
+        <version>9.4.48.v20220622</version>
         <configuration>
           <webApp>
             <contextPath>/cinearchive</contextPath>
@@ -141,7 +152,6 @@
       </plugin>
     </plugins>
   </build>
-  <!-- Perfil dev para ejecutar con seed en H2 sin propiedades en CLI -->
   <profiles>
     <profile>
       <id>dev</id>

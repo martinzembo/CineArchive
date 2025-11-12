@@ -10,6 +10,7 @@ import edu.utn.inspt.cinearchive.backend.repositorio.TransaccionRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,10 +93,11 @@ public class AlquilerServiceImpl implements AlquilerService {
         if (alquilerRepository.existsActiveByUsuarioAndContenido(usuarioId, contenidoId)) {
             throw new IllegalStateException("Ya existe un alquiler activo para este contenido");
         }
-        Contenido c = contenidoRepository.findById(contenidoId);
-        if (c == null || Boolean.FALSE.equals(c.getDisponibleParaAlquiler())) {
+        Optional<Contenido> contenidoOpt = contenidoRepository.findById(contenidoId);
+        if (!contenidoOpt.isPresent() || Boolean.FALSE.equals(contenidoOpt.get().getDisponibleParaAlquiler())) {
             throw new IllegalStateException("Contenido no disponible para alquiler");
         }
+        Contenido c = contenidoOpt.get();
         if (c.getCopiasDisponibles() == null || c.getCopiasDisponibles() <= 0) {
             throw new IllegalStateException("No hay copias disponibles");
         }

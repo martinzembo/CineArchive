@@ -1,14 +1,18 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.*;
 
+/**
+ * Clase que representa un contenido multimedia (película o serie) en el sistema.
+ * Contiene toda la información relevante para la gestión del catálogo y alquileres.
+ */
 public class Contenido implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public enum Tipo {
         PELICULA,
@@ -17,31 +21,37 @@ public class Contenido implements Serializable {
 
     private Long id;
 
-    @NotBlank
+    @NotNull(message = "El título es obligatorio")
+    @Size(min = 1, max = 255, message = "El título debe tener entre 1 y 255 caracteres")
     private String titulo;
 
     private String genero;
 
-    @Min(1880) @Max(2100)
+    @NotNull(message = "El año es obligatorio")
+    @Min(value = 1900, message = "El año debe ser mayor a 1900")
+    @Max(value = 2100, message = "El año debe ser menor a 2100")
     private Integer anio;
 
+    @Size(max = 2000, message = "La descripción no puede exceder los 2000 caracteres")
     private String descripcion;
 
     private String imagenUrl;
 
     private String trailerUrl;
 
+    @NotNull(message = "El tipo de contenido es obligatorio")
     private Tipo tipo;
 
-    private Boolean disponibleParaAlquiler;
+    private Boolean disponibleParaAlquiler = true;
 
+    @DecimalMin(value = "0.0", message = "El precio no puede ser negativo")
     private BigDecimal precioAlquiler;
 
-    @Min(0)
-    private Integer copiasDisponibles;
+    @Min(value = 0, message = "Las copias disponibles no pueden ser negativas")
+    private Integer copiasDisponibles = 0;
 
-    @Min(0)
-    private Integer copiasTotales;
+    @Min(value = 0, message = "Las copias totales no pueden ser negativas")
+    private Integer copiasTotales = 0;
 
     private LocalDate fechaVencimientoLicencia;
 
@@ -50,7 +60,7 @@ public class Contenido implements Serializable {
     private Long gestorInventarioId;
 
     // Atributos específicos de Películas
-    @Min(1)
+    @Min(value = 1, message = "La duración debe ser mayor a 0")
     private Integer duracion;
 
     private String director;
@@ -62,9 +72,20 @@ public class Contenido implements Serializable {
 
     private Boolean enEmision;
 
+    // Solo incluir si tienes las clases ContenidoCategoria y Categoria
+    // private Set<ContenidoCategoria> categorias = new HashSet<>();
+
+    // Constructores
     public Contenido() {
     }
 
+    public Contenido(String titulo, Integer anio, Tipo tipo) {
+        this.titulo = titulo;
+        this.anio = anio;
+        this.tipo = tipo;
+    }
+
+    // Getters y Setters (mantener todos los existentes)
     public Long getId() {
         return id;
     }
@@ -225,17 +246,70 @@ public class Contenido implements Serializable {
         this.enEmision = enEmision;
     }
 
+    // Métodos de negocio (NUEVOS - del fork)
+    
+    /**
+     * Verifica si hay copias disponibles para alquiler
+     */
+    public boolean tieneCopiasDisponibles() {
+        return copiasDisponibles != null && copiasDisponibles > 0;
+    }
+
+    /**
+     * Verifica si el contenido está disponible para alquiler
+     */
+    public boolean estaDisponibleParaAlquiler() {
+        return disponibleParaAlquiler != null &&
+               disponibleParaAlquiler &&
+               tieneCopiasDisponibles() &&
+               (fechaVencimientoLicencia == null ||
+                fechaVencimientoLicencia.isAfter(LocalDate.now()));
+    }
+
+    /**
+     * Reduce el número de copias disponibles en uno
+     */
+    public void reducirCopiasDisponibles() {
+        if (copiasDisponibles > 0) {
+            copiasDisponibles--;
+        }
+    }
+
+    /**
+     * Aumenta el número de copias disponibles en uno
+     */
+    public void aumentarCopiasDisponibles() {
+        if (copiasDisponibles < copiasTotales) {
+            copiasDisponibles++;
+        }
+    }
+
+    /**
+     * Valida el estado del contenido
+     */
+    public void validar() {
+        if (copiasDisponibles > copiasTotales) {
+            throw new IllegalStateException("Las copias disponibles no pueden superar a las totales");
+        }
+        if (tipo == Tipo.SERIE && temporadas != null && temporadas <= 0) {
+            throw new IllegalStateException("Una serie debe tener al menos una temporada");
+        }
+        if (tipo == Tipo.PELICULA && duracion != null && duracion <= 0) {
+            throw new IllegalStateException("Una película debe tener una duración positiva");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Contenido)) return false;
         Contenido contenido = (Contenido) o;
-        return Objects.equals(getId(), contenido.getId());
+        return Objects.equals(id, contenido.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(id);
     }
 
     @Override
@@ -244,6 +318,9 @@ public class Contenido implements Serializable {
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", tipo=" + tipo +
+                ", anio=" + anio +
+                ", disponibleParaAlquiler=" + disponibleParaAlquiler +
+                ", copiasDisponibles=" + copiasDisponibles +
                 '}';
     }
 }
