@@ -36,9 +36,23 @@ public class LoginController {
             Model model,
             HttpSession session) {
 
-        // Si ya hay un usuario logueado, redirigir al home
-        if (session.getAttribute("usuarioLogueado") != null) {
-            return "redirect:/index";
+        // Si ya hay un usuario logueado, redirigir a su página principal según su rol
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado != null) {
+            // Redirigir según el rol del usuario
+            switch (usuarioLogueado.getRol()) {
+                case ADMINISTRADOR:
+                    return "redirect:/admin/usuarios";
+
+                case GESTOR_INVENTARIO:
+                    return "redirect:/inventario/panel";
+
+                case ANALISTA_DATOS:
+                    return "redirect:/reportes/panel";
+
+                default: // USUARIO_REGULAR
+                    return "redirect:/catalogo";
+            }
         }
 
         // Agregar mensajes si existen
