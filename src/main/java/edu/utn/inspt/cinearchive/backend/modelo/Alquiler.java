@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class Alquiler implements Serializable {
 
@@ -15,15 +18,19 @@ public class Alquiler implements Serializable {
 
     private Long id;
 
+    @NotNull
     private Long usuarioId;
 
+    @NotNull
     private Long contenidoId;
 
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
 
+    @Positive
     private Integer periodoAlquiler;
 
+    @Min(0)
     private BigDecimal precio;
 
     private Estado estado;

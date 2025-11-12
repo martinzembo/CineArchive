@@ -29,6 +29,7 @@ public class Contenido implements Serializable {
 
     @NotNull(message = "El año es obligatorio")
     @Min(value = 1900, message = "El año debe ser mayor a 1900")
+    @Max(value = 2100, message = "El año debe ser menor a 2100")
     private Integer anio;
 
     @Size(max = 2000, message = "La descripción no puede exceder los 2000 caracteres")
@@ -58,17 +59,21 @@ public class Contenido implements Serializable {
 
     private Long gestorInventarioId;
 
+    // Atributos específicos de Películas
+    @Min(value = 1, message = "La duración debe ser mayor a 0")
     private Integer duracion;
 
     private String director;
 
+    // Atributos específicos de Series
     private Integer temporadas;
 
     private Integer capitulosTotales;
 
     private Boolean enEmision;
 
-    private Set<ContenidoCategoria> categorias = new HashSet<>();
+    // Solo incluir si tienes las clases ContenidoCategoria y Categoria
+    // private Set<ContenidoCategoria> categorias = new HashSet<>();
 
     // Constructores
     public Contenido() {
@@ -80,7 +85,7 @@ public class Contenido implements Serializable {
         this.tipo = tipo;
     }
 
-    // Getters y Setters
+    // Getters y Setters (mantener todos los existentes)
     public Long getId() {
         return id;
     }
@@ -241,21 +246,8 @@ public class Contenido implements Serializable {
         this.enEmision = enEmision;
     }
 
-    /**
-     * Agrega una categoría al contenido
-     */
-    public void agregarCategoria(Categoria categoria) {
-        ContenidoCategoria contenidoCategoria = new ContenidoCategoria(this, categoria);
-        categorias.add(contenidoCategoria);
-    }
-
-    /**
-     * Remueve una categoría del contenido
-     */
-    public void removerCategoria(Categoria categoria) {
-        categorias.removeIf(cc -> cc.getCategoria().equals(categoria));
-    }
-
+    // Métodos de negocio (NUEVOS - del fork)
+    
     /**
      * Verifica si hay copias disponibles para alquiler
      */
@@ -292,6 +284,21 @@ public class Contenido implements Serializable {
         }
     }
 
+    /**
+     * Valida el estado del contenido
+     */
+    public void validar() {
+        if (copiasDisponibles > copiasTotales) {
+            throw new IllegalStateException("Las copias disponibles no pueden superar a las totales");
+        }
+        if (tipo == Tipo.SERIE && temporadas != null && temporadas <= 0) {
+            throw new IllegalStateException("Una serie debe tener al menos una temporada");
+        }
+        if (tipo == Tipo.PELICULA && duracion != null && duracion <= 0) {
+            throw new IllegalStateException("Una película debe tener una duración positiva");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -315,20 +322,5 @@ public class Contenido implements Serializable {
                 ", disponibleParaAlquiler=" + disponibleParaAlquiler +
                 ", copiasDisponibles=" + copiasDisponibles +
                 '}';
-    }
-
-    /**
-     * Valida el estado del contenido
-     */
-    public void validar() {
-        if (copiasDisponibles > copiasTotales) {
-            throw new IllegalStateException("Las copias disponibles no pueden superar a las totales");
-        }
-        if (tipo == Tipo.SERIE && temporadas != null && temporadas <= 0) {
-            throw new IllegalStateException("Una serie debe tener al menos una temporada");
-        }
-        if (tipo == Tipo.PELICULA && duracion != null && duracion <= 0) {
-            throw new IllegalStateException("Una película debe tener una duración positiva");
-        }
     }
 }

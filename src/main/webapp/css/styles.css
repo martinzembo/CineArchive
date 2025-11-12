@@ -10,6 +10,34 @@
     --info-color: #17a2b8;
 }
 
+/* Global box-sizing to avoid overflow */
+*, *::before, *::after { box-sizing: border-box; }
+/* Estilos para mensajes de alerta */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: var(--background-color);
@@ -82,6 +110,38 @@ nav {
     color: var(--primary-color);
 }
 
+.admin-link {
+    background-color: rgba(229, 9, 20, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+    background-color: rgba(229, 9, 20, 0.25);
+    border-color: rgba(229, 9, 20, 0.5);
+    transform: translateY(-1px);
+}
+
+.logout-btn {
+    background-color: rgba(220, 53, 69, 0.2);
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: #ff6b6b !important;
+}
+
+.logout-btn:hover {
+    background-color: rgba(220, 53, 69, 0.35);
+    border-color: rgba(220, 53, 69, 0.6);
+    transform: translateY(-1px);
+    color: #ff5252 !important;
+}
+
 .login-btn {
     background-color: var(--primary-color);
     color: var(--text-color);
@@ -152,7 +212,7 @@ nav {
 .category {
     margin-top: 40px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .highlighted-section {
@@ -173,25 +233,21 @@ h2 {
     display: flex;
     gap: 20px;
     overflow-x: auto;
-    overflow-y: hidden;
-    padding: 20px 0;
+    overflow-y: visible; /* permitir que el scale no se corte verticalmente */
+    padding: 20px 40px; /* actualizar para coincidir con scroll-padding */
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) var(--surface-color);
+    /* scroll-snap eliminado: el acomodo se hará vía JS al soltar */
+    scroll-padding-left: 40px;
+    scroll-padding-right: 40px;
 }
 
-.movie-row::-webkit-scrollbar {
-    height: 8px;
-}
-
-.movie-row::-webkit-scrollbar-track {
-    background: var(--surface-color);
-}
-
-.movie-row::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
+/* Catálogo: una sola fila tipo slide */
+#catalogoRow.movie-row { /* revertido para permitir multi-2 grilla */ }
+#catalogoRow .movie-card { /* revertido */ }
+/* Evitar que el body se ensanche por sombras/hover */
+/* body { overflow-x: hidden; } */
 
 .movie-card {
     background-color: var(--surface-color);
@@ -200,21 +256,26 @@ h2 {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex: 0 0 auto;
     width: 200px;
+    position: relative; /* permitir z-index en hover */
 }
 
 .movie-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+    z-index: 5; /* sobre las vecinas y sin recorte */
 }
 
 .movie-card img {
     width: 100%;
-    height: 300px;
+    height: 270px;
     object-fit: cover;
 }
 
 .movie-info {
-    padding: 15px;
+    padding: 12px;
+    /* asegurar layout consistente */
+    display: flex;
+    flex-direction: column;
 }
 
 .movie-title {
@@ -226,6 +287,11 @@ h2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    /* forzar altura para 2 líneas aun si es corto */
+    line-height: 1.2em;
+    min-height: 2.4em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .movie-rating {
@@ -237,7 +303,7 @@ h2 {
 .rental-price {
     color: var(--success-color);
     font-weight: bold;
-    margin: 8px 0;
+    margin: 6px 0;
 }
 
 .rental-time {
@@ -251,6 +317,26 @@ h2 {
     font-size: 12px;
     margin: 5px 0;
 }
+
+.movie-actions { margin-top:auto; display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+.details-wrapper { width:100%; display:flex; justify-content:center; }
+
+.details-btn { width:100%; }
+
+.rent-btn[data-alquilado='true'] { background: var(--success-color); cursor: default; pointer-events: none; }
+/* Quitar cambio de color en hover para alquilado */
+.rent-btn[data-alquilado='true']:hover { background: var(--success-color); }
+/* Ocultar precio si la tarjeta está alquilada */
+.movie-card[data-alquilado='true'] .rental-price { display: none !important; }
+
+.rent-btn { position:relative; }
+
+.rent-btn.animating { transition: background-color .35s ease, transform .35s ease; }
+
+.btn-link.added { transition: background-color .25s ease, color .25s ease; }
+
+.btn-link.remove-mode { transition: background-color .25s ease, color .25s ease; }
 
 /* Priority Cards */
 .priority-high {
@@ -552,6 +638,11 @@ h2 {
 .badge-admin { background-color: #dc3545; }
 .badge-gestor { background-color: #fd7e14; }
 .badge-analista { background-color: #20c997; }
+.badge-estado { display:inline-block; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:bold; letter-spacing:.5px; }
+.estado-activo { background:rgba(40,167,69,.15); color:var(--success-color); border:1px solid var(--success-color); }
+.estado-finalizado { background:rgba(108,117,125,.15); color:#adb5bd; border:1px solid #6c757d; }
+.estado-cancelado { background:rgba(220,53,69,.15); color:var(--danger-color); border:1px solid var(--danger-color); }
+.badge-expirado { background:rgba(255,193,7,.2); color:var(--warning-color); padding:4px 8px; border-radius:12px; font-size:11px; border:1px solid var(--warning-color); margin-left:6px; }
 
 .rating-large {
     color: #ffd700;
@@ -896,6 +987,33 @@ h2 {
     margin: 20px 0;
 }
 
+.page-link { color: var(--text-color); padding:6px 12px; margin:0 4px; background:var(--secondary-color); text-decoration:none; border-radius:4px; font-size:13px; }
+.page-link.active { background: var(--primary-color); font-weight:bold; }
+.page-link:hover { background: #333; }
+.btn-link { background:none; border:1px solid var(--primary-color); color: var(--primary-color); cursor:pointer; font-size:12px; margin-top:6px; text-decoration:none; border-radius:6px; padding:6px 10px; display:inline-block; }
+/* Override base btn-link inside list-actions for better readability */
+.list-actions .btn-link { font-size:13px; padding:8px 12px; border-radius:8px; margin-top:0; }
+/* Labels superpuestas para 4 estados */
+.btn-link .label-default, .btn-link .label-add, .btn-link .label-added, .btn-link .label-remove {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; width:100%; height:100%;
+  transition: opacity .18s ease, transform .18s ease; opacity:0; transform: translateY(6px);
+}
+/* Estado base: no agregado */
+.btn-link:not(.added) .label-default { opacity:1; transform: translateY(0); }
+/* Hover no agregado: mostrar Agregar */
+.btn-link:not(.added):hover .label-default { opacity:0; transform: translateY(-6px); }
+.btn-link:not(.added):hover .label-add { opacity:1; transform: translateY(0); }
+/* Estado agregado por defecto */
+.btn-link.added .label-added { opacity:1; transform: translateY(0); }
+/* Hover agregado (remove-mode controlado por JS) */
+.btn-link.added.remove-mode .label-added { opacity:0; transform: translateY(-6px); }
+.btn-link.added.remove-mode .label-remove { opacity:1; transform: translateY(0); }
+/* Colores de fondo/contorno por estado */
+.btn-link { position:relative; min-height: 34px; overflow:hidden; }
+.btn-link:not(.added):hover { background: var(--success-color); color:#fff; border-color: var(--success-color); }
+.btn-link.added { background: var(--success-color); color:#fff; border-color: var(--success-color); }
+.btn-link.added.remove-mode { background: var(--danger-color); border-color: var(--danger-color); }
+
 /* Config & Forms */
 .price-config-grid {
     display: grid;
@@ -998,7 +1116,321 @@ h2 {
 .log-time {
     color: #888;
     font-size: 12px;
-    min-width: 150px;
+}
+
+/* ==========================================================================
+   ADMIN PANEL - GESTIÓN DE USUARIOS
+   Estilos para el panel de administración de usuarios
+   ========================================================================== */
+
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Badges de Roles */
+.badge-rol {
+    font-size: 0.85em;
+    padding: 0.4em 0.8em;
+    font-weight: 600;
+}
+
+.badge-ADMINISTRADOR {
+    background-color: #dc3545;
+}
+
+.badge-GESTOR_INVENTARIO {
+    background-color: #17a2b8;
+}
+
+.badge-ANALISTA_DATOS {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-USUARIO_REGULAR {
+    background-color: #6c757d;
+}
+
+/* Tarjetas de Estadísticas */
+.estadistica-card {
+    border-left: 4px solid;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.estadistica-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-total {
+    border-left-color: #007bff;
+}
+
+.card-activos {
+    border-left-color: #28a745;
+}
+
+.card-inactivos {
+    border-left-color: #6c757d;
+}
+
+.card-admins {
+    border-left-color: #dc3545;
+}
+
+/* Tabla de Usuarios */
+.tabla-usuarios {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Botones de Acción */
+.btn-accion {
+    margin: 2px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Filtros */
+.filtros-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Formulario de Usuario */
+.form-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.password-strength {
+    height: 5px;
+    border-radius: 3px;
+    margin-top: 5px;
+    transition: all 0.3s;
+}
+
+.strength-weak {
+    background-color: #dc3545;
+    width: 33%;
+}
+
+.strength-medium {
+    background-color: #ffc107;
+    width: 66%;
+}
+
+.strength-strong {
+    background-color: #28a745;
+    width: 100%;
+}
+
+.form-section {
+    border-left: 4px solid #667eea;
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+.badge-rol-selector {
+    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.badge-rol-selector:hover {
+    transform: scale(1.05);
+}
+
+.info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Perfil de Usuario en Detalle */
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: white;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.section-title {
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Página de Acceso Denegado */
+.error-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.error-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    padding: 60px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-icon {
+    font-size: 120px;
+    color: #dc3545;
+    margin-bottom: 30px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.error-code {
+    font-size: 80px;
+    font-weight: bold;
+    color: #667eea;
+    margin: 0;
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin: 20px 0;
+}
+
+.error-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.btn-home {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    border-radius: 50px;
+    transition: all 0.3s;
+    margin: 10px;
+}
+
+.btn-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.rol-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin: 5px;
+}
+
+.rol-admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.rol-gestor {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.rol-analista {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.rol-regular {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Body especial para página de acceso denegado */
+body.acceso-denegado {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .log-user {
@@ -1063,20 +1495,10 @@ h2 {
 .trend-down { color: var(--danger-color); }
 .trend-stable { color: #888; }
 
-.progress-bar {
-    flex: 1;
-    height: 20px;
-    background-color: var(--secondary-color);
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 0 15px;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: var(--primary-color);
-    transition: width 0.3s;
-}
+.progress-wrapper { margin:8px 0; }
+.progress-bar { background:var(--secondary-color); height:8px; border-radius:6px; overflow:hidden; }
+.progress-fill { background:var(--primary-color); height:100%; width:0; transition:width .4s ease; }
+.progress-text { font-size:11px; color:#aaa; margin-top:4px; }
 
 .recommendations-container {
     display: flex;
@@ -1159,6 +1581,74 @@ footer {
     color: var(--primary-color);
 }
 
+/* Results Bar */
+.results-bar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #bbb;
+}
+
+.results-count {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn .5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton Loader */
+.skeleton-card {
+    background: var(--surface-color);
+    border-radius: 8px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-thumb {
+    height: 300px;
+    background: linear-gradient(90deg, #222, #2a2a2a, #222);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+}
+
+.skeleton-info {
+    padding: 12px;
+}
+
+.skeleton-line {
+    height: 12px;
+    background: #2a2a2a;
+    margin: 6px 0;
+    border-radius: 6px;
+    animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 /* ============================================
    ESTILOS DE REGISTRO
    ============================================ */
@@ -1233,324 +1723,211 @@ footer {
     color: var(--danger-color);
 }
 
-/* Estilos para el botón de categorías */
-.categories-btn {
-    background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
-    color: #ffffff;
-    border: 1px solid #333333;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    margin: 15px auto;
-    position: relative;
-    overflow: hidden;
-}
-
-.categories-btn:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(45deg, #2d2d2d, #1a1a1a);
-    border-color: #e50914;
-    box-shadow: 0 6px 15px rgba(229, 9, 20, 0.2);
-}
-
-.categories-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.15);
-}
-
-.categories-btn i {
-    font-size: 1.1rem;
-    color: #e50914;
-    transition: all 0.3s ease;
-}
-
-.categories-btn:hover i {
-    transform: scale(1.1);
-    color: #ff0f1b;
-}
-
-/* Centrar el botón en el contenedor de login */
-.login-container .categories-btn {
-    display: block;
-    width: fit-content;
-    margin: 20px auto 0;
-}
-
-/* =====================================
- * ESTILOS ESPECÍFICOS DEVELOPER 3
- * ===================================== */
-
-/* Badges y indicadores de estado */
-.badge {
-    display: inline-block;
-    padding: 0.25em 0.6em;
-    font-size: 0.75em;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: 0.375rem;
-}
-
-.badge-primary { background-color: var(--primary-color); color: white; }
-.badge-secondary { background-color: var(--secondary-color); color: white; }
-.badge-success { background-color: var(--success-color); color: white; }
-.badge-info { background-color: var(--info-color); color: white; }
-.badge-warning { background-color: var(--warning-color); color: black; }
-.badge-danger { background-color: var(--danger-color); color: white; }
-
-/* Botones pequeños para acciones */
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.2rem;
-    margin: 0 2px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
-
-/* Tabla mejorada */
-.content-table {
-    background-color: white;
-    color: #333;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.content-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #495057;
-    border-bottom: 2px solid #dee2e6;
-}
-
-.content-table tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-.content-table tbody tr:hover {
-    background-color: #f8f9fa;
-}
-
-/* Sistema de rating con estrellas */
-.rating {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.rating-number {
-    font-weight: bold;
-    color: #333;
-}
-
-/* Mejoras para modales */
-.modal-content h2 {
-    margin-top: 0;
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #495057;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: 0;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
-}
-
-/* Estilos para gráficos responsivos */
-.chart-container {
-    position: relative;
-    margin: 20px 0;
-}
-
-.chart-container canvas {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Indicadores de carga mejorados */
-.loading-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    color: #6c757d;
-}
-
-.loading-indicator i {
-    font-size: 2em;
-    margin-right: 10px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Mejoras para filtros */
-.search-filters {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.search-filters input,
-.search-filters select {
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 14px;
-}
-
-.search-filters input:focus,
-.search-filters select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
-}
-
-/* Responsive para pantallas pequeñas */
+/* Responsive */
 @media (max-width: 768px) {
-    .kpi-grid,
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--surface-color);
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .detail-hero {
+        grid-template-columns: 1fr;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
 
-    .analytics-sections {
-        grid-template-columns: 1fr;
+    .movie-card {
+        width: 150px;
     }
 
-    .detailed-analytics {
-        grid-template-columns: 1fr;
-    }
-
-    .search-filters {
+    .my-review-card {
         flex-direction: column;
     }
 
-    .action-buttons {
+    .search-filter-bar {
         flex-direction: column;
     }
 
-    .export-buttons {
-        flex-direction: column;
+    .admin-table {
+        font-size: 12px;
     }
 
-    .tab-buttons {
-        flex-direction: column;
-    }
-
-    .category-filters {
-        flex-direction: column;
+    .admin-table th, .admin-table td {
+        padding: 8px;
     }
 }
 
-/* Mejoras para accesibilidad */
-.btn:focus,
-.tab-button:focus,
-.category-type-btn:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+@media (max-width: 480px) {
+    .movie-grid .movie-card { width: calc(50% - 10px); }
+    .movie-card img { height: 180px; }
 }
 
-/* Transiciones suaves */
-.stat-card,
-.kpi-card,
-.report-card,
-.analytics-card,
-.category-card {
-    transition: all 0.3s ease;
+@media (max-width: 360px) {
+    .movie-grid .movie-card { width: 100%; }
 }
 
-/* Tooltips personalizados */
-[title] {
-    position: relative;
+.movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
 }
 
-/* Estados de error y éxito */
-.error-message {
-    color: var(--danger-color);
-    background-color: rgba(220, 53, 69, 0.1);
-    padding: 10px;
-    border-radius: 4px;
-    border-left: 4px solid var(--danger-color);
-    margin: 10px 0;
+/* Ajuste cuando se usa grilla: las tarjetas deben ocupar 100% del ancho de celda */
+.movie-grid .movie-card {
+    width: 200px;
 }
 
-.success-message {
-    color: var(--success-color);
-    background-color: rgba(40, 167, 69, 0.1);
-    padding: 10px;
-    border-radius: 4px;
-    border-left: 4px solid var(--success-color);
-    margin: 10px 0;
+/* Escopo al carrusel: tarjetas más compactas para evitar recortes en hover */
+.movie-row .movie-card { width: 190px; }
+.movie-row .movie-card img { height: 285px; }
+.movie-row .movie-card { transform-origin: center center; will-change: transform; }
+.movie-row .movie-card:hover { z-index:6; }
+/* Transición mejorada */
+.movie-card { transition: transform .25s cubic-bezier(.25,.8,.25,1), box-shadow .25s ease; }
+/* Enfoque accesible opcional cuando se navega con teclado */
+.movie-row:focus { outline: 2px solid var(--primary-color); outline-offset: 4px; }
+
+/* Carrusel multi-filas opcional */
+.movie-row.multi-2, .movie-row.multi-3 {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 190px; /* cada columna una tarjeta apilada verticalmente */
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 24px 40px; /* un poco más de aire en multi-fila */
+    scroll-behavior: smooth;
+}
+.movie-row.multi-2 { grid-template-rows: repeat(2, auto); }
+.movie-row.multi-3 { grid-template-rows: repeat(3, auto); }
+.movie-row.multi-2 .movie-card, .movie-row.multi-3 .movie-card {
+    width: 190px;
+    margin: 0; /* grid gestiona el espacio */
+}
+.movie-row.multi-2 .movie-card img, .movie-row.multi-3 .movie-card img { height: 260px; }
+/* Ajuste de hover en multi-fila para evitar solapado excesivo */
+.movie-row.multi-2 .movie-card:hover, .movie-row.multi-3 .movie-card:hover {
+    transform: scale(1.04);
+    z-index: 4;
+}
+/* Evitar escalado que rompa alineación vertical en multi-fila */
+.movie-row.multi-2 .movie-card, .movie-row.multi-3 .movie-card { transform-origin: center center; }
+
+/* Evitar selección en carrusel (sin bloquear clicks) */
+.movie-row.no-select, .movie-row.no-select * { user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+.movie-row img { -webkit-user-drag: none; user-drag: none; }
+
+.list-actions { display:flex; gap:4px; width:100%; justify-content:stretch; margin-top:6px; }
+.list-actions .btn-link { flex:1 1 0; text-align:center; min-height:38px; padding:8px 12px; font-size:13px; font-weight:600; border-radius:8px; }
+/* Estado estable para botones de listas (sin cambio de tamaño) */
+.list-actions .btn-link { position: relative; min-height: 34px; overflow: hidden; }
+.btn-link .label, .btn-link .label-remove { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; width:100%; height:100%; transition: opacity .2s ease, transform .2s ease; }
+.btn-link .label { opacity: 1; transform: translateY(0); }
+.btn-link .label-remove { opacity: 0; transform: translateY(8px); }
+.btn-link.remove-mode .label { opacity: 0; transform: translateY(-8px); }
+.btn-link.remove-mode .label-remove { opacity: 1; transform: translateY(0); }
+
+/* Compact card height tweak (mantener estructura, menos alto) */
+.movie-card img { height: 270px; }
+.movie-row .movie-card img { height: 250px; }
+.movie-row.multi-2 .movie-card img,
+.movie-row.multi-3 .movie-card img { height: 230px; }
+.movie-info { padding: 12px; }
+.rental-price { margin: 6px 0; }
+/* Evitar que algo bloquee los clicks en los botones de temporadas */
+.detail-cast ul li button { pointer-events:auto; position:relative; z-index:1; }
+.detail-cast ul, .detail-cast li { pointer-events:auto; }
+
+/* Slides en detalle: una sola fila horizontal sin ensanchar la página */
+.detail-page .detail-slide {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: visible;
+  gap: 20px;
+  padding: 20px 40px; /* margen interno para que hover no se corte */
+}
+.detail-page .detail-slide .movie-card { flex: 0 0 auto; }
+/* Scrollbar estilizado opcional en detalle */
+.detail-page .detail-slide::-webkit-scrollbar { height: 8px; }
+.detail-page .detail-slide::-webkit-scrollbar-track { background: var(--secondary-color); }
+.detail-page .detail-slide::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+
+.detail-page { overflow-x: hidden; }
+.detail-page .detail-slide {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px 0; /* quitar padding lateral que expandía ancho */
 }
 
-/* Estilos para el botón de categorías agregado anteriormente */
-.categories-btn {
-    display: block;
-    background: linear-gradient(135deg, var(--primary-color), #b91c3c);
-    color: white;
-    padding: 15px 25px;
-    text-decoration: none;
-    border-radius: 8px;
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+/* Ajustes de viewport y carrusel en detalle */
+.detail-page .detail-slide-viewport {
+  width: min(100%, 868px); /* 4 tarjetas (4*190=760) + 3 gaps (3*20=60) + sangría interna (2*24=48) => 868px */
+  margin: 0; /* alineado a la izquierda */
+  padding: 0; /* sin padding aquí */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.detail-page .detail-slide { padding: 16px 24px; }
+@media (max-width: 920px) {
+  .detail-page .detail-slide-viewport { width: 100%; } /* en pantallas más chicas se adapta al ancho completo */
 }
 
-.categories-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4);
-    text-decoration: none;
-    color: white;
-}
+/* Compactar la sección de alquiler para que no se vea cortada o demasiado grande */
+.detail-page .rental-section { padding: 16px; }
+.detail-page .rental-option label { padding: 12px; }
+.detail-page .rental-price-large { font-size: 20px; }
+.detail-page .rent-btn-large { padding: 12px; font-size: 16px; }
 
-.categories-btn i {
-    margin-right: 8px;
+/* Compactación avanzada del bloque de alquiler en detalle */
+.detail-page .rental-section {
+  max-width: 520px; /* limitar ancho visual */
+  width: 100%;
+  margin: 16px 0; /* separar del resto pero sin empujar layout */
+  border: 1px solid var(--secondary-color);
+  border-radius: 10px;
 }
+.detail-page .rental-options { gap: 12px; flex-wrap: wrap; }
+.detail-page .rental-option { flex: 1 1 240px; min-width: 200px; }
+.detail-page .rental-option label { padding: 10px; }
+.detail-page .rental-duration { font-size: 13px; }
+.detail-page .rental-price-large { font-size: 18px; }
+.detail-page .payment-method { display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; }
+.detail-page .payment-method label { font-size: 13px; color: #bbb; }
+.detail-page .payment-method select { flex: 1; min-width: 0; padding: 8px; border-radius: 6px; background: var(--secondary-color); color: var(--text-color); border: 1px solid var(--surface-color); }
+.detail-page .rent-btn-large { padding: 12px; font-size: 15px; }
+/* Alinear todo el bloque de detalle a la rejilla existente sin overflow */
+.detail-page .detail-info { min-width: 0; }
+
+/* Viewport para slides de catálogo (evita recortes en primeras/últimas) */
+.catalogo-slide-viewport { overflow: hidden; padding: 0; margin: 0; }
+.catalogo-slide { padding: 20px 40px; gap: 20px; }
+/* Asegurar una sola fila, sin wrap y scroll horizontal suave */
+.catalogo-slide { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: visible; scroll-behavior: smooth; }
+/* Tarjetas dentro del slide */
+.catalogo-slide .movie-card { flex: 0 0 auto; width: 190px; }
+.catalogo-slide .movie-card img { height: 250px; }
+/* Ocultar barra horizontal del documento, solo scrollea el slide */
+body { overflow-x: hidden; }
+/* Rueda del mouse se mapea a scroll horizontal via JS (catalogo.js) */
+

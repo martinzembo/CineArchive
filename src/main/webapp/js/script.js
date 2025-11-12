@@ -107,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
+    // Re-exponer showMessage como window.showToast si no existe (para integraciones de listas/alquiler)
+    if (typeof window.showToast !== 'function') {
+        window.showToast = function(message, type='info'){ showMessage(message, type === 'error' ? 'error' : (type==='success'?'success':'info')); };
+    }
+
     // Agregar a favoritos
     const addToFavButtons = document.querySelectorAll('.btn-add');
     addToFavButtons.forEach(btn => {
@@ -116,18 +121,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Botón de alquilar
+    // Botón de alquilar (removida confirmación para flujo directo)
     const rentButtons = document.querySelectorAll('.rent-btn-large');
     rentButtons.forEach(btn => {
+        // No interceptamos el submit: si el botón está dentro de un form con action /alquilar, dejamos que el form se envíe
+        // Opcionalmente podemos reflejar estado visual inmediato sin bloquear
         btn.addEventListener('click', function() {
-            const movieTitle = this.closest('.detail-info')?.querySelector('h1')?.textContent || 'Película';
-            if (confirm(`¿Deseas alquilar "${movieTitle}"?`)) {
-                showMessage(`¡"${movieTitle}" alquilado exitosamente! 🎬`);
-                setTimeout(() => {
-                    window.location.href = 'Index.html';
-                }, 2000);
-            }
-        });
+            // No confirm(), no preventDefault(). El form se enviará y alquiler.js gestionará la redirección.
+            // Si se quisiera feedback instantáneo antes de redirección, se puede descomentar:
+            // if (typeof window.showToast === 'function') showToast('Procesando alquiler...', 'info');
+        }, { once: false });
     });
 
     // Validación de formularios
@@ -307,6 +310,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ============================================
+    // VALIDACIÓN DE FORMULARIO DE LOGIN
+    // ============================================
+
+    const loginForm = document.querySelector('.login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                e.preventDefault();
+                alert('Por favor, completa todos los campos');
+                return false;
+            }
+
+            // Validación básica de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                alert('Por favor, ingresa un email válido');
+                return false;
+            }
+        });
+    }
+
+    // ============================================
     // VALIDACIÓN DE FORMULARIO DE REGISTRO
     // ============================================
 
@@ -475,20 +504,42 @@ document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             fechaNacimientoInput.setAttribute('max', today);
         }
-
-        // Auto-ocultar mensajes después de 5 segundos
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                alert.style.transition = 'opacity 0.5s';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            });
-        }, 5000);
     }
+
+    // ============================================
+    // AUTO-OCULTAR MENSAJES DE ALERTA
+    // ============================================
+    // Auto-ocultar mensajes después de 5 segundos (funciona en todas las páginas)
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 500);
+        });
+    }, 5000);
+
+    // ============================================
+    // PÁGINA ACCESO DENEGADO
+    // ============================================
+    // Efecto de shake en el icono al cargar
+    const errorIcon = document.querySelector('.error-icon');
+    if (errorIcon) {
+        errorIcon.classList.add('animated', 'shake');
+    }
+
+    // Efecto hover en botones de la página de acceso denegado
+    const btnHome = document.querySelectorAll('.btn-home');
+    btnHome.forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.classList.add('shadow-lg');
+        });
+        btn.addEventListener('mouseleave', function() {
+            this.classList.remove('shadow-lg');
+        });
+    });
 });
 
 console.log('🎬 CineArchive - Sistema cargado correctamente');
-

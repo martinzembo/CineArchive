@@ -1,137 +1,49 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CineArchive</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-    <style>
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-title {
-            text-align: center;
-            color: #dc2626;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus {
-            border-color: #dc2626;
-            outline: none;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: #dc2626;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-login:hover {
-            background: #b91c1c;
-        }
-
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #dc2626;
-        }
-
-        .success-message {
-            background: #dcfce7;
-            color: #166534;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #16a34a;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .register-link a {
-            color: #dc2626;
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineArchive - Iniciar Sesión</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/fragments/header.jsp" />
+<div class="container">
     <div class="login-container">
-        <h1 class="login-title">CineArchive</h1>
+        <h2>Iniciar Sesión</h2>
+        <p class="subtitle">Accede a tu cuenta de CineArchive</p>
 
-        <c:if test="${not empty error}">
-            <div class="error-message">
-                ${error}
+        <%-- Mostrar mensaje de registro exitoso --%>
+        <% if ("registroExitoso".equals(request.getParameter("mensaje"))) { %>
+            <div class="alert alert-success" style="background-color: #28a745; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center;">
+                ¡Registro exitoso! Ahora puedes iniciar sesión con tu cuenta.
             </div>
-        </c:if>
+        <% } %>
 
-        <c:if test="${not empty mensaje}">
-            <div class="success-message">
-                ${mensaje}
+        <%-- Mostrar mensaje de error si existe --%>
+        <% if (request.getAttribute("error") != null) { %>
+            <div class="alert alert-error" style="background-color: #ff4444; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center;">
+                <%= request.getAttribute("error") %>
             </div>
-        </c:if>
+        <% } %>
 
-        <form action="${pageContext.request.contextPath}/login" method="post">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="${email}" required>
+        <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
+            <input type="email" name="email" placeholder="Correo electrónico" required />
+            <input type="password" name="password" placeholder="Contraseña" required />
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember" name="remember" />
+                <label for="remember">Recordarme</label>
             </div>
-
-            <div class="form-group">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <button type="submit" class="btn-login">Iniciar Sesión</button>
+            <button type="submit">Iniciar Sesión</button>
         </form>
-
-        <div class="register-link">
-            <p>¿No tienes cuenta? <a href="${pageContext.request.contextPath}/registro">Regístrate aquí</a></p>
+        <div class="login-links">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+            <br /><br />
+            <span>¿No tienes una cuenta? </span><a href="${pageContext.request.contextPath}/registro">Regístrate</a>
         </div>
     </div>
+</div>
+<jsp:include page="/WEB-INF/views/fragments/footer.jsp" />
 </body>
 </html>
-

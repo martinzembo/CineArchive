@@ -62,6 +62,14 @@ public class RegistroController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
+        // DEBUG: Log de entrada
+        System.out.println("=== PROCESANDO REGISTRO ===");
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Email: " + email);
+        System.out.println("Password length: " + (password != null ? password.length() : "null"));
+        System.out.println("PasswordConfirm length: " + (passwordConfirm != null ? passwordConfirm.length() : "null"));
+        System.out.println("FechaNacimiento: " + fechaNacimiento);
+
         // VALIDACIÓN 1: Verificar que los campos obligatorios no estén vacíos
         if (nombre == null || nombre.trim().isEmpty()) {
             model.addAttribute("error", "El nombre es obligatorio");

@@ -8,159 +8,116 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implementación del repositorio para la entidad Contenido con JDBC Template
- */
 @Repository
 public class ContenidoRepositoryImpl implements ContenidoRepository {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    public ContenidoRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<Contenido> contenidoRowMapper = (rs, rowNum) -> {
-        Contenido contenido = new Contenido();
-        contenido.setId(rs.getLong("id"));
-        contenido.setTitulo(rs.getString("titulo"));
-        contenido.setGenero(rs.getString("genero"));
-        contenido.setAnio(rs.getInt("anio"));
-        contenido.setDescripcion(rs.getString("descripcion"));
-        contenido.setImagenUrl(rs.getString("imagen_url"));
-        contenido.setTrailerUrl(rs.getString("trailer_url"));
-        contenido.setTipo(Contenido.Tipo.valueOf(rs.getString("tipo")));
-        contenido.setDisponibleParaAlquiler(rs.getBoolean("disponible_para_alquiler"));
-        contenido.setPrecioAlquiler(rs.getBigDecimal("precio_alquiler"));
-        contenido.setCopiasDisponibles(rs.getInt("copias_disponibles"));
-        contenido.setCopiasTotales(rs.getInt("copias_totales"));
-        if (rs.getDate("fecha_vencimiento_licencia") != null) {
-            contenido.setFechaVencimientoLicencia(rs.getDate("fecha_vencimiento_licencia").toLocalDate());
+    private final RowMapper<Contenido> mapper = new RowMapper<Contenido>() {
+        @Override
+        public Contenido mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Contenido c = new Contenido();
+            c.setId(rs.getLong("id"));
+            c.setTitulo(rs.getString("titulo"));
+            c.setGenero(rs.getString("genero"));
+            c.setAnio((Integer) rs.getObject("anio"));
+            c.setDescripcion(rs.getString("descripcion"));
+            c.setImagenUrl(rs.getString("imagen_url"));
+            c.setTrailerUrl(rs.getString("trailer_url"));
+            String tipo = rs.getString("tipo");
+            if (tipo != null) {
+                try { c.setTipo(Contenido.Tipo.valueOf(tipo)); } catch (IllegalArgumentException ignored) {}
+            }
+            c.setDisponibleParaAlquiler((Boolean) rs.getObject("disponible_para_alquiler"));
+            c.setPrecioAlquiler(rs.getBigDecimal("precio_alquiler"));
+            c.setCopiasDisponibles((Integer) rs.getObject("copias_disponibles"));
+            c.setCopiasTotales((Integer) rs.getObject("copias_totales"));
+            java.sql.Date fvl = rs.getDate("fecha_vencimiento_licencia");
+            c.setFechaVencimientoLicencia(fvl != null ? fvl.toLocalDate() : null);
+            c.setIdApiExterna(rs.getString("id_api_externa"));
+            c.setGestorInventarioId((Long) rs.getObject("gestor_inventario_id"));
+            c.setDuracion((Integer) rs.getObject("duracion"));
+            c.setDirector(rs.getString("director"));
+            c.setTemporadas((Integer) rs.getObject("temporadas"));
+            c.setCapitulosTotales((Integer) rs.getObject("capitulos_totales"));
+            c.setEnEmision((Boolean) rs.getObject("en_emision"));
+            return c;
         }
-        contenido.setIdApiExterna(rs.getString("id_api_externa"));
-        contenido.setGestorInventarioId(rs.getLong("gestor_inventario_id"));
-        contenido.setDuracion(rs.getInt("duracion"));
-        contenido.setDirector(rs.getString("director"));
-        contenido.setTemporadas(rs.getInt("temporadas"));
-        contenido.setCapitulosTotales(rs.getInt("capitulos_totales"));
-        contenido.setEnEmision(rs.getBoolean("en_emision"));
-        return contenido;
     };
 
-    public List<Contenido> findAll() {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido ORDER BY titulo",
-                contenidoRowMapper
-        );
-    }
+    // ===== MÉTODOS CRUD BÁSICOS =====
 
+    @Override
     public Optional<Contenido> findById(Long id) {
+        String sql = "SELECT * FROM contenido WHERE id = ?";
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(
-                    "SELECT * FROM contenido WHERE id = ?",
-                    contenidoRowMapper,
-                    id
-            ));
+            Contenido contenido = jdbcTemplate.queryForObject(sql, mapper, id);
+            return Optional.ofNullable(contenido);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
-    public List<Contenido> findByTitulo(String titulo) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE titulo = ?",
-                contenidoRowMapper,
-                titulo
-        );
+    @Override
+    public List<Contenido> findAll() {
+        String sql = "SELECT * FROM contenido ORDER BY titulo";
+        return jdbcTemplate.query(sql, mapper);
     }
 
-    // Métodos específicos implementados una sola vez
-
-    // Métodos existentes sin duplicar
-
-    private Contenido insert(Contenido contenido) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_url, " +
-                    "tipo, disponible_para_alquiler, precio_alquiler, copias_disponibles, copias_totales, " +
-                    "fecha_vencimiento_licencia, id_api_externa, gestor_inventario_id, duracion, director, " +
-                    "temporadas, capitulos_totales, en_emision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS
-            );
+    @Override
+    public int save(Contenido contenido) {
+        String sql = "INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_url, tipo, disponible_para_alquiler, precio_alquiler, copias_disponibles, copias_totales, fecha_vencimiento_licencia, id_api_externa, gestor_inventario_id, duracion, director, temporadas, capitulos_totales, en_emision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        KeyHolder kh = new GeneratedKeyHolder();
+        int updated = jdbcTemplate.update(con -> {
+            java.sql.PreparedStatement ps = con.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contenido.getTitulo());
             ps.setString(2, contenido.getGenero());
-            ps.setInt(3, contenido.getAnio());
+            ps.setObject(3, contenido.getAnio());
             ps.setString(4, contenido.getDescripcion());
             ps.setString(5, contenido.getImagenUrl());
             ps.setString(6, contenido.getTrailerUrl());
-            ps.setString(7, contenido.getTipo().name());
-            ps.setBoolean(8, contenido.getDisponibleParaAlquiler());
+            ps.setString(7, contenido.getTipo() != null ? contenido.getTipo().name() : null);
+            ps.setObject(8, contenido.getDisponibleParaAlquiler());
             ps.setBigDecimal(9, contenido.getPrecioAlquiler());
-            ps.setInt(10, contenido.getCopiasDisponibles());
-            ps.setInt(11, contenido.getCopiasTotales());
-            if (contenido.getFechaVencimientoLicencia() != null) {
-                ps.setDate(12, java.sql.Date.valueOf(contenido.getFechaVencimientoLicencia()));
-            } else {
-                ps.setNull(12, java.sql.Types.DATE);
-            }
+            ps.setObject(10, contenido.getCopiasDisponibles());
+            ps.setObject(11, contenido.getCopiasTotales());
+            ps.setObject(12, contenido.getFechaVencimientoLicencia());
             ps.setString(13, contenido.getIdApiExterna());
-            if (contenido.getGestorInventarioId() != null) {
-                ps.setLong(14, contenido.getGestorInventarioId());
-            } else {
-                ps.setNull(14, java.sql.Types.BIGINT);
-            }
-            if (contenido.getDuracion() != null) {
-                ps.setInt(15, contenido.getDuracion());
-            } else {
-                ps.setNull(15, java.sql.Types.INTEGER);
-            }
+            ps.setObject(14, contenido.getGestorInventarioId());
+            ps.setObject(15, contenido.getDuracion());
             ps.setString(16, contenido.getDirector());
-            if (contenido.getTemporadas() != null) {
-                ps.setInt(17, contenido.getTemporadas());
-            } else {
-                ps.setNull(17, java.sql.Types.INTEGER);
-            }
-            if (contenido.getCapitulosTotales() != null) {
-                ps.setInt(18, contenido.getCapitulosTotales());
-            } else {
-                ps.setNull(18, java.sql.Types.INTEGER);
-            }
-            if (contenido.getEnEmision() != null) {
-                ps.setBoolean(19, contenido.getEnEmision());
-            } else {
-                ps.setNull(19, java.sql.Types.BOOLEAN);
-            }
+            ps.setObject(17, contenido.getTemporadas());
+            ps.setObject(18, contenido.getCapitulosTotales());
+            ps.setObject(19, contenido.getEnEmision());
             return ps;
-        }, keyHolder);
-
-        contenido.setId(keyHolder.getKey().longValue());
-        return contenido;
+        }, kh);
+        if (kh.getKey() != null) {
+            contenido.setId(kh.getKey().longValue());
+        }
+        return updated;
     }
 
-    private Contenido update(Contenido contenido) {
-        jdbcTemplate.update(
-                "UPDATE contenido SET titulo = ?, genero = ?, anio = ?, descripcion = ?, imagen_url = ?, " +
-                "trailer_url = ?, tipo = ?, disponible_para_alquiler = ?, precio_alquiler = ?, " +
-                "copias_disponibles = ?, copias_totales = ?, fecha_vencimiento_licencia = ?, " +
-                "id_api_externa = ?, gestor_inventario_id = ?, duracion = ?, director = ?, " +
-                "temporadas = ?, capitulos_totales = ?, en_emision = ? WHERE id = ?",
+    @Override
+    public int update(Contenido contenido) {
+        String sql = "UPDATE contenido SET titulo=?, genero=?, anio=?, descripcion=?, imagen_url=?, trailer_url=?, tipo=?, disponible_para_alquiler=?, precio_alquiler=?, copias_disponibles=?, copias_totales=?, fecha_vencimiento_licencia=?, id_api_externa=?, gestor_inventario_id=?, duracion=?, director=?, temporadas=?, capitulos_totales=?, en_emision=? WHERE id=?";
+        return jdbcTemplate.update(sql,
                 contenido.getTitulo(),
                 contenido.getGenero(),
                 contenido.getAnio(),
                 contenido.getDescripcion(),
                 contenido.getImagenUrl(),
                 contenido.getTrailerUrl(),
-                contenido.getTipo().name(),
+                contenido.getTipo() != null ? contenido.getTipo().name() : null,
                 contenido.getDisponibleParaAlquiler(),
                 contenido.getPrecioAlquiler(),
                 contenido.getCopiasDisponibles(),
@@ -173,15 +130,262 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
                 contenido.getTemporadas(),
                 contenido.getCapitulosTotales(),
                 contenido.getEnEmision(),
-                contenido.getId()
+                contenido.getId());
+    }
+
+    @Override
+    public int delete(Long id) {
+        String sql = "DELETE FROM contenido WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
+
+    // ===== MÉTODOS DE BÚSQUEDA =====
+
+    @Override
+    public List<Contenido> findByTituloLike(String tituloPattern) {
+        String sql = "SELECT * FROM contenido WHERE titulo LIKE ?";
+        return jdbcTemplate.query(sql, new Object[]{tituloPattern}, mapper);
+    }
+
+    @Override
+    public List<Contenido> findByTitulo(String titulo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE titulo = ?",
+                mapper,
+                titulo
         );
-        return contenido;
     }
 
-    public void deleteById(Long id) {
-        jdbcTemplate.update("DELETE FROM contenido WHERE id = ?", id);
+    @Override
+    public List<Contenido> findByTituloContainingIgnoreCase(String titulo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE LOWER(titulo) LIKE LOWER(?)",
+                mapper,
+                "%" + titulo + "%"
+        );
     }
 
+    @Override
+    public List<Contenido> findByGenero(String genero) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE genero = ?",
+                mapper,
+                genero
+        );
+    }
+
+    @Override
+    public List<Contenido> findByAnio(Integer anio) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE anio = ?",
+                mapper,
+                anio
+        );
+    }
+
+    @Override
+    public List<Contenido> findByTipo(Contenido.Tipo tipo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE tipo = ?",
+                mapper,
+                tipo.name()
+        );
+    }
+
+    @Override
+    public List<Contenido> findAvailable() {
+        return findDisponiblesParaAlquiler();
+    }
+
+    @Override
+    public List<Contenido> findDisponiblesParaAlquiler() {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE disponible_para_alquiler = true AND copias_disponibles > 0",
+                mapper
+        );
+    }
+
+    @Override
+    public List<Contenido> findByCategoria(Integer categoriaId) {
+        String sql = "SELECT c.* FROM contenido c " +
+                    "JOIN contenido_categoria cc ON c.id = cc.contenido_id " +
+                    "WHERE cc.categoria_id = ? ORDER BY c.titulo ASC";
+        return jdbcTemplate.query(sql, mapper, categoriaId);
+    }
+
+    @Override
+    public List<Contenido> findByGestorInventarioId(Long gestorId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE gestor_inventario_id = ?",
+                mapper,
+                gestorId
+        );
+    }
+
+    @Override
+    public List<Contenido> findSeasonsByTitlePrefix(String titlePrefix) {
+        if (titlePrefix == null) return java.util.Collections.emptyList();
+        String base = titlePrefix.trim();
+        if (base.isEmpty()) return java.util.Collections.emptyList();
+        String pattern = base + " - Temporada %";
+        String sql = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) ORDER BY titulo ASC";
+        java.util.List<Contenido> lista = jdbcTemplate.query(sql, new Object[]{ pattern }, mapper);
+        if (lista.isEmpty()) {
+            String sqlFallback = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) AND LOWER(titulo) LIKE LOWER('%temporada%') ORDER BY titulo ASC";
+            lista = jdbcTemplate.query(sqlFallback, new Object[]{ base + '%' }, mapper);
+        }
+        return lista;
+    }
+
+    // ===== BÚSQUEDA AVANZADA =====
+
+    @Override
+    public List<Contenido> search(String q, String genero, String tipo, String orden) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
+        }
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        if (orden != null) {
+            switch (orden) {
+                case "fecha":
+                    sql.append(" ORDER BY anio DESC, titulo ASC");
+                    break;
+                case "nombre":
+                    sql.append(" ORDER BY titulo ASC");
+                    break;
+                default:
+                    sql.append(" ORDER BY titulo ASC");
+            }
+        } else {
+            sql.append(" ORDER BY titulo ASC");
+        }
+        return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
+    }
+
+    @Override
+    public List<Contenido> searchPaged(String q, String genero, String tipo, String orden, int page, int size) {
+        if (page < 1) page = 1;
+        if (size < 1) size = 10;
+        int offset = (page - 1) * size;
+        StringBuilder sql = new StringBuilder("SELECT * FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
+        }
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        if (orden != null) {
+            switch (orden) {
+                case "fecha":
+                    sql.append(" ORDER BY anio DESC, titulo ASC");
+                    break;
+                case "nombre":
+                    sql.append(" ORDER BY titulo ASC");
+                    break;
+                default:
+                    sql.append(" ORDER BY titulo ASC");
+            }
+        } else {
+            sql.append(" ORDER BY titulo ASC");
+        }
+        sql.append(" LIMIT ? OFFSET ?");
+        params.add(size);
+        params.add(offset);
+        return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
+    }
+
+    @Override
+    public List<Contenido> searchPagedLight(String q, String genero, String tipo, String orden, int page, int size) {
+        if (page < 1) page = 1;
+        if (size < 1) size = 10;
+        int offset = (page - 1) * size;
+        StringBuilder sql = new StringBuilder("SELECT id, titulo, imagen_url, precio_alquiler FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
+        }
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        if (orden != null) {
+            switch (orden) {
+                case "fecha":
+                    sql.append(" ORDER BY anio DESC, titulo ASC");
+                    break;
+                case "nombre":
+                default:
+                    sql.append(" ORDER BY titulo ASC");
+            }
+        } else {
+            sql.append(" ORDER BY titulo ASC");
+        }
+        sql.append(" LIMIT ? OFFSET ?");
+        params.add(size);
+        params.add(offset);
+        return jdbcTemplate.query(sql.toString(), params.toArray(), (rs, rowNum) -> {
+            Contenido c = new Contenido();
+            c.setId(rs.getLong("id"));
+            c.setTitulo(rs.getString("titulo"));
+            c.setImagenUrl(rs.getString("imagen_url"));
+            c.setPrecioAlquiler(rs.getBigDecimal("precio_alquiler"));
+            return c;
+        });
+    }
+
+    @Override
+    public long searchCount(String q, String genero, String tipo) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
+        }
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        Long cnt = jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Long.class);
+        return cnt != null ? cnt : 0L;
+    }
+
+    // ===== VALIDACIÓN Y CONTEO =====
+
+    @Override
     public boolean existsById(Long id) {
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM contenido WHERE id = ?",
@@ -190,33 +394,6 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         );
         return count != null && count > 0;
     }
-
-    // Métodos auxiliares privados
-    public List<Contenido> listarTodos() {
-        return jdbcTemplate.query("SELECT * FROM contenido ORDER BY titulo", contenidoRowMapper);
-    }
-
-    public Contenido buscarPorId(Long id) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * FROM contenido WHERE id = ?", contenidoRowMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    public Contenido crear(Contenido contenido) {
-        return insert(contenido);
-    }
-
-    public void actualizar(Contenido contenido) {
-        update(contenido);
-    }
-
-    public void eliminar(Long id) {
-        deleteById(id);
-    }
-
-    // Implementación de métodos de la interfaz - versión corregida
 
     @Override
     public boolean existsByTitulo(String titulo) {
@@ -229,108 +406,29 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
     }
 
     @Override
-    public List<Contenido> findByTituloContainingIgnoreCase(String titulo) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE LOWER(titulo) LIKE LOWER(?)",
-                contenidoRowMapper,
-                "%" + titulo + "%"
-        );
-    }
-
-    @Override
-    public List<Contenido> findDisponiblesParaAlquiler() {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE disponible_para_alquiler = true AND copias_disponibles > 0",
-                contenidoRowMapper
-        );
-    }
-
-    @Override
-    public List<Contenido> findByGestorInventarioId(Long gestorId) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE gestor_inventario_id = ?",
-                contenidoRowMapper,
-                gestorId
-        );
-    }
-
-    // Implementación completa de la interfaz ContenidoRepository
-
-    @Override
     public long count() {
         String sql = "SELECT COUNT(*) FROM contenido";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
         return count != null ? count : 0;
     }
 
-    @Override
-    public List<Contenido> findByAnio(Integer anio) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE anio = ?",
-                contenidoRowMapper,
-                anio
-        );
-    }
-
-    // Métodos faltantes de la interfaz ContenidoRepository
+    // ===== GESTIÓN DE INVENTARIO =====
 
     @Override
-    public Optional<Contenido> findById(Integer id) {
-        return findById(id.longValue());
+    public int updateCopiasDisponibles(Long contenidoId, int delta) {
+        String sql = "UPDATE contenido SET copias_disponibles = GREATEST(copias_disponibles + ?, 0) WHERE id = ?";
+        return jdbcTemplate.update(sql, delta, contenidoId);
     }
 
     @Override
-    public List<Contenido> findByGenero(String genero) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE genero = ?",
-                contenidoRowMapper,
-                genero
-        );
-    }
-
-    @Override
-    public List<Contenido> findByTipo(Contenido.Tipo tipo) {
-        return jdbcTemplate.query(
-                "SELECT * FROM contenido WHERE tipo = ?",
-                contenidoRowMapper,
-                tipo.name()
-        );
-    }
-
-    @Override
-    public List<Contenido> findAvailable() {
-        return findDisponiblesParaAlquiler();
-    }
-
-    @Override
-    public List<Contenido> findByCategoria(Integer categoriaId) {
-        String sql = "SELECT c.* FROM contenido c " +
-                    "JOIN contenido_categoria cc ON c.id = cc.contenido_id " +
-                    "WHERE cc.categoria_id = ? ORDER BY c.titulo ASC";
-        return jdbcTemplate.query(sql, contenidoRowMapper, categoriaId);
-    }
-
-    @Override
-    public Contenido save(Contenido contenido) {
-        if (contenido.getId() == null) {
-            return insert(contenido);
-        }
-        return update(contenido);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        deleteById(id.longValue());
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return existsById(id.longValue());
-    }
-
-    @Override
-    public int updateDisponibilidad(Integer id, Integer disponibilidad) {
+    public int updateDisponibilidad(Long id, Integer disponibilidad) {
         String sql = "UPDATE contenido SET copias_disponibles = ? WHERE id = ?";
         return jdbcTemplate.update(sql, disponibilidad, id);
+    }
+
+    @Override
+    public int reserveCopy(Long contenidoId) {
+        String sql = "UPDATE contenido SET copias_disponibles = copias_disponibles - 1 WHERE id = ? AND copias_disponibles > 0";
+        return jdbcTemplate.update(sql, contenidoId);
     }
 }

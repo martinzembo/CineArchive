@@ -3,13 +3,17 @@ package edu.utn.inspt.cinearchive.backend.modelo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class Lista implements Serializable {
 
     private Long id;
 
+    @NotNull
     private Long usuarioId;
 
+    @NotBlank
     private String nombre;
 
     private String descripcion;

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class Transaccion implements Serializable {
 
@@ -16,12 +18,16 @@ public class Transaccion implements Serializable {
 
     private Long id;
 
+    @NotNull
     private Long usuarioId;
 
+    @NotNull
     private Long alquilerId;
 
+    @Min(0)
     private BigDecimal monto;
 
+    @NotNull
     private String metodoPago;
 
     private LocalDateTime fechaTransaccion;
