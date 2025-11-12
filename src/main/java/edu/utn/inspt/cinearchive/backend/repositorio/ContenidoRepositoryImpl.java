@@ -2,6 +2,7 @@ package edu.utn.inspt.cinearchive.backend.repositorio;
 
 import edu.utn.inspt.cinearchive.backend.modelo.Contenido;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ContenidoRepositoryImpl implements ContenidoRepository {
@@ -53,28 +55,28 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         }
     };
 
+    // ===== MÉTODOS CRUD BÁSICOS =====
+
     @Override
-    public Contenido findById(Long id) {
+    public Optional<Contenido> findById(Long id) {
         String sql = "SELECT * FROM contenido WHERE id = ?";
-        java.util.List<Contenido> results = jdbcTemplate.query(sql, new Object[]{id}, mapper);
-        return results.isEmpty() ? null : results.get(0);
+        try {
+            Contenido contenido = jdbcTemplate.queryForObject(sql, mapper, id);
+            return Optional.ofNullable(contenido);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Contenido> findAll() {
-        String sql = "SELECT * FROM contenido";
+        String sql = "SELECT * FROM contenido ORDER BY titulo";
         return jdbcTemplate.query(sql, mapper);
     }
 
     @Override
-    public List<Contenido> findByTituloLike(String tituloPattern) {
-        String sql = "SELECT * FROM contenido WHERE titulo LIKE ?";
-        return jdbcTemplate.query(sql, new Object[]{tituloPattern}, mapper);
-    }
-
-    @Override
     public int save(Contenido contenido) {
-        String sql = "INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_url, tipo, disponible_para_alquiler, precio_alquiler, copias_disponibles, copias_totales, fecha_vencimiento_licencia, id_api_externa, gestor_inventario_id, duracion, director, temporadas, capitulos_totales, en_emision) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO contenido (titulo, genero, anio, descripcion, imagen_url, trailer_url, tipo, disponible_para_alquiler, precio_alquiler, copias_disponibles, copias_totales, fecha_vencimiento_licencia, id_api_externa, gestor_inventario_id, duracion, director, temporadas, capitulos_totales, en_emision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder kh = new GeneratedKeyHolder();
         int updated = jdbcTemplate.update(con -> {
             java.sql.PreparedStatement ps = con.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
@@ -107,7 +109,7 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
 
     @Override
     public int update(Contenido contenido) {
-        String sql = "UPDATE contenido SET titulo=?, genero=?, anio=?, descripcion=?, imagen_url=?, trailer_url=?, tipo=?, disponible_para_alquiler=?, precio_alquiler=?, copias_disponibles=?, copias_totales=?, fecha_vencimiento_licencia=?, id_api_externa=?, gestor_inventario_id=?, duracion=?, director=?, temporadas=?, capitulos_totales=?, en_emision=? WHERE id = ?";
+        String sql = "UPDATE contenido SET titulo=?, genero=?, anio=?, descripcion=?, imagen_url=?, trailer_url=?, tipo=?, disponible_para_alquiler=?, precio_alquiler=?, copias_disponibles=?, copias_totales=?, fecha_vencimiento_licencia=?, id_api_externa=?, gestor_inventario_id=?, duracion=?, director=?, temporadas=?, capitulos_totales=?, en_emision=? WHERE id=?";
         return jdbcTemplate.update(sql,
                 contenido.getTitulo(),
                 contenido.getGenero(),
@@ -137,6 +139,106 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         return jdbcTemplate.update(sql, id);
     }
 
+    // ===== MÉTODOS DE BÚSQUEDA =====
+
+    @Override
+    public List<Contenido> findByTituloLike(String tituloPattern) {
+        String sql = "SELECT * FROM contenido WHERE titulo LIKE ?";
+        return jdbcTemplate.query(sql, new Object[]{tituloPattern}, mapper);
+    }
+
+    @Override
+    public List<Contenido> findByTitulo(String titulo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE titulo = ?",
+                mapper,
+                titulo
+        );
+    }
+
+    @Override
+    public List<Contenido> findByTituloContainingIgnoreCase(String titulo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE LOWER(titulo) LIKE LOWER(?)",
+                mapper,
+                "%" + titulo + "%"
+        );
+    }
+
+    @Override
+    public List<Contenido> findByGenero(String genero) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE genero = ?",
+                mapper,
+                genero
+        );
+    }
+
+    @Override
+    public List<Contenido> findByAnio(Integer anio) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE anio = ?",
+                mapper,
+                anio
+        );
+    }
+
+    @Override
+    public List<Contenido> findByTipo(Contenido.Tipo tipo) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE tipo = ?",
+                mapper,
+                tipo.name()
+        );
+    }
+
+    @Override
+    public List<Contenido> findAvailable() {
+        return findDisponiblesParaAlquiler();
+    }
+
+    @Override
+    public List<Contenido> findDisponiblesParaAlquiler() {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE disponible_para_alquiler = true AND copias_disponibles > 0",
+                mapper
+        );
+    }
+
+    @Override
+    public List<Contenido> findByCategoria(Integer categoriaId) {
+        String sql = "SELECT c.* FROM contenido c " +
+                    "JOIN contenido_categoria cc ON c.id = cc.contenido_id " +
+                    "WHERE cc.categoria_id = ? ORDER BY c.titulo ASC";
+        return jdbcTemplate.query(sql, mapper, categoriaId);
+    }
+
+    @Override
+    public List<Contenido> findByGestorInventarioId(Long gestorId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM contenido WHERE gestor_inventario_id = ?",
+                mapper,
+                gestorId
+        );
+    }
+
+    @Override
+    public List<Contenido> findSeasonsByTitlePrefix(String titlePrefix) {
+        if (titlePrefix == null) return java.util.Collections.emptyList();
+        String base = titlePrefix.trim();
+        if (base.isEmpty()) return java.util.Collections.emptyList();
+        String pattern = base + " - Temporada %";
+        String sql = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) ORDER BY titulo ASC";
+        java.util.List<Contenido> lista = jdbcTemplate.query(sql, new Object[]{ pattern }, mapper);
+        if (lista.isEmpty()) {
+            String sqlFallback = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) AND LOWER(titulo) LIKE LOWER('%temporada%') ORDER BY titulo ASC";
+            lista = jdbcTemplate.query(sqlFallback, new Object[]{ base + '%' }, mapper);
+        }
+        return lista;
+    }
+
+    // ===== BÚSQUEDA AVANZADA =====
+
     @Override
     public List<Contenido> search(String q, String genero, String tipo, String orden) {
         StringBuilder sql = new StringBuilder("SELECT * FROM contenido WHERE 1=1");
@@ -155,7 +257,6 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
             sql.append(" AND tipo = ?");
             params.add(tipo.trim());
         }
-        // Orden permitido: fecha (anio desc), nombre (titulo asc)
         if (orden != null) {
             switch (orden) {
                 case "fecha":
@@ -171,12 +272,6 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
             sql.append(" ORDER BY titulo ASC");
         }
         return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
-    }
-
-    @Override
-    public int updateCopiasDisponibles(Long contenidoId, int delta) {
-        String sql = "UPDATE contenido SET copias_disponibles = GREATEST(copias_disponibles + ?, 0) WHERE id = ?";
-        return jdbcTemplate.update(sql, delta, contenidoId);
     }
 
     @Override
@@ -200,7 +295,6 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
             sql.append(" AND tipo = ?");
             params.add(tipo.trim());
         }
-        // Orden soportado real: fecha (anio desc), nombre (titulo asc)
         if (orden != null) {
             switch (orden) {
                 case "fecha":
@@ -219,35 +313,6 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         params.add(size);
         params.add(offset);
         return jdbcTemplate.query(sql.toString(), params.toArray(), mapper);
-    }
-
-    @Override
-    public long searchCount(String q, String genero, String tipo) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM contenido WHERE 1=1");
-        java.util.List<Object> params = new java.util.ArrayList<>();
-        if (q != null && !q.trim().isEmpty()) {
-            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
-            String like = "%" + q.trim() + "%";
-            params.add(like);
-            params.add(like);
-        }
-        if (genero != null && !genero.trim().isEmpty()) {
-            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
-            params.add(genero.trim());
-        }
-        if (tipo != null && !tipo.trim().isEmpty()) {
-            sql.append(" AND tipo = ?");
-            params.add(tipo.trim());
-        }
-        Long cnt = jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Long.class);
-        return cnt != null ? cnt : 0L;
-    }
-
-    @Override
-    public int reserveCopy(Long contenidoId) {
-        // Decrementa si hay stock disponible (>0)
-        String sql = "UPDATE contenido SET copias_disponibles = copias_disponibles - 1 WHERE id = ? AND copias_disponibles > 0";
-        return jdbcTemplate.update(sql, contenidoId);
     }
 
     @Override
@@ -287,7 +352,7 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
         params.add(size);
         params.add(offset);
         return jdbcTemplate.query(sql.toString(), params.toArray(), (rs, rowNum) -> {
-            edu.utn.inspt.cinearchive.backend.modelo.Contenido c = new edu.utn.inspt.cinearchive.backend.modelo.Contenido();
+            Contenido c = new Contenido();
             c.setId(rs.getLong("id"));
             c.setTitulo(rs.getString("titulo"));
             c.setImagenUrl(rs.getString("imagen_url"));
@@ -297,19 +362,73 @@ public class ContenidoRepositoryImpl implements ContenidoRepository {
     }
 
     @Override
-    public List<Contenido> findSeasonsByTitlePrefix(String titlePrefix) {
-        if (titlePrefix == null) return java.util.Collections.emptyList();
-        String base = titlePrefix.trim();
-        if (base.isEmpty()) return java.util.Collections.emptyList();
-        // Patrón estándar de nuestros seeds: "Base - Temporada X"
-        String pattern = base + " - Temporada %"; // LIKE pattern
-        String sql = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) ORDER BY titulo ASC";
-        java.util.List<Contenido> lista = jdbcTemplate.query(sql, new Object[]{ pattern }, mapper);
-        if (lista.isEmpty()) {
-            // Fallback: usar solo el prefijo base% y contener 'temporada'
-            String sqlFallback = "SELECT * FROM contenido WHERE tipo='SERIE' AND LOWER(titulo) LIKE LOWER(?) AND LOWER(titulo) LIKE LOWER('%temporada%') ORDER BY titulo ASC";
-            lista = jdbcTemplate.query(sqlFallback, new Object[]{ base + '%' }, mapper);
+    public long searchCount(String q, String genero, String tipo) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM contenido WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (LOWER(titulo) LIKE LOWER(?) OR LOWER(COALESCE(descripcion,'')) LIKE LOWER(?))");
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
         }
-        return lista;
+        if (genero != null && !genero.trim().isEmpty()) {
+            sql.append(" AND LOWER(REPLACE(REPLACE(genero,'-',''),' ','')) = LOWER(REPLACE(REPLACE(?,'-',''),' ',''))");
+            params.add(genero.trim());
+        }
+        if (tipo != null && !tipo.trim().isEmpty()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo.trim());
+        }
+        Long cnt = jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Long.class);
+        return cnt != null ? cnt : 0L;
+    }
+
+    // ===== VALIDACIÓN Y CONTEO =====
+
+    @Override
+    public boolean existsById(Long id) {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM contenido WHERE id = ?",
+                Integer.class,
+                id
+        );
+        return count != null && count > 0;
+    }
+
+    @Override
+    public boolean existsByTitulo(String titulo) {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM contenido WHERE titulo = ?",
+                Integer.class,
+                titulo
+        );
+        return count != null && count > 0;
+    }
+
+    @Override
+    public long count() {
+        String sql = "SELECT COUNT(*) FROM contenido";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+        return count != null ? count : 0;
+    }
+
+    // ===== GESTIÓN DE INVENTARIO =====
+
+    @Override
+    public int updateCopiasDisponibles(Long contenidoId, int delta) {
+        String sql = "UPDATE contenido SET copias_disponibles = GREATEST(copias_disponibles + ?, 0) WHERE id = ?";
+        return jdbcTemplate.update(sql, delta, contenidoId);
+    }
+
+    @Override
+    public int updateDisponibilidad(Long id, Integer disponibilidad) {
+        String sql = "UPDATE contenido SET copias_disponibles = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, disponibilidad, id);
+    }
+
+    @Override
+    public int reserveCopy(Long contenidoId) {
+        String sql = "UPDATE contenido SET copias_disponibles = copias_disponibles - 1 WHERE id = ? AND copias_disponibles > 0";
+        return jdbcTemplate.update(sql, contenidoId);
     }
 }

@@ -1,35 +1,73 @@
 package edu.utn.inspt.cinearchive.backend.modelo;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Clase que representa la relación muchos a muchos entre Contenido y Categoria.
+ * Esta es una tabla de unión con atributos adicionales que permite asociar contenidos con categorías.
+ */
 public class ContenidoCategoria implements Serializable {
 
-    private int contenidoId;
-    private int categoriaId;
+    private static final long serialVersionUID = 1L;
+
+    private Long contenidoId;
+
+    private Long categoriaId;
+
+    @NotNull(message = "El contenido es obligatorio")
+    private Contenido contenido;
+
+    @NotNull(message = "La categoría es obligatoria")
+    private Categoria categoria;
 
     public ContenidoCategoria() {
     }
 
-    public ContenidoCategoria(int contenidoId, int categoriaId) {
-        this.contenidoId = contenidoId;
-        this.categoriaId = categoriaId;
+    public ContenidoCategoria(Contenido contenido, Categoria categoria) {
+        this.contenido = contenido;
+        this.categoria = categoria;
+        this.contenidoId = contenido.getId();
+        this.categoriaId = categoria.getId();
     }
 
-    public int getContenidoId() {
+    public Long getContenidoId() {
         return contenidoId;
     }
 
-    public void setContenidoId(int contenidoId) {
+    public void setContenidoId(Long contenidoId) {
         this.contenidoId = contenidoId;
     }
 
-    public int getCategoriaId() {
+    public Long getCategoriaId() {
         return categoriaId;
     }
 
-    public void setCategoriaId(int categoriaId) {
+    public void setCategoriaId(Long categoriaId) {
         this.categoriaId = categoriaId;
+    }
+
+    public Contenido getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(Contenido contenido) {
+        this.contenido = contenido;
+        if (contenido != null) {
+            this.contenidoId = contenido.getId();
+        }
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+        if (categoria != null) {
+            this.categoriaId = categoria.getId();
+        }
     }
 
     @Override
@@ -37,12 +75,13 @@ public class ContenidoCategoria implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ContenidoCategoria)) return false;
         ContenidoCategoria that = (ContenidoCategoria) o;
-        return Objects.equals(getContenidoId(), that.getContenidoId()) && Objects.equals(getCategoriaId(), that.getCategoriaId());
+        return Objects.equals(contenidoId, that.contenidoId) &&
+               Objects.equals(categoriaId, that.categoriaId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getContenidoId(), getCategoriaId());
+        return Objects.hash(contenidoId, categoriaId);
     }
 
     @Override
@@ -51,5 +90,17 @@ public class ContenidoCategoria implements Serializable {
                 "contenidoId=" + contenidoId +
                 ", categoriaId=" + categoriaId +
                 '}';
+    }
+
+    /**
+     * Valida que los IDs coincidan con los objetos relacionados
+     */
+    public void validarIds() {
+        if (contenido != null && !Objects.equals(contenidoId, contenido.getId())) {
+            throw new IllegalStateException("El ID del contenido no coincide con la relación");
+        }
+        if (categoria != null && !Objects.equals(categoriaId, categoria.getId())) {
+            throw new IllegalStateException("El ID de la categoría no coincide con la relación");
+        }
     }
 }

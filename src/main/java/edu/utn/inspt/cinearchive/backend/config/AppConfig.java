@@ -30,7 +30,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         // Agregamos config para disponer de beans como SecurityInterceptor en el contexto raíz
         "edu.utn.inspt.cinearchive.backend.config",
         "edu.utn.inspt.cinearchive.backend.servicio",
-        "edu.utn.inspt.cinearchive.backend.repositorio"
+        "edu.utn.inspt.cinearchive.backend.repositorio",
+        "edu.utn.inspt.cinearchive.backend.util"  // ✅ AGREGADO del fork
     },
     excludeFilters = {
         @Filter(type = FilterType.ANNOTATION, classes = EnableWebMvc.class)

@@ -99,54 +99,17 @@ public class SecurityInterceptor implements HandlerInterceptor {
      */
     private boolean esRutaPublica(String path) {
         // Rutas públicas exactas
-        if (path.equals("/") ||
-            path.equals("/login") ||
-            path.equals("/registro") ||
-            path.equals("/logout") ||
-            path.equals("/health") ||
-            path.equals("/acceso-denegado")) {
-            return true;
-        }
-
-        // Rutas de testing (TEMPORAL - ELIMINAR EN PRODUCCIÓN)
-        if (path.startsWith("/test")) {
-            return true;
-        }
-
-        // Rutas de verificación AJAX
-        if (path.startsWith("/registro/verificar-")) {
-            return true;
-        }
-
-        // Recursos estáticos (CSS, JS, imágenes)
-        if (path.startsWith("/css/") ||
-            path.startsWith("/js/") ||
-            path.startsWith("/img/") ||
-            path.startsWith("/images/") ||
-            path.startsWith("/fonts/") ||
-            path.startsWith("/disenio/") ||
-            path.startsWith("/resources/") ||
-            path.startsWith("/static/")) {
-            return true;
-        }
-
-        // Archivos estáticos comunes
-        if (path.endsWith(".css") ||
-            path.endsWith(".js") ||
-            path.endsWith(".jpg") ||
-            path.endsWith(".jpeg") ||
-            path.endsWith(".png") ||
-            path.endsWith(".gif") ||
-            path.endsWith(".ico") ||
-            path.endsWith(".svg") ||
-            path.endsWith(".woff") ||
-            path.endsWith(".woff2") ||
-            path.endsWith(".ttf")) {
-            return true;
-        }
-
-        // Por defecto, la ruta requiere autenticación
-        return false;
+        return path.equals("/login") ||
+               path.equals("/registro") ||
+               path.equals("/") ||
+               path.equals("/index") ||
+               path.equals("/acceso-denegado") || // Permitir acceso a la página de acceso denegado
+               path.equals("/test-acceso-denegado") || // Ruta de prueba
+               path.startsWith("/api/") || // Permitir acceso a los endpoints de la API
+               path.startsWith("/css/") ||
+               path.startsWith("/js/") ||
+               path.startsWith("/img/") ||
+               path.startsWith("/disenio/");
     }
 
     /**
@@ -190,4 +153,3 @@ public class SecurityInterceptor implements HandlerInterceptor {
         }
     }
 }
-
