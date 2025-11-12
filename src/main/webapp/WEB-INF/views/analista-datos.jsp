@@ -1,312 +1,4 @@
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .metric-row:last-child {
-            border-bottom: none;
-        }
-
-        .metric-label {
-            font-weight: 500;
-            color: #666;
-        }
-
-        .metric-value {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #1a1a1a;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .loading i {
-            font-size: 2em;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .export-section {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .export-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-    </style>
-</head>
-<body>
-    <div class="analytics-dashboard">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <h1><i class="fas fa-chart-line"></i> Centro de Análisis de Datos</h1>
-            <p>Dashboard integral para análisis de comportamiento, tendencias y métricas de negocio</p>
-        </div>
-
-        <!-- Controles de Filtros -->
-        <div class="filter-controls">
-            <h3><i class="fas fa-filter"></i> Filtros de Análisis</h3>
-            <div class="filter-row">
-                <div class="form-group">
-                    <label>Período de Análisis:</label>
-                    <select id="periodo-filter" onchange="actualizarAnalytics()">
-                        <option value="7">Últimos 7 días</option>
-                        <option value="30" selected>Últimos 30 días</option>
-                        <option value="90">Últimos 3 meses</option>
-                        <option value="365">Último año</option>
-                        <option value="custom">Personalizado</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Fecha Inicio:</label>
-                    <input type="date" id="fecha-inicio" onchange="actualizarAnalytics()">
-                </div>
-                <div class="form-group">
-                    <label>Fecha Fin:</label>
-                    <input type="date" id="fecha-fin" onchange="actualizarAnalytics()">
-                </div>
-                <div class="form-group">
-                    <label>Tipo de Contenido:</label>
-                    <select id="tipo-contenido-filter" onchange="actualizarAnalytics()">
-                        <option value="">Todos</option>
-                        <option value="PELICULA">Películas</option>
-                        <option value="SERIE">Series</option>
-                    </select>
-                </div>
-            </div>
-            <div class="filter-row">
-                <button class="btn btn-primary" onclick="actualizarAnalytics()">
-                    <i class="fas fa-sync"></i> Actualizar Análisis
-                </button>
-                <button class="btn btn-secondary" onclick="resetearFiltros()">
-                    <i class="fas fa-undo"></i> Resetear Filtros
-                </button>
-            </div>
-        </div>
-
-        <!-- KPIs Principales -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="icon"><i class="fas fa-eye"></i></div>
-                <div class="number" id="kpi-visualizaciones">-</div>
-                <div class="label">Total Visualizaciones</div>
-                <div class="trend up" id="trend-visualizaciones">
-                    <i class="fas fa-arrow-up"></i> +12% vs período anterior
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="icon"><i class="fas fa-dollar-sign"></i></div>
-                <div class="number" id="kpi-ingresos">-</div>
-                <div class="label">Ingresos Totales</div>
-                <div class="trend up" id="trend-ingresos">
-                    <i class="fas fa-arrow-up"></i> +8% vs período anterior
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="icon"><i class="fas fa-users"></i></div>
-                <div class="number" id="kpi-usuarios-activos">-</div>
-                <div class="label">Usuarios Activos</div>
-                <div class="trend neutral" id="trend-usuarios">
-                    <i class="fas fa-minus"></i> Sin cambios
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="icon"><i class="fas fa-star"></i></div>
-                <div class="number" id="kpi-calificacion-promedio">-</div>
-                <div class="label">Calificación Promedio</div>
-                <div class="trend up" id="trend-calificacion">
-                    <i class="fas fa-arrow-up"></i> +0.2 vs período anterior
-                </div>
-            </div>
-        </div>
-
-        <!-- Sección Principal de Analytics -->
-        <div class="analytics-sections">
-            <div class="chart-section">
-                <h3><i class="fas fa-chart-area"></i> Tendencias de Alquileres</h3>
-                <div class="chart-container">
-                    <canvas id="tendencias-chart"></canvas>
-                </div>
-            </div>
-
-            <div class="reports-section">
-                <div class="report-card">
-                    <h4><i class="fas fa-trophy"></i> Top 5 Contenidos</h4>
-                    <ul class="top-content-list" id="top-contenidos">
-                        <!-- Se llena dinámicamente -->
-                    </ul>
-                    <div class="report-actions">
-                        <button class="btn btn-info" onclick="verReporteCompleto('contenidos')">Ver Completo</button>
-                    </div>
-                </div>
-
-                <div class="report-card">
-                    <h4><i class="fas fa-tags"></i> Géneros Populares</h4>
-                    <ul class="top-content-list" id="top-generos">
-                        <!-- Se llena dinámicamente -->
-                    </ul>
-                    <div class="report-actions">
-                        <button class="btn btn-info" onclick="verReporteCompleto('generos')">Ver Completo</button>
-                    </div>
-                </div>
-
-                <div class="report-card">
-                    <h4><i class="fas fa-chart-pie"></i> Análisis Rápido</h4>
-                    <div class="metric-row">
-                        <span class="metric-label">Tasa de Conversión:</span>
-                        <span class="metric-value" id="tasa-conversion">-</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Duración Promedio:</span>
-                        <span class="metric-value" id="duracion-promedio">-</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Retención:</span>
-                        <span class="metric-value" id="retencion">-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Detallados -->
-        <div class="detailed-analytics">
-            <div class="analytics-card">
-                <h3><i class="fas fa-chart-bar"></i> Análisis Demográfico</h3>
-                <div class="chart-container" style="height: 300px;">
-                    <canvas id="demografico-chart"></canvas>
-                </div>
-            </div>
-
-            <div class="analytics-card">
-                <h3><i class="fas fa-chart-pie"></i> Distribución por Géneros</h3>
-                <div class="chart-container" style="height: 300px;">
-                    <canvas id="generos-chart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sección de Reportes -->
-        <div class="export-section">
-            <h3><i class="fas fa-file-export"></i> Generación de Reportes</h3>
-            <p>Genera reportes personalizados basados en los filtros actuales</p>
-            <div class="export-buttons">
-                <button class="btn btn-primary" onclick="generarReporte('mas-alquilados')">
-                    <i class="fas fa-trophy"></i> Contenidos Más Alquilados
-                </button>
-                <button class="btn btn-success" onclick="generarReporte('demografico')">
-                    <i class="fas fa-users"></i> Análisis Demográfico
-                </button>
-                <button class="btn btn-info" onclick="generarReporte('tendencias')">
-                    <i class="fas fa-chart-line"></i> Tendencias Temporales
-                </button>
-                <button class="btn btn-secondary" onclick="generarReporte('comportamiento')">
-                    <i class="fas fa-brain"></i> Comportamiento de Usuarios
-                </button>
-            </div>
-        </div>
-
-        <!-- Métricas Avanzadas -->
-        <div class="detailed-analytics">
-            <div class="analytics-card">
-                <h3><i class="fas fa-clock"></i> Métricas Temporales</h3>
-                <div class="metric-row">
-                    <span class="metric-label">Hora pico de alquileres:</span>
-                    <span class="metric-value" id="hora-pico">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Día más activo:</span>
-                    <span class="metric-value" id="dia-activo">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Temporada alta:</span>
-                    <span class="metric-value" id="temporada-alta">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Duración promedio alquiler:</span>
-                    <span class="metric-value" id="duracion-alquiler">-</span>
-                </div>
-            </div>
-
-            <div class="analytics-card">
-                <h3><i class="fas fa-bullseye"></i> Métricas de Negocio</h3>
-                <div class="metric-row">
-                    <span class="metric-label">Valor promedio por usuario:</span>
-                    <span class="metric-value" id="valor-usuario">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Tasa de retorno:</span>
-                    <span class="metric-value" id="tasa-retorno">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Satisfacción promedio:</span>
-                    <span class="metric-value" id="satisfaccion">-</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Crecimiento mensual:</span>
-                    <span class="metric-value" id="crecimiento">-</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="/cinearchive/js/reportes.js"></script>
-    <script src="/cinearchive/js/charts.js"></script>
-    <script>
-        // Inicializar dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            inicializarFechas();
-            cargarDashboardCompleto();
-            inicializarCharts();
-        });
-
-        function inicializarFechas() {
-            const hoy = new Date();
-            const hace30dias = new Date(hoy.getTime() - (30 * 24 * 60 * 60 * 1000));
-
-            document.getElementById('fecha-fin').value = hoy.toISOString().split('T')[0];
-            document.getElementById('fecha-inicio').value = hace30dias.toISOString().split('T')[0];
-        }
-
-        function actualizarAnalytics() {
-            mostrarLoading();
-            cargarDashboardCompleto();
-            actualizarCharts();
-        }
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-        function mostrarLoading() {
-            // Mostrar indicadores de carga
-            const elementos = ['kpi-visualizaciones', 'kpi-ingresos', 'kpi-usuarios-activos', 'kpi-calificacion-promedio'];
-            elementos.forEach(id => {
-                document.getElementById(id).innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            });
-        }
-
-        function resetearFiltros() {
-            document.getElementById('periodo-filter').value = '30';
-            document.getElementById('tipo-contenido-filter').value = '';
-            inicializarFechas();
-            actualizarAnalytics();
-        }
-    </script>
-</body>
-</html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
@@ -314,270 +6,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineArchive - Analista de Datos</title>
-    <link rel="stylesheet" href="/cinearchive/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .analytics-dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+    <title>Analista de Datos - CineArchive</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+</head>
+<body>
+    <%@ include file="fragments/header.jsp" %>
+
+    <div class="container">
+        <div class="admin-panel">
+            <h1>Panel de Analítica y Reportes</h1>
+
+            <!-- KPIs Principales -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3>Alquileres del Mes</h3>
+                        <p class="stat-number" id="alquileres-mes">2,847</p>
+                        <span class="stat-change positive">+18% vs mes anterior</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3>Usuarios Activos</h3>
+                        <p class="stat-number" id="usuarios-activos">892</p>
+                        <span class="stat-change positive">+12% esta semana</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-content">
+                        <h3>Calificación Promedio</h3>
+                        <p class="stat-number" id="calificacion-promedio">4.3/5</p>
+                        <span class="stat-change">En todo el catálogo</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <h3>Tasa de Retención</h3>
+                        <p class="stat-number" id="tasa-retencion">78%</p>
+                        <span class="stat-change positive">+5% este trimestre</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generador de Reportes -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>📄 Generador de Reportes</h2>
+                </div>
+
+                <div class="report-generator">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tipo-reporte">Tipo de Reporte:</label>
+                            <select id="tipo-reporte">
+                                <option value="">Seleccionar tipo...</option>
+                                <option value="mas-alquilados">Contenido Más Alquilado</option>
+                                <option value="rendimiento-generos">Rendimiento por Género</option>
+                                <option value="comportamiento-usuarios">Comportamiento de Usuarios</option>
+                                <option value="tendencias">Tendencias Temporales</option>
+                                <option value="demografico">Análisis Demográfico</option>
+                                <option value="ingresos">Análisis de Ingresos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodo-reporte">Período:</label>
+                            <select id="periodo-reporte">
+                                <option value="ultima-semana">Última Semana</option>
+                                <option value="ultimo-mes" selected>Último Mes</option>
+                                <option value="ultimo-trimestre">Último Trimestre</option>
+                                <option value="ultimo-año">Último Año</option>
+                                <option value="personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-inicio">Fecha Inicio:</label>
+                            <input type="date" id="fecha-inicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-fin">Fecha Fin:</label>
+                            <input type="date" id="fecha-fin">
+                        </div>
+                        <div class="form-group">
+                            <label for="formato-reporte">Formato:</label>
+                            <select id="formato-reporte">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                                <option value="html">HTML</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="generarReporte()">📊 Generar Reporte</button>
+                </div>
+            </section>
+
+            <!-- Top 10 Más Alquilados -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>🏆 Top 10 Contenido Más Alquilado</h2>
+                    <label for="filtro-top" style="display:inline-block; margin-right:10px;">Filtrar por:</label>
+                    <select class="filter-select" id="filtro-top">
+                        <option value="mes" selected>Este Mes</option>
+                        <option value="trimestre">Este Trimestre</option>
+                        <option value="año">Este Año</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Género</th>
+                                <th>Alquileres</th>
+                                <th>Ingresos</th>
+                                <th>Calificación</th>
+                                <th>Tendencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Oppenheimer</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Drama</td>
+                                <td>342</td>
+                                <td>$1,364.58</td>
+                                <td>★★★★★ 4.9</td>
+                                <td><span class="trend-up">📈 +25%</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Breaking Bad T1</strong></td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>Drama</td>
+                                <td>298</td>
+                                <td>$1,784.02</td>
+                                <td>★★★★★ 5.0</td>
+                                <td><span class="trend-stable">➡️ +2%</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Barbie</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Comedia</td>
+                                <td>276</td>
+                                <td>$1,101.24</td>
+                                <td>★★★★☆ 4.5</td>
+                                <td><span class="trend-down">📉 -8%</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Interstellar</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Ciencia Ficción</td>
+                                <td>254</td>
+                                <td>$1,013.46</td>
+                                <td>★★★★★ 4.8</td>
+                                <td><span class="trend-stable">➡️ +1%</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>The Last of Us</strong></td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>Drama/Terror</td>
+                                <td>243</td>
+                                <td>$1,699.57</td>
+                                <td>★★★★★ 4.9</td>
+                                <td><span class="trend-up">📈 +32%</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>John Wick 4</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Acción</td>
+                                <td>231</td>
+                                <td>$1,152.69</td>
+                                <td>★★★★☆ 4.6</td>
+                                <td><span class="trend-up">📈 +15%</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><strong>Stranger Things T4</strong></td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>Ciencia Ficción</td>
+                                <td>218</td>
+                                <td>$1,305.82</td>
+                                <td>★★★★★ 4.7</td>
+                                <td><span class="trend-stable">➡️ +3%</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><strong>Top Gun: Maverick</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Acción</td>
+                                <td>207</td>
+                                <td>$825.93</td>
+                                <td>★★★★★ 4.8</td>
+                                <td><span class="trend-down">📉 -5%</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><strong>Wednesday</strong></td>
+                                <td><span class="badge badge-series">Serie</span></td>
+                                <td>Comedia/Terror</td>
+                                <td>189</td>
+                                <td>$1,131.11</td>
+                                <td>★★★★☆ 4.4</td>
+                                <td><span class="trend-up">📈 +19%</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><strong>Dune: Part Two</strong></td>
+                                <td><span class="badge badge-movie">Película</span></td>
+                                <td>Ciencia Ficción</td>
+                                <td>178</td>
+                                <td>$888.22</td>
+                                <td>★★★★★ 4.9</td>
+                                <td><span class="trend-up">📈 +45%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Análisis por Género -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>🎭 Rendimiento por Género</h2>
+                </div>
+
+                <div class="genre-analysis-grid">
+                    <div class="genre-card">
+                        <h3>🎬 Acción</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">892</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$3,568</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★★☆ 4.4</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-up">+12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genre-card">
+                        <h3>😂 Comedia</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">654</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$2,616</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★★☆ 4.1</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-down">-3%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genre-card">
+                        <h3>🎭 Drama</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">1,234</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$4,936</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★★★ 4.7</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-up">+22%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genre-card">
+                        <h3>🚀 Ciencia Ficción</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">987</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$3,948</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★★★ 4.6</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-up">+28%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genre-card">
+                        <h3>😱 Terror</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">432</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$1,728</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★☆☆ 3.9</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-stable">+1%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genre-card">
+                        <h3>❤️ Romance</h3>
+                        <div class="genre-stats">
+                            <div class="genre-stat">
+                                <span class="stat-label">Alquileres:</span>
+                                <span class="stat-value">567</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Ingresos:</span>
+                                <span class="stat-value">$2,268</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Calif. Prom:</span>
+                                <span class="stat-value">★★★★☆ 4.2</span>
+                            </div>
+                            <div class="genre-stat">
+                                <span class="stat-label">Tendencia:</span>
+                                <span class="trend-up">+7%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Análisis Demográfico -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>👥 Análisis Demográfico de Usuarios</h2>
+                </div>
+
+                <div class="demographic-grid">
+                    <div class="demographic-card">
+                        <h3>Distribución por Edad</h3>
+                        <div class="demographic-item">
+                            <span class="age-range">18-24 años</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%"></div>
+                            </div>
+                            <span class="percentage">25%</span>
+                        </div>
+                        <div class="demographic-item">
+                            <span class="age-range">25-34 años</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 35%"></div>
+                            </div>
+                            <span class="percentage">35%</span>
+                        </div>
+                        <div class="demographic-item">
+                            <span class="age-range">35-44 años</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 20%"></div>
+                            </div>
+                            <span class="percentage">20%</span>
+                        </div>
+                        <div class="demographic-item">
+                            <span class="age-range">45-54 años</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 12%"></div>
+                            </div>
+                            <span class="percentage">12%</span>
+                        </div>
+                        <div class="demographic-item">
+                            <span class="age-range">55+ años</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 8%"></div>
+                            </div>
+                            <span class="percentage">8%</span>
+                        </div>
+                    </div>
+
+                    <div class="demographic-card">
+                        <h3>Preferencias por Edad</h3>
+                        <div class="preference-item">
+                            <strong>18-24:</strong> Acción (32%), Terror (28%), Comedia (22%)
+                        </div>
+                        <div class="preference-item">
+                            <strong>25-34:</strong> Drama (35%), Ciencia Ficción (25%), Acción (20%)
+                        </div>
+                        <div class="preference-item">
+                            <strong>35-44:</strong> Drama (40%), Thriller (25%), Comedia (18%)
+                        </div>
+                        <div class="preference-item">
+                            <strong>45-54:</strong> Drama (45%), Romance (22%), Thriller (18%)
+                        </div>
+                        <div class="preference-item">
+                            <strong>55+:</strong> Drama (50%), Clásicos (25%), Documental (15%)
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recomendaciones Estratégicas -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2>💡 Recomendaciones Estratégicas</h2>
+                </div>
+
+                <div class="recommendations-container">
+                    <div class="recommendation-item success">
+                        <span class="rec-icon">✅</span>
+                        <div class="rec-content">
+                            <h4>Aumentar Inventario - Ciencia Ficción</h4>
+                            <p>El género de Ciencia Ficción muestra un crecimiento del 28% y alta demanda. Recomendación: Aumentar el catálogo en un 20% en los próximos 30 días.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item info">
+                        <span class="rec-icon">ℹ️</span>
+                        <div class="rec-content">
+                            <h4>Enfoque en Demografía 25-34</h4>
+                            <p>El segmento de 25-34 años representa el 35% de usuarios y prefiere Drama y Ciencia Ficción. Oportunidad para campañas de marketing dirigidas.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item warning">
+                        <span class="rec-icon">⚠️</span>
+                        <div class="rec-content">
+                            <h4>Revisar Estrategia de Comedia</h4>
+                            <p>El género Comedia muestra una tendencia negativa del -3%. Considerar renovar el catálogo o ajustar precios para mejorar el rendimiento.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <%@ include file="fragments/footer.jsp" %>
+
+    <script src="${pageContext.request.contextPath}/js/script.js"></script>
+    <script>
+        function generarReporte() {
+            const tipo = document.getElementById('tipo-reporte').value;
+            const formato = document.getElementById('formato-reporte').value;
+
+            if (!tipo) {
+                alert('Por favor selecciona un tipo de reporte');
+                return;
+            }
+
+            alert('Generando reporte de tipo: ' + tipo + ' en formato ' + formato);
         }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            border-radius: 15px;
-        }
-
-        .dashboard-header h1, .dashboard-header p {
-            position: relative;
-            z-index: 1;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .kpi-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-            border-left: 5px solid #dc143c;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-        }
-
-        .kpi-card .icon {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            color: #dc143c;
-        }
-
-        .kpi-card .number {
-            font-size: 3em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1a1a1a;
-        }
-
-        .kpi-card .label {
-            color: #666;
-            font-size: 1.2em;
-            font-weight: 500;
-        }
-
-        .kpi-card .trend {
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-
-        .trend.up { color: #28a745; }
-        .trend.down { color: #dc3545; }
-        .trend.neutral { color: #ffc107; }
-
-        .analytics-sections {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .chart-section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .chart-section h3 {
-            margin-bottom: 25px;
-            color: #1a1a1a;
-            font-size: 1.5em;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin-bottom: 20px;
-        }
-
-        .reports-section {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        .report-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .report-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .report-card h4 {
-            margin-bottom: 15px;
-            color: #1a1a1a;
-        }
-
-        .report-actions {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9em;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #dc143c, #b91c3c);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d, #545b62);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-        }
-
-        .btn-info {
-            background: linear-gradient(135deg, #17a2b8, #20c997);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .top-content-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .top-content-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .top-content-list li:last-child {
-            border-bottom: none;
-        }
-
-        .content-title {
-            font-weight: bold;
-            color: #1a1a1a;
-        }
-
-        .content-metric {
-            font-weight: bold;
-            color: #dc143c;
-        }
-
-        .filter-controls {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .filter-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #1a1a1a;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #dc143c;
-        }
-
-        .detailed-analytics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .analytics-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .analytics-card h3 {
-            margin-bottom: 25px;
-            color: #1a1a1a;
-            font-size: 1.4em;
-        }
-
-        .metric-row {
+    </script>
+</body>
+</html>
 

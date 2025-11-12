@@ -12,6 +12,12 @@
       <c:if test="${not empty sessionScope.usuarioLogueado && sessionScope.usuarioLogueado.rol == 'ADMINISTRADOR'}">
         <a href="${pageContext.request.contextPath}/admin/usuarios" class="admin-link">👥 Panel Admin</a>
       </c:if>
+      <c:if test="${not empty sessionScope.usuarioLogueado && sessionScope.usuarioLogueado.rol == 'GESTOR_INVENTARIO'}">
+        <a href="${pageContext.request.contextPath}/inventario/panel" class="admin-link">📦 Inventario</a>
+      </c:if>
+      <c:if test="${not empty sessionScope.usuarioLogueado && sessionScope.usuarioLogueado.rol == 'ANALISTA_DATOS'}">
+        <a href="${pageContext.request.contextPath}/reportes/panel" class="admin-link">📊 Reportes</a>
+      </c:if>
       <a href="#" class="user-profile" title="Perfil (pendiente Dev 1)">👤 Perfil</a>
       <c:if test="${not empty sessionScope.usuarioLogueado}">
         <a href="${pageContext.request.contextPath}/logout" class="logout-btn" title="Cerrar sesión">🚪 Salir</a>

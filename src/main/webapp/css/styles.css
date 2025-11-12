@@ -1051,6 +1051,10 @@ h2 {
     margin: 20px 0;
 }
 
+.report-generator {
+    margin: 20px 0;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -1522,6 +1526,11 @@ body.acceso-denegado {
 .recommendation-item.info {
     background-color: rgba(23, 162, 184, 0.1);
     border-color: var(--info-color);
+}
+
+.recommendation-item.warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: var(--warning-color);
 }
 
 .rec-icon {

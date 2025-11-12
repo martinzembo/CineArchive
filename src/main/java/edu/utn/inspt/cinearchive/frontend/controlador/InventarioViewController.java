@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InventarioViewController {
 
     /**
-     * Mostrar la página principal del gestor de inventario
+     * Mostrar el panel principal del gestor de inventario
+     * Endpoint principal para el rol GESTOR_INVENTARIO
      *
      * @param model el modelo para pasar datos a la vista
      * @return el nombre de la vista JSP
      */
-    @GetMapping("/dashboard")
-    public String mostrarDashboardInventario(Model model) {
+    @GetMapping("/panel")
+    public String mostrarPanelInventario(Model model) {
         // Agregar metadatos para la vista
         model.addAttribute("pageTitle", "Gestor de Inventario - CineArchive");
         model.addAttribute("pageDescription", "Panel de control completo para la gestión de contenidos, categorías y reseñas");
@@ -33,6 +34,18 @@ public class InventarioViewController {
         model.addAttribute("totalResenas", 0);
 
         return "gestor-inventario";
+    }
+
+    /**
+     * Mostrar la página principal del gestor de inventario (alias de /panel)
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return el nombre de la vista JSP
+     */
+    @GetMapping("/dashboard")
+    public String mostrarDashboardInventario(Model model) {
+        // Redirigir al endpoint principal /panel
+        return mostrarPanelInventario(model);
     }
 
     /**

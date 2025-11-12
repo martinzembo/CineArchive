@@ -17,16 +17,15 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/reportes")
 public class ReportesViewController {
 
-    /*
-     * Mostrar el dashboard principal del analista de datos
-     * NOTA: Este endpoint está comentado porque está duplicado con
-     * ReporteController.mostrarDashboard()
-     * El método activo es el de ReporteController que incluye
-     * la lógica completa de carga de datos desde los servicios.
+    /**
+     * Mostrar el panel principal del analista de datos
+     * Endpoint principal para el rol ANALISTA_DATOS
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return el nombre de la vista JSP
      */
-    /*
-    @GetMapping("/dashboard")
-    public String mostrarDashboardAnalytics(Model model) {
+    @GetMapping("/panel")
+    public String mostrarPanelReportes(Model model) {
         // Agregar metadatos para la vista
         model.addAttribute("pageTitle", "Centro de Análisis de Datos - CineArchive");
         model.addAttribute("pageDescription", "Dashboard integral para análisis de comportamiento, tendencias y métricas de negocio");
@@ -48,6 +47,20 @@ public class ReportesViewController {
         model.addAttribute("calificacionPromedio", 0.0);
 
         return "analista-datos";
+    }
+
+    /*
+     * Mostrar el dashboard principal del analista de datos (alias de /panel)
+     * NOTA: Este endpoint está comentado porque está duplicado con
+     * ReporteController.mostrarDashboard()
+     * El método activo es el de ReporteController que incluye
+     * la lógica completa de carga de datos desde los servicios.
+     */
+    /*
+    @GetMapping("/dashboard")
+    public String mostrarDashboardAnalytics(Model model) {
+        // Redirigir al endpoint principal /panel
+        return mostrarPanelReportes(model);
     }
     */
 
