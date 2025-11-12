@@ -1,9 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    // Configurar headers de no-cache en el JSP también
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Meta tags para prevenir caché del navegador -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>CineArchive - Iniciar Sesión</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
@@ -31,10 +43,6 @@
         <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
             <input type="email" name="email" placeholder="Correo electrónico" required />
             <input type="password" name="password" placeholder="Contraseña" required />
-            <div class="checkbox-group">
-                <input type="checkbox" id="remember" name="remember" />
-                <label for="remember">Recordarme</label>
-            </div>
             <button type="submit">Iniciar Sesión</button>
         </form>
         <div class="login-links">
@@ -45,5 +53,49 @@
     </div>
 </div>
 <jsp:include page="/WEB-INF/views/fragments/footer.jsp" />
+
+<script>
+    // Detectar si la página se cargó desde el caché del navegador (bfcache)
+    // Esto sucede cuando el usuario presiona el botón "Atrás" del navegador
+    window.addEventListener('pageshow', function(event) {
+        // event.persisted es true si la página viene del bfcache
+        if (event.persisted) {
+            console.log('Página cargada desde caché del navegador - Forzando recarga...');
+            // Forzar recarga completa desde el servidor
+            window.location.reload(true);
+        }
+    });
+
+    // Prevenir navegación hacia atrás usando el caché
+    window.addEventListener('load', function() {
+        // Reemplazar el historial actual para evitar navegación hacia atrás
+        window.history.pushState(null, document.title, window.location.href);
+
+        // Detectar cuando el usuario intenta ir hacia atrás
+        window.addEventListener('popstate', function(event) {
+            // Volver a empujar el estado para mantenerse en login
+            window.history.pushState(null, document.title, window.location.href);
+            console.log('Navegación hacia atrás bloqueada en la página de login');
+        });
+    });
+
+    // Invalidar sesión usando AJAX cuando la página se carga
+    // Esto asegura que siempre se invalide la sesión, incluso si viene desde caché
+    (function() {
+        fetch('${pageContext.request.contextPath}/api/session/invalidate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        }).then(function(response) {
+            if (response.ok) {
+                console.log('Sesión invalidada correctamente');
+            }
+        }).catch(function(error) {
+            console.log('Nota: La invalidación de sesión será manejada por el servidor');
+        });
+    })();
+</script>
 </body>
 </html>
