@@ -49,12 +49,14 @@ public class InventarioViewController {
         return "gestor-inventario";
     }
 
-    /**
+    /*
      * Mostrar gestión de categorías
-     *
-     * @param model el modelo para pasar datos a la vista
-     * @return el nombre de la vista JSP
+     * NOTA: Este endpoint está comentado porque está duplicado con
+     * GestorInventarioController.gestionarCategorias()
+     * El método activo es el de GestorInventarioController que incluye
+     * la lógica de carga de datos desde los servicios.
      */
+    /*
     @GetMapping("/categorias")
     public String mostrarGestionCategorias(Model model) {
         model.addAttribute("pageTitle", "Gestión de Categorías - CineArchive");
@@ -62,6 +64,7 @@ public class InventarioViewController {
 
         return "gestor-inventario";
     }
+    */
 
     /**
      * Mostrar gestión de reseñas

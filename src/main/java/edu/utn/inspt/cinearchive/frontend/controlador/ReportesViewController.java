@@ -17,12 +17,14 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/reportes")
 public class ReportesViewController {
 
-    /**
+    /*
      * Mostrar el dashboard principal del analista de datos
-     *
-     * @param model el modelo para pasar datos a la vista
-     * @return el nombre de la vista JSP
+     * NOTA: Este endpoint está comentado porque está duplicado con
+     * ReporteController.mostrarDashboard()
+     * El método activo es el de ReporteController que incluye
+     * la lógica completa de carga de datos desde los servicios.
      */
+    /*
     @GetMapping("/dashboard")
     public String mostrarDashboardAnalytics(Model model) {
         // Agregar metadatos para la vista
@@ -47,6 +49,7 @@ public class ReportesViewController {
 
         return "analista-datos";
     }
+    */
 
     /**
      * Mostrar analytics con filtros específicos
